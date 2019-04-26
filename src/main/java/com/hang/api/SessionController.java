@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author test
  */
 @RestController
+@RequestMapping("/session")
 public class SessionController {
     private static final Logger log = LoggerFactory.getLogger(SessionController.class);
 

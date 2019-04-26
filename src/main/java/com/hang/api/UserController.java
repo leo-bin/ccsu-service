@@ -23,6 +23,7 @@ import java.io.IOException;
  * @author test
  */
 @RestController
+@RequestMapping("/user")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
