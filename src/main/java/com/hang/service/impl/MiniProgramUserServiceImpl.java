@@ -32,10 +32,10 @@ public class MiniProgramUserServiceImpl implements UserService {
 
     private static final Logger log = LoggerFactory.getLogger(MiniProgramUserServiceImpl.class);
 
-    @Value("${wx.appId: wx3e84b5a3155384ee}")
+    @Value("${wx.appId: wxba259c9cc25c8a20}")
     private String appId;
 
-    @Value("${wx.appSecret: 853e6bbdc2fc227f340b304a68da444a}")
+    @Value("${wx.appSecret: 76c2371c920e0905a47bdf5df0c2c357}")
     private String appSecret;
 
     @Autowired
