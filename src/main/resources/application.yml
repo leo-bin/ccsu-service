@@ -29,5 +29,5 @@ spring:
 
 mybatis:
   mapperLocations: classpath:mapper/*.xml
-  typeAliasesPackage: cn.ccsu.main.pojo.data
+  typeAliasesPackage: com.hang.pojo.data
   config-location: classpath:mybatis-config.xml

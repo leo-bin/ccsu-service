@@ -7,7 +7,7 @@ import com.hang.pojo.data.InformationDO;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.service.ApplyService;
 import com.hang.service.InformationService;
-import com.hang.utils.BaseResUtil;
+import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -44,7 +44,7 @@ public class InformationController {
     @ApiOperation("请求类别列表")
     @GetMapping("categoryList")
     public BaseRes categoryList() {
-        return BaseResUtil.success(CATEGORY_MAP);
+        return RespUtil.success(CATEGORY_MAP);
     }
 
     /**
@@ -69,7 +69,7 @@ public class InformationController {
         information.setCategory(category);
         information.setReleaseTime(new Date());
         informationService.addInformation(information);
-        return BaseResUtil.success();
+        return RespUtil.success();
     }
 
     /**
@@ -82,7 +82,7 @@ public class InformationController {
     @PostMapping("/removeInformation")
     public BaseRes removeInformation(@RequestParam int id) {
         informationService.removeInformation(id);
-        return BaseResUtil.success();
+        return RespUtil.success();
     }
 
     /**
@@ -99,7 +99,7 @@ public class InformationController {
     public BaseRes modifyInformation(int id, String title, String content, String authors) {
         InformationDO information = informationService.getInformationById(id);
         if (information == null) {
-            return BaseResUtil.error(-1, "information不存在");
+            return RespUtil.error(-1, "information不存在");
         }
         if (StringUtils.isNotBlank(title)) {
             information.setTitle(title);
@@ -111,7 +111,7 @@ public class InformationController {
             information.setAuthors(authors);
         }
         informationService.modifyInformation(information);
-        return BaseResUtil.success();
+        return RespUtil.success();
     }
 
     /**
@@ -124,7 +124,7 @@ public class InformationController {
     @JsonView(InformationDO.DetailInformation.class)
     @GetMapping("/getInformationById")
     public BaseRes getInformationById(@RequestParam int id) {
-        return BaseResUtil.success(informationService.getInformationById(id));
+        return RespUtil.success(informationService.getInformationById(id));
     }
 
     /**
@@ -139,13 +139,13 @@ public class InformationController {
     public BaseRes activityApply(int userId, int informationId) {
         InformationDO information = informationService.getInformationById(informationId);
         if (information == null) {
-            return BaseResUtil.error(-1, "找不到information");
+            return RespUtil.error(-1, "找不到information");
         }
         if (!CATEGORY_MAP.containsKey(information.getCategory())) {
-            return BaseResUtil.error(-1, "不是活动，无法报名");
+            return RespUtil.error(-1, "不是活动，无法报名");
         }
         applyService.apply(information.getId(), userId);
-        return BaseResUtil.success();
+        return RespUtil.success();
     }
 
     /**
@@ -158,7 +158,7 @@ public class InformationController {
     @GetMapping("/modifyActivityStatusSuccess")
     public BaseRes modifyStatusSuccess(int applyId) {
         applyService.updateApplyStatus(applyId, ApplyStatusEnum.SUCCESS);
-        return BaseResUtil.success();
+        return RespUtil.success();
     }
 
     /**
@@ -171,7 +171,7 @@ public class InformationController {
     @GetMapping("/modifyActivityStatusFailure")
     public BaseRes modifyStatusFailure(int applyId) {
         applyService.updateApplyStatus(applyId, ApplyStatusEnum.FAILURE);
-        return BaseResUtil.success();
+        return RespUtil.success();
     }
 
 }

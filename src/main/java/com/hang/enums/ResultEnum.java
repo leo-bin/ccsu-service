@@ -23,7 +23,8 @@ public enum ResultEnum {
      * 服务器内部异常
      */
     SERVER_INNER_ERROR(-10006, "server inner error"),
-    ;
+
+    HEADERS_ERROR(-10007, "header error");
 
     /**
      * 错误码

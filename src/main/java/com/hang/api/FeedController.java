@@ -5,7 +5,7 @@ import com.hang.exceptions.GlobalException;
 import com.hang.pojo.data.InformationDO;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.service.InformationService;
-import com.hang.utils.BaseResUtil;
+import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class FeedController {
     @GetMapping("/latest")
     public BaseRes latest() {
         List<InformationDO> latestInformation = informationService.getLatestInformation();
-        return BaseResUtil.success(latestInformation);
+        return RespUtil.success(latestInformation);
     }
 
     /**
@@ -57,9 +57,9 @@ public class FeedController {
     public BaseRes hot() {
         List<InformationDO> hotInformation = informationService.getHotInformation();
         if (hotInformation == null || hotInformation.size() == 0) {
-            return BaseResUtil.success(informationService.getLatestInformation());
+            return RespUtil.success(informationService.getLatestInformation());
         }
-        return BaseResUtil.success(hotInformation);
+        return RespUtil.success(hotInformation);
     }
 
     /**
@@ -79,7 +79,7 @@ public class FeedController {
         }
         List<InformationDO> informations = informationService.getInformationByCategory(category, start, offset);
         Collections.reverse(informations);
-        return BaseResUtil.success(informations);
+        return RespUtil.success(informations);
     }
 
 }
