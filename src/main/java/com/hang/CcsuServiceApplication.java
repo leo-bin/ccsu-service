@@ -5,6 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @author hangs.zhang
+ */
 @RestController
 @SpringBootApplication
 public class CcsuServiceApplication {
