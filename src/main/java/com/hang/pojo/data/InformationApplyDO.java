@@ -11,11 +11,11 @@ import lombok.Data;
 @Data
 public class InformationApplyDO {
 
-    private Integer id;
+    private Integer applyId;
 
     private Integer informationId;
 
-    private Integer userId;
+    private String openId;
 
     private String status;
 

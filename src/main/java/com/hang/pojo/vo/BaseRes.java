@@ -11,15 +11,19 @@ import lombok.Data;
  * function:
  */
 @Data
+@JsonView(InformationDO.SimpleInformation.class)
 public class BaseRes<T> {
 
-    // 错误代码
+    /**
+     * 错误代码
+     */
     private Integer errcode;
 
-    // 错误信息
+    /**
+     * 错误信息
+     */
     private String errmsg;
 
-    @JsonView(InformationDO.SimpleInformation.class)
     private T data;
 
 }

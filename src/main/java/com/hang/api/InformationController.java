@@ -1,7 +1,9 @@
 package com.hang.api;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.hang.annotation.OpenId;
 import com.hang.enums.ApplyStatusEnum;
+import com.hang.enums.ResultEnum;
 import com.hang.exceptions.GlobalException;
 import com.hang.pojo.data.InformationDO;
 import com.hang.pojo.vo.BaseRes;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.Objects;
 
 import static com.hang.constant.InformationConstant.CATEGORY_MAP;
 
@@ -130,13 +133,17 @@ public class InformationController {
     /**
      * activity 活动申请
      *
-     * @param userId
+     * @param openId
      * @param informationId
      * @return
      */
-    @ApiOperation("活动申请，暂时不可用，需要联调")
+    @ApiOperation("申请活动")
     @PostMapping("/applyActivity")
-    public BaseRes activityApply(int userId, int informationId) {
+    public BaseRes activityApply(@OpenId String openId, int informationId) {
+        if (StringUtils.isEmpty(openId)) {
+            return RespUtil.error(ResultEnum.CAN_NOT_GET_OPEN_ID);
+        }
+
         InformationDO information = informationService.getInformationById(informationId);
         if (information == null) {
             return RespUtil.error(-1, "找不到information");
@@ -144,17 +151,17 @@ public class InformationController {
         if (!CATEGORY_MAP.containsKey(information.getCategory())) {
             return RespUtil.error(-1, "不是活动，无法报名");
         }
-        applyService.apply(information.getId(), userId);
+        applyService.apply(information.getId(), openId);
         return RespUtil.success();
     }
 
     /**
-     * activity 更新申请状态为成功
+     * 更新申请状态为成功
      *
      * @param applyId
      * @return
      */
-    @ApiOperation("更新申请状态为申请成功，暂时不可用，需要联调")
+    @ApiOperation("更新activity 申请状态为成功")
     @GetMapping("/modifyActivityStatusSuccess")
     public BaseRes modifyStatusSuccess(int applyId) {
         applyService.updateApplyStatus(applyId, ApplyStatusEnum.SUCCESS);
@@ -162,12 +169,12 @@ public class InformationController {
     }
 
     /**
-     * activity 更新申请状态为失败
+     * 更新申请状态为失败
      *
      * @param applyId
      * @return
      */
-    @ApiOperation("更新申请状态为申请失败，暂时不可用，需要联调")
+    @ApiOperation("更新activity 申请状态为失败")
     @GetMapping("/modifyActivityStatusFailure")
     public BaseRes modifyStatusFailure(int applyId) {
         applyService.updateApplyStatus(applyId, ApplyStatusEnum.FAILURE);

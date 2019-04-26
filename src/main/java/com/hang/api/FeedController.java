@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
@@ -73,10 +74,12 @@ public class FeedController {
     @ApiOperation("根据类别查询feed流数据")
     @JsonView(InformationDO.SimpleInformation.class)
     @GetMapping("/listByCategory")
-    public BaseRes listByCategory(String category, int start, int offset) {
+    public BaseRes listByCategory(String category, @RequestParam(required = false, defaultValue = "0") int start,
+                                  @RequestParam(required = false, defaultValue = "10") int offset) {
         if (!CATEGORY_MAP.containsKey(category)) {
             throw new GlobalException(-1, "category不存在");
         }
+
         List<InformationDO> informations = informationService.getInformationByCategory(category, start, offset);
         Collections.reverse(informations);
         return RespUtil.success(informations);

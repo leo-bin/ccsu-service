@@ -3,6 +3,7 @@ package com.hang.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hang.annotation.OpenId;
+import com.hang.constant.WxConstant;
 import com.hang.service.SessionService;
 import com.hang.utils.HeaderParser;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,8 @@ public class OpenIdResolver implements HandlerMethodArgumentResolver {
         Map<String, String> parse = HeaderParser.parse(request);
         String sessionId = parse.get("sessionId");
         if (StringUtils.isEmpty(sessionId)) {
-            return result;
+            // 测试
+            return WxConstant.TEST_OPEN_ID;
         }
 
         JSONObject sessionInfo = sessionService.getSessionInfo(sessionId);
@@ -52,6 +54,9 @@ public class OpenIdResolver implements HandlerMethodArgumentResolver {
         if (userInfo != null) {
             log.info("body: " + userInfo.toString());
             result = userInfo.getString("openId");
+        } else {
+            // 测试
+            result = WxConstant.TEST_OPEN_ID;
         }
         return result;
     }

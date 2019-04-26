@@ -8,6 +8,7 @@ import com.hang.pojo.data.InformationApplyDO;
 import com.hang.pojo.data.InformationDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,9 +31,10 @@ public class ApplyService {
      * 报名
      *
      * @param informationId
-     * @param userId
+     * @param openId
      */
-    public void apply(int informationId, int userId) {
+    @Transactional(rollbackFor = Exception.class)
+    public void apply(int informationId, String openId) {
         InformationDO information = informationService.getInformationById(informationId);
         if (information == null) {
             throw new GlobalException(-1, "information不存在");
@@ -41,7 +43,7 @@ public class ApplyService {
             throw new GlobalException(-1, "information类型错误");
         }
         InformationApplyDO apply = new InformationApplyDO();
-        apply.setUserId(userId);
+        apply.setOpenId(openId);
         apply.setInformationId(informationId);
         apply.setStatus(ApplyStatusEnum.CURRENT_APPLY.name());
         int i = applyDAO.insert(apply);
@@ -56,10 +58,13 @@ public class ApplyService {
      * @param applyId
      * @param applyStatus
      */
+    @Transactional(rollbackFor = Exception.class)
     public void updateApplyStatus(int applyId, ApplyStatusEnum applyStatus) {
         InformationApplyDO apply = applyDAO.selectById(applyId);
         // TODO: 2019/1/30 将id转化为数据
-        int userId = apply.getUserId();
+        String openId = apply.getOpenId();
+
+
         int informationId = apply.getInformationId();
         InformationDO information = informationService.getInformationById(informationId);
         if (information == null) {
@@ -71,6 +76,7 @@ public class ApplyService {
         } else {
             content = "恭喜您，活动报名成功";
         }
+        // TODO: 19-4-26 发送异步消息 websocket推送前端
 
         int i = applyDAO.update(applyId, applyStatus.name());
         if (i != 1) {

@@ -24,7 +24,12 @@ public enum ResultEnum {
      */
     SERVER_INNER_ERROR(-10006, "server inner error"),
 
-    HEADERS_ERROR(-10007, "header error");
+    HEADERS_ERROR(-10007, "header error"),
+
+    /**
+     * 无法获取open id
+     */
+    CAN_NOT_GET_OPEN_ID(-10008, "can not get open id");
 
     /**
      * 错误码

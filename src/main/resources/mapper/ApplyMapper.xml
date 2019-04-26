@@ -5,8 +5,8 @@
 <mapper namespace="com.hang.dao.ApplyDAO">
 
     <insert id="insert">
-        insert ignore activity_apply(information_id, user_id, status)
-        values(#{informationId}, #{userId}, #{status})
+        insert ignore activity_apply(information_id, open_id, status)
+        values(#{informationId}, #{openId}, #{status})
     </insert>
 
     <update id="update">
@@ -14,7 +14,7 @@
         set
           status = #{status}
         where
-          id = #{id}
+          apply_id = #{applyId}
     </update>
 
     <select id="listAppliesByInformationId" resultType="com.hang.pojo.data.InformationApplyDO">
@@ -22,7 +22,7 @@
     </select>
 
     <select id="selectById" resultType="com.hang.pojo.data.InformationApplyDO">
-      select * from activity_apply where id = #{id}
+      select * from activity_apply where apply_id = #{applyId}
     </select>
 
 
