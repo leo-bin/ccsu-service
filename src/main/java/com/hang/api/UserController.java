@@ -7,6 +7,8 @@ package com.hang.api;
 import com.alibaba.fastjson.JSONObject;
 import com.hang.service.SessionService;
 import com.hang.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,7 @@ import java.io.IOException;
 /**
  * @author test
  */
+@Api("用户数据相关接口")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -36,11 +39,13 @@ public class UserController {
     @Autowired
     private SessionService sessionService;
 
+    @ApiOperation("绑定学号等信息，暂未实现")
     @PostMapping("/bind")
     public String bind() {
         return "暂未实现";
     }
 
+    @ApiOperation("登录，获取sessionId")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(@RequestParam String code, @RequestParam String rawData) {
         log.info("appPlatform: {}", request.getHeader("appPlatform"));
@@ -57,6 +62,7 @@ public class UserController {
         return miniProgramUserService.login(code, rawData);
     }
 
+    @ApiOperation("获取用户信息")
     @GetMapping("/getUserInfo")
     public String getUserInfo(String sessionId) throws IOException {
         log.info("sessionId: " + request.getHeader("sessionId"));

@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -41,9 +42,14 @@ public class TeamService {
     }
 
     public List<TeamVO> getTeamByUserId(String userId) {
-        List<TeamDO> teamPOS = teamDAO.selectTeamByUserId(userId);
-        List<TeamVO> teamVOS = teamPOS.stream().map(teamPO -> teamPO2VO(teamPO)).collect(Collectors.toList());
+        List<TeamDO> teamDOS = teamDAO.selectTeamByUserId(userId);
+        List<TeamVO> teamVOS = teamDOS.stream().map(teamPO -> teamPO2VO(teamPO)).collect(Collectors.toList());
         return teamVOS;
+    }
+
+    public List<TeamVO> getTeams(int start, int offset) {
+        List<TeamDO> teamDOS = teamDAO.selectTeams(start, offset);
+        return teamDOS.stream().map(teamPO -> teamPO2VO(teamPO)).collect(Collectors.toList());
     }
 
     /**
@@ -148,8 +154,8 @@ public class TeamService {
         if (StringUtils.isNotBlank(projectPO.getProperties())) {
             projectVO.setProperties(projectPO.getProperties());
         }
-        List<TeamDO> teamPOS = teamDAO.selectTeamByProjectId(projectPO.getId());
-        List<String> teams = teamPOS.stream().map(teamPO -> teamPO.getName()).collect(Collectors.toList());
+        List<TeamDO> teamDOS = teamDAO.selectTeamByProjectId(projectPO.getId());
+        Map<String, Integer> teams = teamDOS.stream().collect(Collectors.toMap(TeamDO::getName, TeamDO::getId));
         projectVO.setTeams(teams);
 
         String schedule = projectPO.getSchedule();

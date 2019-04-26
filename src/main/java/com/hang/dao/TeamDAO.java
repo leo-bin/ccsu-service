@@ -90,4 +90,6 @@ public interface TeamDAO {
      */
     List<TeamDO> selectTeamByUserId(String userId);
 
+    List<TeamDO> selectTeams(@Param("start") int start, @Param("offset") int offset);
+
 }

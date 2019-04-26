@@ -43,9 +43,14 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(headerCheckInterceptor)
                 // 拦截
-                .addPathPatterns("/**")
+                .addPathPatterns("/feed/**")
+                .addPathPatterns("/information/**")
+                .addPathPatterns("/team/**")
+                .addPathPatterns("/project/**")
+                .addPathPatterns("/user/**")
+                .addPathPatterns("/session/**")
                 // 不拦截
-                .excludePathPatterns("/login");
+                .excludePathPatterns("/user/login");
     }
 
     @Override

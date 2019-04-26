@@ -55,4 +55,8 @@
       (select team_id from project_team where project_id = #{projectId})
     </select>
 
+    <select id="selectTeams" resultType="com.hang.pojo.data.TeamDO">
+        select * from team limit #{start}, #{offset}
+    </select>
+
 </mapper>

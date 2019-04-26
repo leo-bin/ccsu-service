@@ -5,6 +5,8 @@
 package com.hang.api;
 
 import com.hang.service.SessionService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author test
  */
+@Api("回话服务接口")
 @RestController
 @RequestMapping("/session")
 public class SessionController {
@@ -33,6 +36,7 @@ public class SessionController {
      * @param data
      * @return 新的会话ID
      */
+    @ApiOperation("新建立一个会话")
     @RequestMapping("/newSession")
     public String newSession(@RequestParam String data) {
         return sessionService.newSession(data).toJSONString();
@@ -44,6 +48,7 @@ public class SessionController {
      * @param sessionId
      * @return 会话信息
      */
+    @ApiOperation("获取会话信息")
     @RequestMapping(value = "/getSessionInfo", method = RequestMethod.GET)
     public String getSessionInfo(@RequestBody String json, String sessionId) {
         log.info("sessionId: " + request.getHeader("sessionId"));

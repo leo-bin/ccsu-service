@@ -15,20 +15,28 @@ import java.util.List;
 @Data
 public class TeamVO {
 
-    private int id;
+    private Integer id;
 
     private String name;
 
-    // 组员
+    /**
+     * 组员
+     */
     private List<GroupMemberVO> groupMemberVOS;
 
-    // 团队项目
+    /**
+     * 团队项目
+     */
     private List<ProjectVO> projects;
 
-    // 团队荣誉
+    /**
+     * 团队荣誉
+     */
     private List<String> honor;
 
-    // 团队日志
+    /**
+     * 团队日志
+     */
     private LinkedHashMap<Date, String> teamLog;
 
 }

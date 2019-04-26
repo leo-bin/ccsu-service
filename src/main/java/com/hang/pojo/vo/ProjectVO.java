@@ -3,6 +3,7 @@ package com.hang.pojo.vo;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Objects;
 @Data
 public class ProjectVO {
 
-    private int id;
+    private Integer id;
 
     private String name;
 
@@ -23,7 +24,7 @@ public class ProjectVO {
     /**
      * 所属团队
      */
-    private List<String> teams;
+    private Map<String, Integer> teams;
 
     /**
      * 项目荣誉
@@ -45,7 +46,7 @@ public class ProjectVO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProjectVO projectVO = (ProjectVO) o;
-        return id == projectVO.id;
+        return id.equals(projectVO.id);
     }
 
     @Override
