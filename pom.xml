@@ -94,6 +94,7 @@
     </dependencies>
 
     <build>
+        <finalName>ccsu-serivce</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

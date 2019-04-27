@@ -1,7 +1,3 @@
-/*
- * Created by Long Duping
- * Date 2018/12/5 15:38
- */
 package com.hang.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
@@ -35,7 +31,7 @@ public class MiniProgramUserServiceImpl implements UserService {
     @Value("${wx.appId: wxba259c9cc25c8a20}")
     private String appId;
 
-    @Value("${wx.appSecret: 76c2371c920e0905a47bdf5df0c2c357}")
+    @Value("${wx.appSecret: c911996088c1946f02d1af55d452a539}")
     private String appSecret;
 
     @Autowired
