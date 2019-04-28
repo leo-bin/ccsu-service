@@ -12,4 +12,12 @@
         select * from course where jwc_account = #{jwcAccount} and xnxqh = #{semester}
     </select>
 
+    <select id="selectClassroomNow" resultType="java.lang.String">
+        select distinct(location) from course where section=#{section} and weekday = #{weekDay} and xnxqh = #{semester} and locate("-"+#{week}+"-",week_seq) > 0;
+    </select>
+
+    <select id="selectAllClassroom" resultType="java.lang.String">
+        select distinct(location) from course;
+    </select>
+
 </mapper>

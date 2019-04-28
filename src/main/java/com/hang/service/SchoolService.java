@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -82,6 +83,13 @@ public class SchoolService {
             result.add(lostPropertyAndRecruitVO);
         });
         return result;
+    }
+
+    public Set<String> getFreeClassroom(String semester, String section, String week, String weekDay) {
+        Set<String> allClassroom = courseDAO.selectAllClassroom();
+        Set<String> classroomNow = courseDAO.selectClassroomNow(semester, section, week, weekDay);
+        allClassroom.removeAll(classroomNow);
+        return allClassroom;
     }
 
 }

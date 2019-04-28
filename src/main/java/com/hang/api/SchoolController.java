@@ -18,7 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.channels.ShutdownChannelGroupException;
 import java.util.List;
 import java.util.Objects;
 
@@ -85,6 +84,12 @@ public class SchoolController {
         } else {
             return RespUtil.success(schoolService.listLostPropertyAndRecruit(LostPropertyAndRecruitEnum.RECRUIT, start, offset));
         }
+    }
+
+    @ApiOperation("获取当前空闲教室")
+    @GetMapping("/getFreeClassroom")
+    public BaseRes getFreeClassroom(String semester, String section, String week, String weekDay) {
+        return RespUtil.success(schoolService.getFreeClassroom(semester, section, week, weekDay));
     }
 
     private void openIdCheck(String openId) {
