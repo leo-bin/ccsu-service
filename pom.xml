@@ -95,7 +95,7 @@
     </dependencies>
 
     <build>
-        <finalName>ccsu-servitail ce</finalName>
+        <finalName>ccsu-service</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
