@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
@@ -94,7 +95,7 @@
     </dependencies>
 
     <build>
-        <finalName>ccsu-servitace</finalName>
+        <finalName>ccsu-servitail ce</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

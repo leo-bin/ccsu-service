@@ -1,12 +1,14 @@
 package com.hang.api;
 
 import com.hang.annotation.OpenId;
+import com.hang.enums.LostPropertyAndRecruitEnum;
 import com.hang.enums.ResultEnum;
 import com.hang.exceptions.GlobalException;
 import com.hang.pojo.data.CourseDO;
 import com.hang.pojo.data.UserInfoDO;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.pojo.vo.CourseVO;
+import com.hang.pojo.vo.LostPropertyAndRecruitVO;
 import com.hang.service.SchoolService;
 import com.hang.service.UserService;
 import com.hang.utils.RespUtil;
@@ -14,11 +16,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.nio.channels.ShutdownChannelGroupException;
 import java.util.List;
 import java.util.Objects;
 
@@ -61,6 +61,30 @@ public class SchoolController {
 
         List<CourseDO> allCourse = schoolService.getAllCourse(userInfo.getJwcAccount(), semester);
         return RespUtil.success(allCourse);
+    }
+
+    @ApiOperation("发布失物与招领 code=0为发布失物 code=1为发布招领,默认code为0")
+    @GetMapping("/initiatorMessage")
+    public BaseRes initiatorLostAndRecruitMessage(@ModelAttribute LostPropertyAndRecruitVO lostPropertyAndRecruitVO,
+                                                  @RequestParam(required = false, defaultValue = "0") int code) {
+        if (code == 0) {
+            schoolService.saveLostPropertyAndRecruit(lostPropertyAndRecruitVO, LostPropertyAndRecruitEnum.LOSTPROPERTY);
+        } else {
+            schoolService.saveLostPropertyAndRecruit(lostPropertyAndRecruitVO, LostPropertyAndRecruitEnum.RECRUIT);
+        }
+        return RespUtil.success();
+    }
+
+    @ApiOperation("发布失物与招领列表 code=0为查询失物 code=1为查询招领,默认code为0")
+    @GetMapping("/listLostAndRecruitMessage")
+    public BaseRes listLostAndRecruitMessage(@RequestParam(required = false, defaultValue = "0") int code,
+                                             @RequestParam(required = false, defaultValue = "0") int start,
+                                             @RequestParam(required = false, defaultValue = "10") int offset) {
+        if (code == 0) {
+            return RespUtil.success(schoolService.listLostPropertyAndRecruit(LostPropertyAndRecruitEnum.LOSTPROPERTY, start, offset));
+        } else {
+            return RespUtil.success(schoolService.listLostPropertyAndRecruit(LostPropertyAndRecruitEnum.RECRUIT, start, offset));
+        }
     }
 
     private void openIdCheck(String openId) {

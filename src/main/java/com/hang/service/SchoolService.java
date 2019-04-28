@@ -2,13 +2,20 @@ package com.hang.service;
 
 import com.google.common.collect.Lists;
 import com.hang.dao.CourseDAO;
+import com.hang.dao.LostPropertyAndRecruitDAO;
+import com.hang.enums.LostPropertyAndRecruitEnum;
+import com.hang.exceptions.GlobalException;
 import com.hang.pojo.data.CourseDO;
+import com.hang.pojo.data.LostPropertyAndRecruitDO;
 import com.hang.pojo.vo.CourseVO;
+import com.hang.pojo.vo.LostPropertyAndRecruitVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +31,9 @@ public class SchoolService {
 
     @Autowired
     private CourseDAO courseDAO;
+
+    @Autowired
+    private LostPropertyAndRecruitDAO lostPropertyAndRecruitDAO;
 
     public List<CourseVO> getCourseByWeek(String jwcAccount, Integer week, String semester) {
         List<CourseVO> result = Lists.newArrayList();
@@ -48,6 +58,30 @@ public class SchoolService {
 
     public List<CourseDO> getAllCourse(String jwcAccount, String semester) {
         return courseDAO.selectAllCourseByJwcAccountAndSemester(jwcAccount, semester);
+    }
+
+    public void saveLostPropertyAndRecruit(LostPropertyAndRecruitVO lostPropertyAndRecruitVO, LostPropertyAndRecruitEnum lostPropertyAndRecruitEnum) {
+        LostPropertyAndRecruitDO lostPropertyAndRecruitDO = new LostPropertyAndRecruitDO();
+        BeanUtils.copyProperties(lostPropertyAndRecruitVO, lostPropertyAndRecruitDO);
+        lostPropertyAndRecruitDO.setOccurTime(new Date(lostPropertyAndRecruitVO.getOccurTime()));
+        lostPropertyAndRecruitDO.setDatetime(new Date());
+        lostPropertyAndRecruitDO.setCategory(lostPropertyAndRecruitEnum.name());
+        int i = lostPropertyAndRecruitDAO.insert(lostPropertyAndRecruitDO);
+        if (i != 1) {
+            throw new GlobalException(-1, "存储失败");
+        }
+    }
+
+    public List<LostPropertyAndRecruitVO> listLostPropertyAndRecruit(LostPropertyAndRecruitEnum lostPropertyAndRecruitEnum, int start, int offset) {
+        List<LostPropertyAndRecruitDO> lostPropertyAndRecruitDOS = lostPropertyAndRecruitDAO.listByCategory(lostPropertyAndRecruitEnum.name(), start, offset);
+        ArrayList<LostPropertyAndRecruitVO> result = Lists.newArrayList();
+        lostPropertyAndRecruitDOS.forEach(e -> {
+            LostPropertyAndRecruitVO lostPropertyAndRecruitVO = new LostPropertyAndRecruitVO();
+            BeanUtils.copyProperties(e, lostPropertyAndRecruitVO);
+            lostPropertyAndRecruitVO.setOccurTime(e.getOccurTime().getTime());
+            result.add(lostPropertyAndRecruitVO);
+        });
+        return result;
     }
 
 }
