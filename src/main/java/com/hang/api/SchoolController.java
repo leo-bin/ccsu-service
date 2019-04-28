@@ -14,6 +14,7 @@ import com.hang.service.UserService;
 import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -88,7 +89,10 @@ public class SchoolController {
 
     @ApiOperation("获取当前空闲教室")
     @GetMapping("/getFreeClassroom")
-    public BaseRes getFreeClassroom(String semester, String section, String week, String weekDay) {
+    public BaseRes getFreeClassroom(@ApiParam("学期，默认为2018-2019-2") @RequestParam(required = false, defaultValue = "2018-2019-2") String semester,
+                                    @ApiParam("课程时间节数 1-2或3-4或5-6等") String section,
+                                    @ApiParam("周数") String week,
+                                    @ApiParam("星期") String weekDay) {
         return RespUtil.success(schoolService.getFreeClassroom(semester, section, week, weekDay));
     }
 
