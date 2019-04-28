@@ -40,4 +40,6 @@ public class UserInfoDO {
 
     private Date lastLoginTime;
 
+    private String jwcAccount;
+
 }

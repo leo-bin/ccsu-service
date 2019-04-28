@@ -6,6 +6,7 @@ import com.hang.pojo.vo.BaseRes;
 import com.hang.utils.RespUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,6 +45,9 @@ public class GlobalExceptionHandler {
             // 其他异常
         } else if (ex instanceof HttpRequestMethodNotSupportedException) {
             return RespUtil.error(-1, "对不起，不支持当前HTTP方法");
+
+        } else if (ex instanceof MissingServletRequestParameterException) {
+            return RespUtil.error(-1, ex.getMessage());
         } else {
             return RespUtil.error(ResultEnum.SERVER_INNER_ERROR);
         }

@@ -24,12 +24,25 @@ public enum ResultEnum {
      */
     SERVER_INNER_ERROR(-10006, "server inner error"),
 
+    /**
+     * HTTP请求头错误
+     */
     HEADERS_ERROR(-10007, "header error"),
 
     /**
      * 无法获取open id
      */
-    CAN_NOT_GET_OPEN_ID(-10008, "can not get open id");
+    CAN_NOT_GET_OPEN_ID(-10008, "can not get open id"),
+
+    /**
+     * 无法获取用户信息
+     */
+    CAN_NOT_GET_USER_INFO(-10009, "can not get user info"),
+
+    /**
+     * 学号信息未绑定
+     */
+    JWC_ACCOUNT_NOT_BIND(-10010, "jwd account not bind");
 
     /**
      * 错误码

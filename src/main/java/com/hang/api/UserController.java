@@ -5,33 +5,34 @@
 package com.hang.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hang.annotation.OpenId;
+import com.hang.pojo.vo.BaseRes;
 import com.hang.service.SessionService;
 import com.hang.service.UserService;
+import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
  * @author test
  */
-@Api("用户数据相关接口")
+@Api("用户相关接口")
 @RestController
 @RequestMapping("/user")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-    @Resource(name = "miniProgramUserService")
-    private UserService miniProgramUserService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private HttpServletRequest request;
@@ -39,10 +40,11 @@ public class UserController {
     @Autowired
     private SessionService sessionService;
 
-    @ApiOperation("绑定学号等信息，暂未实现")
+    @ApiOperation("绑定学号信息，openId参数不用传")
     @PostMapping("/bind")
-    public String bind() {
-        return "暂未实现";
+    public BaseRes bind(@OpenId String openId, @RequestParam String jwcAccount) {
+        userService.updateJwcAccount(openId, jwcAccount);
+        return RespUtil.success();
     }
 
     @ApiOperation("登录，获取sessionId")
@@ -59,7 +61,7 @@ public class UserController {
             log.error(returnJson.toString());
             return returnJson.toString();
         }
-        return miniProgramUserService.login(code, rawData);
+        return userService.login(code, rawData);
     }
 
     @ApiOperation("获取用户信息")
