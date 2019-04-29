@@ -8,11 +8,12 @@ import com.hang.bbs.tag.service.TagService;
 import com.hang.bbs.topic.pojo.Topic;
 import com.hang.bbs.topic.pojo.TopicWithBLOBs;
 import com.hang.bbs.topic.service.TopicService;
-import com.hang.constant.WxConstant;
 import com.hang.exceptions.ApiAssert;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.utils.EnumUtil;
 import com.hang.utils.RespUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ import java.util.Map;
 /**
  * @author test
  */
+@Api("主题接口")
 @RestController
 @RequestMapping("/api/topic")
 public class TopicApiController {
@@ -40,12 +42,14 @@ public class TopicApiController {
      * @param pageNo 页数
      * @return Page对象，里面有分页信息
      */
+    @ApiOperation("请求主题列表页")
     @GetMapping("/index")
     public BaseRes index(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "5") Integer pageSize) {
         Page<Map> page = topicService.page(pageNo, pageSize);
         return RespUtil.success(page);
     }
 
+    @ApiOperation("查看主题详情")
     @GetMapping("/{id}")
     public BaseRes detail(@PathVariable Integer id) {
         Map<String, Object> map = new HashMap<>(16);
@@ -71,6 +75,7 @@ public class TopicApiController {
      * @param tag     话题标签，格式是 , 隔开的字符串（英文下的逗号）
      * @return
      */
+    @ApiOperation("新建主题")
     @GetMapping("/save")
     public BaseRes save(@OpenId String openId, String title, String content, String tag) {
         ApiAssert.notEmpty(title, "请输入标题");
@@ -90,6 +95,7 @@ public class TopicApiController {
      * @param tag     话题标签，格式是 , 隔开的字符串（英文下的逗号）
      * @return
      */
+    @ApiOperation("编辑主题")
     @GetMapping("/edit")
     public BaseRes update(@OpenId String openId, Integer id, String title, String content, String tag) {
         ApiAssert.notEmpty(title, "请输入标题");
@@ -114,6 +120,7 @@ public class TopicApiController {
      * @param action 赞成或者反对，只能填：UP, DOWN
      * @return
      */
+    @ApiOperation("为主题点赞")
     @GetMapping("/{id}/vote")
     public BaseRes vote(@OpenId String openId, @PathVariable Integer id, String action) {
         TopicWithBLOBs topic = topicService.findById(id);

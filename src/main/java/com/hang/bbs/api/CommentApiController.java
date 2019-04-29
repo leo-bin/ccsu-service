@@ -12,6 +12,8 @@ import com.hang.exceptions.ApiAssert;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.utils.EnumUtil;
 import com.hang.utils.RespUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,7 @@ import java.util.Map;
 /**
  * @author test
  */
+@Api("主题评论接口")
 @RestController
 @RequestMapping("/api/comment")
 public class CommentApiController {
@@ -35,6 +38,7 @@ public class CommentApiController {
      * @param topicId 话题ID
      * @return
      */
+    @ApiOperation("主题的评论列表")
     @GetMapping("/list")
     public BaseRes list(@RequestParam Integer topicId) {
         return RespUtil.success(commentService.findCommentWithTopic(topicId));
@@ -48,6 +52,7 @@ public class CommentApiController {
      * @param content   评论内容
      * @return
      */
+    @ApiOperation("对某个主题进行评价")
     @PostMapping("/save")
     public BaseRes save(@OpenId String openId, Integer topicId, String content) {
         ApiAssert.notEmpty(content, "评论内容不能为空");
@@ -67,6 +72,7 @@ public class CommentApiController {
      * @param content 评论内容
      * @return
      */
+    @ApiOperation("对某个主题进行编辑")
     @PostMapping("/edit")
     public BaseRes edit(@OpenId String openId, Integer id, String content) {
         ApiAssert.notEmpty(content, "评论内容不能为空");
