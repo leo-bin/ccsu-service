@@ -29,7 +29,7 @@ spring:
 
 mybatis:
   mapperLocations: classpath:mapper/*.xml
-  typeAliasesPackage: com.hang.pojo.data
+  typeAliasesPackage: com.hang
   config-location: classpath:mybatis-config.xml
 
 wx:

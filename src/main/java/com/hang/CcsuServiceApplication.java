@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @SpringBootApplication
-@MapperScan(basePackages = "com.hang.dao")
+@MapperScan(basePackages = "com.hang")
 public class CcsuServiceApplication {
 
     public static void main(String[] args) {
