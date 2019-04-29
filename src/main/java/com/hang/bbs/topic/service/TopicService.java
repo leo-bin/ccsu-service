@@ -97,24 +97,10 @@ public class TopicService {
         topicMapper.deleteByOpenId(openId);
     }
 
-    public Page<Map> page(Integer pageNo, Integer pageSize, String tab) {
-        if (tab.equalsIgnoreCase("good")) {
-            List<Map> list = topicMapper.findTopic(null, true, null, null, null, null, (pageNo - 1) * pageSize, pageSize, "t.top desc, t.weight desc, t.id desc");
-            int count = topicMapper.countTopic(null, true, null, null, null, null);
-            return new Page<>(pageNo, pageSize, count, list);
-        } else if (tab.equalsIgnoreCase("newest")) {
-            List<Map> list = topicMapper.findTopic(null, null, null, null, null, null, (pageNo - 1) * pageSize, pageSize, "t.id desc, t.weight desc");
-            int count = topicMapper.countTopic(null, null, null, null, null, null);
-            return new Page<>(pageNo, pageSize, count, list);
-        } else if (tab.equalsIgnoreCase("noanswer")) {
-            List<Map> list = topicMapper.findTopic(null, null, null, 0, null, null, (pageNo - 1) * pageSize, pageSize, "t.top desc, t.weight desc, t.id desc");
-            int count = topicMapper.countTopic(null, null, null, 0, null, null);
-            return new Page<>(pageNo, pageSize, count, list);
-        } else {
-            List<Map> list = topicMapper.findTopic(null, null, null, null, null, null, (pageNo - 1) * pageSize, pageSize, "t.top desc, t.weight desc, t.id desc");
-            int count = topicMapper.countTopic(null, null, null, null, null, null);
-            return new Page<>(pageNo, pageSize, count, list);
-        }
+    public Page<Map> page(Integer pageNo, Integer pageSize) {
+        List<Map> list = topicMapper.findTopic(null, null, null, null, null, null, (pageNo - 1) * pageSize, pageSize, "t.top desc, t.weight desc, t.id desc");
+        int count = topicMapper.countTopic(null, null, null, null, null, null);
+        return new Page<>(pageNo, pageSize, count, list);
     }
 
     public Page<Map> pageByTagId(Integer pageNo, Integer pageSize, Integer tagId) {

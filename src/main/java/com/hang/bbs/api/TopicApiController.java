@@ -1,6 +1,7 @@
 package com.hang.bbs.api;
 
 import com.hang.annotation.OpenId;
+import com.hang.bbs.common.Page;
 import com.hang.bbs.common.VoteAction;
 import com.hang.bbs.tag.pojo.Tag;
 import com.hang.bbs.tag.service.TagService;
@@ -32,6 +33,18 @@ public class TopicApiController {
 
     @Autowired
     private TagService tagService;
+
+    /**
+     * 首页接口
+     *
+     * @param pageNo 页数
+     * @return Page对象，里面有分页信息
+     */
+    @GetMapping("/")
+    public BaseRes index(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "5") Integer pageSize) {
+        Page<Map> page = topicService.page(pageNo, pageSize);
+        return RespUtil.success(page);
+    }
 
     @GetMapping("/{id}")
     public BaseRes detail(@PathVariable Integer id) {
