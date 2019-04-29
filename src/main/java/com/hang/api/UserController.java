@@ -6,6 +6,7 @@ package com.hang.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hang.annotation.OpenId;
+import com.hang.pojo.data.UserInfoDO;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.service.SessionService;
 import com.hang.service.UserService;
@@ -85,4 +86,10 @@ public class UserController {
 
         return sessionJson.toString();
     }
+
+    @GetMapping("/getUserInfoByOpenId")
+    public BaseRes getUserInfoByOpenId(String openId) {
+        return RespUtil.success(userService.getUserInfoByOpenId(openId));
+    }
+
 }

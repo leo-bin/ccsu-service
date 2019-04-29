@@ -8,7 +8,7 @@
     <result column="in_time" jdbcType="TIMESTAMP" property="inTime"/>
     <result column="topic_id" jdbcType="INTEGER" property="topicId"/>
     <result column="up" jdbcType="INTEGER" property="up"/>
-    <result column="user_id" jdbcType="INTEGER" property="userId"/>
+    <result column="user_id" jdbcType="INTEGER" property="OpenId"/>
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hang.bbs.comment.pojo.CommentWithBLOBs">
     <result column="content" jdbcType="LONGVARCHAR" property="content"/>
@@ -42,7 +42,7 @@
     content, down_ids, up_ids
     )
     values (#{commentId,jdbcType=INTEGER}, #{down,jdbcType=INTEGER}, #{inTime,jdbcType=TIMESTAMP},
-    #{topicId,jdbcType=INTEGER}, #{up,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
+    #{topicId,jdbcType=INTEGER}, #{up,jdbcType=INTEGER}, #{OpenId,jdbcType=INTEGER},
     #{content,jdbcType=LONGVARCHAR}, #{downIds,jdbcType=LONGVARCHAR}, #{upIds,jdbcType=LONGVARCHAR}
     )
   </insert>
@@ -67,7 +67,7 @@
       <if test="up != null">
         up,
       </if>
-      <if test="userId != null">
+      <if test="OpenId != null">
         user_id,
       </if>
       <if test="content != null">
@@ -96,8 +96,8 @@
       <if test="up != null">
         #{up,jdbcType=INTEGER},
       </if>
-      <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
+      <if test="OpenId != null">
+        #{OpenId,jdbcType=INTEGER},
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
@@ -128,8 +128,8 @@
       <if test="up != null">
         up = #{up,jdbcType=INTEGER},
       </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=INTEGER},
+      <if test="OpenId != null">
+        user_id = #{OpenId,jdbcType=INTEGER},
       </if>
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},
@@ -150,7 +150,7 @@
       in_time      = #{inTime,jdbcType=TIMESTAMP},
       topic_id     = #{topicId,jdbcType=INTEGER},
       up           = #{up,jdbcType=INTEGER},
-      user_id      = #{userId,jdbcType=INTEGER},
+      user_id      = #{OpenId,jdbcType=INTEGER},
       content      = #{content,jdbcType=LONGVARCHAR},
       down_ids     = #{downIds,jdbcType=LONGVARCHAR},
       up_ids       = #{upIds,jdbcType=LONGVARCHAR}
@@ -163,7 +163,7 @@
       in_time      = #{inTime,jdbcType=TIMESTAMP},
       topic_id     = #{topicId,jdbcType=INTEGER},
       up           = #{up,jdbcType=INTEGER},
-      user_id      = #{userId,jdbcType=INTEGER}
+      user_id      = #{OpenId,jdbcType=INTEGER}
     WHERE id = #{id,jdbcType=INTEGER}
   </update>
   <!--自定义方法-->
@@ -182,9 +182,9 @@
     DELETE FROM comment
     WHERE topic_id = #{topicId}
   </delete>
-  <delete id="deleteByUserId" parameterType="java.lang.Integer">
+  <delete id="deleteByOpenId" parameterType="java.lang.Integer">
     DELETE FROM comment
-    WHERE user_id = #{userId}
+    WHERE user_id = #{OpenId}
   </delete>
   <select id="findAllForAdmin" resultType="map">
     select c.*, t.id as topic_id, t.title as topic_title, u.username
@@ -205,9 +205,9 @@
     <include refid="Blob_Column_List"/>
     from comment where topic_id = #{topicId}
   </select>
-  <select id="findByUserId" resultType="map">
+  <select id="findByOpenId" resultType="map">
     select c.*, u.username, t.title as topic_title from comment c left join topic t on c.topic_id = t.id left join user
-    u on u.id = c.user_id where c.user_id = #{userId}
+    u on u.id = c.user_id where c.user_id = #{OpenId}
     <if test="orderBy != null">
       order by ${orderBy}
     </if>
@@ -215,10 +215,10 @@
       limit #{pageNo}, #{pageSize}
     </if>
   </select>
-  <select id="countByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  <select id="countByOpenId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     SELECT count(1)
     FROM comment
-    WHERE user_id = #{userId}
+    WHERE user_id = #{OpenId}
   </select>
   <select id="findChildByCommentId" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select <include refid="Base_Column_List"/>, <include refid="Blob_Column_List"/>

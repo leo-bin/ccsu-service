@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.hang.annotation.OpenId;
 import com.hang.enums.ApplyStatusEnum;
 import com.hang.enums.ResultEnum;
-import com.hang.exceptions.GlobalException;
+import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.InformationDO;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.service.ApplyService;
@@ -62,7 +62,7 @@ public class InformationController {
     @PostMapping("/createInformation")
     public BaseRes createInformation(String title, String content, String authors, String category) {
         if (!CATEGORY_MAP.containsKey(category)) {
-            throw new GlobalException(-1, "category不存在");
+            throw new ApiException(-1, "category不存在");
         }
         InformationDO information = new InformationDO();
         information.setTitle(title);

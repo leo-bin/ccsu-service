@@ -10,21 +10,21 @@ import lombok.Getter;
  * function:
  */
 @Getter
-public class GlobalException extends RuntimeException {
+public class ApiException extends RuntimeException {
 
     private Integer code;
 
-    public GlobalException(ResultEnum resultEnum) {
+    public ApiException(ResultEnum resultEnum) {
         this(resultEnum.getCode(), resultEnum.getMsg());
         this.code = resultEnum.getCode();
     }
 
-    public GlobalException(Integer code, String message) {
+    public ApiException(Integer code, String message) {
         super(message);
         this.code = code;
     }
 
-    public GlobalException() {
+    public ApiException() {
         super();
     }
 

@@ -1,12 +1,16 @@
 package com.hang.bbs.api;
 
 import com.hang.annotation.OpenId;
+import com.hang.bbs.common.VoteAction;
 import com.hang.bbs.tag.pojo.Tag;
 import com.hang.bbs.tag.service.TagService;
 import com.hang.bbs.topic.pojo.Topic;
 import com.hang.bbs.topic.pojo.TopicWithBLOBs;
 import com.hang.bbs.topic.service.TopicService;
+import com.hang.constant.WxConstant;
+import com.hang.exceptions.ApiAssert;
 import com.hang.pojo.vo.BaseRes;
+import com.hang.utils.EnumUtil;
 import com.hang.utils.RespUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -54,13 +58,12 @@ public class TopicApiController {
      * @param tag     话题标签，格式是 , 隔开的字符串（英文下的逗号）
      * @return
      */
-    @PostMapping("/save")
+    @GetMapping("/save")
     public BaseRes save(@OpenId String openId, String title, String content, String tag) {
-        /// ApiAssert.notTrue(user.getBlock(), "你的帐户已经被禁用了，不能进行此项操作");
-        /// ApiAssert.notEmpty(title, "请输入标题");
-        /// ApiAssert.notEmpty(tag, "标签不能为空");
-        /// ApiAssert.notTrue(topicService.findByTitle(title) != null, "话题标题已经存在");
+        ApiAssert.notEmpty(title, "请输入标题");
+        ApiAssert.notEmpty(tag, "标签不能为空");
 
+        /// ApiAssert.notTrue(topicService.findByTitle(title) != null, "话题标题已经存在");
         Topic topic = topicService.createTopic(title, content, tag, openId);
         return RespUtil.success(topic);
     }
@@ -74,14 +77,14 @@ public class TopicApiController {
      * @param tag     话题标签，格式是 , 隔开的字符串（英文下的逗号）
      * @return
      */
-    @PostMapping("/edit")
+    @GetMapping("/edit")
     public BaseRes update(@OpenId String openId, Integer id, String title, String content, String tag) {
-        /// ApiAssert.notEmpty(title, "请输入标题");
-        /// ApiAssert.notEmpty(content, "请输入内容");
-        /// ApiAssert.notEmpty(tag, "标签不能为空");
+        ApiAssert.notEmpty(title, "请输入标题");
+        ApiAssert.notEmpty(content, "请输入内容");
+        ApiAssert.notEmpty(tag, "标签不能为空");
 
         TopicWithBLOBs oldTopic = topicService.findById(id);
-        /// ApiAssert.isTrue(oldTopic.getUserId().equals(user.getId()), "不能修改别人的话题");
+        ApiAssert.isTrue(oldTopic.getOpenId().equals(openId), "不能修改别人的话题");
 
         TopicWithBLOBs topic = oldTopic;
         topic.setTitle(title);
@@ -100,16 +103,12 @@ public class TopicApiController {
      */
     @GetMapping("/{id}/vote")
     public BaseRes vote(@OpenId String openId, @PathVariable Integer id, String action) {
-        /// ApiAssert.isTrue(user.getReputation() >= ReputationPermission.VOTE_TOPIC.getReputation(), "声望太低，不能进行这项操作");
-
         TopicWithBLOBs topic = topicService.findById(id);
+        ApiAssert.notNull(topic, "话题不存在");
+        ApiAssert.notTrue(openId.equals(topic.getOpenId()), "不能给自己的话题投票");
+        ApiAssert.isTrue(EnumUtil.isDefined(VoteAction.values(), action), "参数错误");
 
-        /// ApiAssert.notNull(topic, "话题不存在");
-        /// ApiAssert.notTrue(user.getId().equals(topic.getUserId()), "不能给自己的话题投票");
-
-        /// ApiAssert.isTrue(EnumUtil.isDefined(VoteAction.values(), action), "参数错误");
-
-        /// Map<String, Object> map = topicService.vote(user.getId(), topic, action);
-        return RespUtil.success(null);
+        Map<String, Object> map = topicService.vote(openId, topic, action);
+        return RespUtil.success(map);
     }
 }

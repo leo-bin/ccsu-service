@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.hang.dao.CourseDAO;
 import com.hang.dao.LostPropertyAndRecruitDAO;
 import com.hang.enums.LostPropertyAndRecruitEnum;
-import com.hang.exceptions.GlobalException;
+import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.CourseDO;
 import com.hang.pojo.data.LostPropertyAndRecruitDO;
 import com.hang.pojo.vo.CourseVO;
@@ -69,7 +69,7 @@ public class SchoolService {
         lostPropertyAndRecruitDO.setCategory(lostPropertyAndRecruitEnum.name());
         int i = lostPropertyAndRecruitDAO.insert(lostPropertyAndRecruitDO);
         if (i != 1) {
-            throw new GlobalException(-1, "存储失败");
+            throw new ApiException(-1, "存储失败");
         }
     }
 

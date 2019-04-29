@@ -10,6 +10,7 @@ import java.util.Map;
 
 @Repository
 public interface CommentMapper {
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(CommentWithBLOBs record);
@@ -30,7 +31,7 @@ public interface CommentMapper {
 
     void deleteByTopicId(Integer topicId);
 
-    void deleteByUserId(Integer userId);
+    void deleteByOpenId(String openId);
 
     List<Map> findAllForAdmin(
             @Param("pageNo") Integer pageNo,
@@ -42,14 +43,14 @@ public interface CommentMapper {
 
     List<CommentWithBLOBs> findCommentByTopicId(Integer topicId);
 
-    List<Map> findByUserId(
-            @Param("openId") Integer userId,
+    List<Map> findByOpenId(
+            @Param("openId") String openId,
             @Param("pageNo") Integer pageNo,
             @Param("pageSize") Integer pageSize,
             @Param("orderBy") String orderBy
     );
 
-    int countByUserId(Integer userId);
+    int countByOpenId(String openId);
 
     List<CommentWithBLOBs> findChildByCommentId(@Param("commentId") Integer commentId);
 

@@ -1,7 +1,7 @@
 package com.hang.exceptions.handler;
 
 import com.hang.enums.ResultEnum;
-import com.hang.exceptions.GlobalException;
+import com.hang.exceptions.ApiException;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.utils.RespUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -39,8 +39,8 @@ public class GlobalExceptionHandler {
         log.error("exception", ex);
 
         // 自定义的感兴趣的异常
-        if (ex instanceof GlobalException) {
-            GlobalException globalException = (GlobalException) ex;
+        if (ex instanceof ApiException) {
+            ApiException globalException = (ApiException) ex;
             return RespUtil.error(globalException.getCode(), globalException.getMessage());
             // 其他异常
         } else if (ex instanceof HttpRequestMethodNotSupportedException) {

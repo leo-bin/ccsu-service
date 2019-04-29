@@ -1,7 +1,8 @@
 package com.hang.bbs.topic.service;
 
+import com.google.common.collect.Lists;
 import com.hang.bbs.common.Page;
-import com.hang.bbs.comment.service.CommentService;
+import com.hang.bbs.common.VoteAction;
 import com.hang.bbs.tag.pojo.Tag;
 import com.hang.bbs.tag.service.TagService;
 import com.hang.bbs.topic.mapper.TopicMapper;
@@ -23,9 +24,6 @@ public class TopicService {
 
     @Autowired
     private TopicMapper topicMapper;
-
-    @Autowired
-    private CommentService commentService;
 
     @Autowired
     private TopicTagService topicTagService;
@@ -156,11 +154,71 @@ public class TopicService {
                 top = true;
             }
         }
-        if ("".equals(startTime)) startTime = null;
-        if ("".equals(endTime)) endTime = null;
+        if ("".equals(startTime)) {
+            startTime = null;
+        }
+        if ("".equals(endTime)) {
+            endTime = null;
+        }
         List<Map> list = topicMapper.findTopic(openId, good, top, null, startTime, endTime, (pageNo - 1) * pageSize, pageSize, "t.top desc, t.weight desc, t.id desc");
         int count = topicMapper.countTopic(openId, good, top, null, startTime, endTime);
         return new Page<>(pageNo, pageSize, count, list);
+    }
+
+    public Map<String, Object> vote(String openId, TopicWithBLOBs topic, String action) {
+        Map<String, Object> map = new HashMap<>(16);
+        List<String> upIds = new ArrayList<>();
+        List<String> downIds = new ArrayList<>();
+        if (!StringUtils.isEmpty(topic.getUpIds())) {
+            upIds = Lists.newArrayList(topic.getUpIds().split(","));
+        }
+        if (!StringUtils.isEmpty(topic.getDownIds())) {
+            downIds = Lists.newArrayList(topic.getDownIds().split(","));
+        }
+        if (action.equals(VoteAction.UP.name())) {
+            // 如果点踩ID里有，就删除，并将down - 1
+            if (downIds.contains(openId)) {
+                topic.setDown(topic.getDown() - 1);
+                downIds.remove(openId);
+            }
+            // 如果点赞ID里没有，就添加上，并将up + 1
+            if (!upIds.contains(openId)) {
+                topic.setUp(topic.getUp() + 1);
+                map.put("isUp", true);
+                map.put("isDown", false);
+            } else {
+                upIds.remove(openId);
+                topic.setUp(topic.getUp() - 1);
+                map.put("isUp", false);
+                map.put("isDown", false);
+            }
+        } else if (action.equals(VoteAction.DOWN.name())) {
+            // 如果点赞ID里有，就删除，并将up - 1
+            if (upIds.contains(openId)) {
+                topic.setUp(topic.getUp() - 1);
+                upIds.remove(openId);
+            }
+            // 如果点踩ID里没有，就添加上，并将down + 1
+            if (!downIds.contains(openId)) {
+                downIds.add(openId);
+                topic.setDown(topic.getDown() + 1);
+                map.put("isUp", false);
+                map.put("isDown", true);
+            } else {
+                downIds.remove(openId);
+                topic.setDown(topic.getDown() - 1);
+                map.put("isUp", false);
+                map.put("isDown", false);
+            }
+        }
+        topic.setUpIds(StringUtils.collectionToCommaDelimitedString(upIds));
+        topic.setDownIds(StringUtils.collectionToCommaDelimitedString(downIds));
+        update(topic);
+        map.put("up", topic.getUp());
+        map.put("down", topic.getDown());
+        map.put("topicId", topic.getId());
+        map.put("vote", topic.getUp() - topic.getDown());
+        return map;
     }
 
 }

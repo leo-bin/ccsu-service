@@ -1,13 +1,16 @@
 package com.hang.bbs.comment.service;
 
+import com.google.common.collect.Lists;
 import com.hang.bbs.common.Page;
 import com.hang.bbs.comment.mapper.CommentMapper;
 import com.hang.bbs.comment.pojo.CommentWithBLOBs;
+import com.hang.bbs.common.VoteAction;
 import com.hang.bbs.topic.pojo.TopicWithBLOBs;
 import com.hang.bbs.topic.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -36,12 +39,12 @@ public class CommentService {
         commentMapper.updateByPrimaryKeySelective(commentWithBLOBs);
     }
 
-    public CommentWithBLOBs update(TopicWithBLOBs topic, CommentWithBLOBs oldComment, CommentWithBLOBs comment, Integer userId) {
+    public CommentWithBLOBs update(TopicWithBLOBs topic, CommentWithBLOBs oldComment, CommentWithBLOBs comment, String openId) {
         this.update(comment);
         return comment;
     }
 
-    public void delete(Integer id, Integer userId) {
+    public void delete(Integer id, String openId) {
         CommentWithBLOBs comment = this.findById(id);
         if (comment != null) {
             TopicWithBLOBs topic = topicService.findById(comment.getTopicId());
@@ -63,10 +66,10 @@ public class CommentService {
     /**
      * 删除用户发布的所有评论
      *
-     * @param userId
+     * @param openId
      */
-    public void deleteByUserId(Integer userId) {
-        commentMapper.deleteByUserId(userId);
+    public void deleteByOpenId(String openId) {
+        commentMapper.deleteByOpenId(openId);
     }
 
     /**
@@ -152,16 +155,86 @@ public class CommentService {
      *
      * @return
      */
-    public Page<Map> findByUser(Integer pageNo, Integer pageSize, Integer userId) {
-        List<Map> list = commentMapper.findByUserId(userId, (pageNo - 1) * pageSize, pageSize, "c.id desc");
-        int count = commentMapper.countByUserId(userId);
+    public Page<Map> findByUser(Integer pageNo, Integer pageSize, String openId) {
+        List<Map> list = commentMapper.findByOpenId(openId, (pageNo - 1) * pageSize, pageSize, "c.id desc");
+        int count = commentMapper.countByOpenId(openId);
         return new Page<>(pageNo, pageSize, count, list);
     }
 
-    // 后台评论列表
+    /**
+     * 后台评论列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
     public Page<Map> findAllForAdmin(Integer pageNo, Integer pageSize) {
         List<Map> list = commentMapper.findAllForAdmin((pageNo - 1) * pageSize, pageSize, "c.id desc");
         int count = commentMapper.countAllForAdmin();
         return new Page<>(pageNo, pageSize, count, list);
+    }
+
+    /**
+     * 对评论投票
+     *
+     * @param openId
+     * @param comment
+     */
+    public Map<String, Object> vote(String openId, CommentWithBLOBs comment, String action) {
+        Map<String, Object> map = new HashMap<>(16);
+        List<String> upIds = new ArrayList<>();
+        List<String> downIds = new ArrayList<>();
+        if (!StringUtils.isEmpty(comment.getUpIds())) {
+            upIds = Lists.newArrayList(comment.getUpIds().split(","));
+        }
+        if (!StringUtils.isEmpty(comment.getDownIds())) {
+            downIds = Lists.newArrayList(comment.getDownIds().split(","));
+        }
+
+        if (action.equals(VoteAction.UP.name())) {
+            // 如果点踩ID里有，就删除，并将down - 1
+            if (downIds.contains(openId)) {
+                comment.setDown(comment.getDown() - 1);
+                downIds.remove(openId);
+            }
+            // 如果点赞ID里没有，就添加上，并将up + 1
+            if (!upIds.contains(openId)) {
+                upIds.add(openId);
+                comment.setUp(comment.getUp() + 1);
+                map.put("isUp", true);
+                map.put("isDown", false);
+            } else {
+                upIds.remove(openId);
+                comment.setUp(comment.getUp() - 1);
+                map.put("isUp", false);
+                map.put("isDown", false);
+            }
+        } else if (action.equals(VoteAction.DOWN.name())) {
+            // 如果点赞ID里有，就删除，并将up - 1
+            if (upIds.contains(openId)) {
+                comment.setUp(comment.getUp() - 1);
+                upIds.remove(openId);
+            }
+            // 如果点踩ID里没有，就添加上，并将down + 1
+            if (!downIds.contains(openId)) {
+                downIds.add(openId);
+                comment.setDown(comment.getDown() + 1);
+                map.put("isUp", false);
+                map.put("isDown", true);
+            } else {
+                downIds.remove(openId);
+                comment.setDown(comment.getDown() - 1);
+                map.put("isUp", false);
+                map.put("isDown", false);
+            }
+        }
+        map.put("commentId", comment.getId());
+        map.put("up", comment.getUp());
+        map.put("down", comment.getDown());
+        map.put("vote", comment.getUp() - comment.getDown());
+        comment.setUpIds(StringUtils.collectionToCommaDelimitedString(upIds));
+        comment.setDownIds(StringUtils.collectionToCommaDelimitedString(downIds));
+        update(comment);
+        return map;
     }
 }

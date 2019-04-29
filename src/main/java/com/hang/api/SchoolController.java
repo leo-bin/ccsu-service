@@ -3,7 +3,7 @@ package com.hang.api;
 import com.hang.annotation.OpenId;
 import com.hang.enums.LostPropertyAndRecruitEnum;
 import com.hang.enums.ResultEnum;
-import com.hang.exceptions.GlobalException;
+import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.CourseDO;
 import com.hang.pojo.data.UserInfoDO;
 import com.hang.pojo.vo.BaseRes;
@@ -98,15 +98,15 @@ public class SchoolController {
 
     private void openIdCheck(String openId) {
         if (StringUtils.isEmpty(openId)) {
-            throw new GlobalException(ResultEnum.CAN_NOT_GET_OPEN_ID);
+            throw new ApiException(ResultEnum.CAN_NOT_GET_OPEN_ID);
         }
     }
 
     private void jwcAccountCheck(UserInfoDO userInfo) {
         if (Objects.isNull(userInfo)) {
-            throw new GlobalException(ResultEnum.CAN_NOT_GET_USER_INFO);
+            throw new ApiException(ResultEnum.CAN_NOT_GET_USER_INFO);
         } else if (StringUtils.isEmpty(userInfo.getJwcAccount())) {
-            throw new GlobalException(ResultEnum.JWC_ACCOUNT_NOT_BIND);
+            throw new ApiException(ResultEnum.JWC_ACCOUNT_NOT_BIND);
         }
     }
 

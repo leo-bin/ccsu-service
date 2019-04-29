@@ -7,7 +7,7 @@ package com.hang.service;
 import com.alibaba.fastjson.JSONObject;
 import com.hang.constant.WxConstant;
 import com.hang.dao.UserInfoDAO;
-import com.hang.exceptions.GlobalException;
+import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.UserInfoDO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
@@ -46,11 +46,11 @@ public class UserService {
         return userInfoDAO.selectByOpenId(openId);
     }
 
-    @Transactional(rollbackFor = GlobalException.class)
+    @Transactional(rollbackFor = ApiException.class)
     public void updateJwcAccount(String openId, String jwcAccount) {
         int i = userInfoDAO.updateJwcAccount(openId, jwcAccount.toUpperCase());
         if (i != 1) {
-            throw new GlobalException(-1, "绑定失败");
+            throw new ApiException(-1, "绑定失败");
         }
     }
 

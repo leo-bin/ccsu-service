@@ -2,7 +2,7 @@ package com.hang.service;
 
 import com.google.common.collect.Lists;
 import com.hang.dao.InformationDAO;
-import com.hang.exceptions.GlobalException;
+import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.InformationDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +35,7 @@ public class InformationService {
     public int addInformation(InformationDO information) {
         int i = informationDAO.insert(information);
         if (i != 1) {
-            throw new GlobalException(-1, "添加失败");
+            throw new ApiException(-1, "添加失败");
         }
         cacheService.addInformation2Cache(information);
         return information.getId();
@@ -49,7 +49,7 @@ public class InformationService {
     public void removeInformation(int id) {
         int i = informationDAO.delete(id);
         if (i != 1) {
-            throw new GlobalException(-1, "删除失败");
+            throw new ApiException(-1, "删除失败");
         }
         cacheService.removeInformationFromCache(id);
     }
@@ -62,7 +62,7 @@ public class InformationService {
     public void modifyInformation(InformationDO information) {
         int i = informationDAO.update(information);
         if (i != 1) {
-            throw new GlobalException(-1, "修改失败");
+            throw new ApiException(-1, "修改失败");
         }
         cacheService.addInformation2Cache(information);
     }

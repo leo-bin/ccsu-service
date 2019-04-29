@@ -3,7 +3,7 @@ package com.hang.service;
 import com.hang.dao.ApplyDAO;
 import com.hang.enums.ApplyStatusEnum;
 import com.hang.enums.InformationCategoryEnum;
-import com.hang.exceptions.GlobalException;
+import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.InformationApplyDO;
 import com.hang.pojo.data.InformationDO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +37,10 @@ public class ApplyService {
     public void apply(int informationId, String openId) {
         InformationDO information = informationService.getInformationById(informationId);
         if (information == null) {
-            throw new GlobalException(-1, "information不存在");
+            throw new ApiException(-1, "information不存在");
         }
         if (!InformationCategoryEnum.ACTIVITY.name().equals(information.getCategory())) {
-            throw new GlobalException(-1, "information类型错误");
+            throw new ApiException(-1, "information类型错误");
         }
         InformationApplyDO apply = new InformationApplyDO();
         apply.setOpenId(openId);
@@ -48,7 +48,7 @@ public class ApplyService {
         apply.setStatus(ApplyStatusEnum.CURRENT_APPLY.name());
         int i = applyDAO.insert(apply);
         if (i != 1) {
-            throw new GlobalException(-1, "报名失败，无法重复报名");
+            throw new ApiException(-1, "报名失败，无法重复报名");
         }
     }
 
@@ -68,7 +68,7 @@ public class ApplyService {
         int informationId = apply.getInformationId();
         InformationDO information = informationService.getInformationById(informationId);
         if (information == null) {
-            throw new GlobalException(-1, "information不存在");
+            throw new ApiException(-1, "information不存在");
         }
         String content;
         if (applyStatus.equals(ApplyStatusEnum.FAILURE)) {
@@ -80,7 +80,7 @@ public class ApplyService {
 
         int i = applyDAO.update(applyId, applyStatus.name());
         if (i != 1) {
-            throw new GlobalException(-1, "更新失败");
+            throw new ApiException(-1, "更新失败");
         }
     }
 

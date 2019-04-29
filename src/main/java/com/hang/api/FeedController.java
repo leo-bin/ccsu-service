@@ -1,7 +1,7 @@
 package com.hang.api;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.hang.exceptions.GlobalException;
+import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.InformationDO;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.service.InformationService;
@@ -74,10 +74,11 @@ public class FeedController {
     @ApiOperation("根据类别查询feed流数据")
     @JsonView(InformationDO.SimpleInformation.class)
     @GetMapping("/listByCategory")
-    public BaseRes listByCategory(String category, @RequestParam(required = false, defaultValue = "0") int start,
+    public BaseRes listByCategory(String category,
+                                  @RequestParam(required = false, defaultValue = "0") int start,
                                   @RequestParam(required = false, defaultValue = "10") int offset) {
         if (!CATEGORY_MAP.containsKey(category)) {
-            throw new GlobalException(-1, "category不存在");
+            throw new ApiException(-1, "category不存在");
         }
 
         List<InformationDO> informations = informationService.getInformationByCategory(category, start, offset);
