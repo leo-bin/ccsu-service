@@ -27,7 +27,6 @@ public interface TopicMapper {
 
   int updateByPrimaryKey(Topic record);
 
-  //自定义方法
   List<Map> findTopic(
           @Param("openId") String openId,
           @Param("good") Boolean good,

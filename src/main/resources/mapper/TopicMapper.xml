@@ -257,7 +257,7 @@
   </update>
   <!--自定义方法-->
   <select id="findTopic" resultType="map">
-    select t.*, u.username, u.avatar from topic t left join user u on t.open_id = u.id
+    select t.*, u.nick_name, u.avatar_url from topic t left join t_user_info u on t.open_id = u.id
     <where>
       <if test="openId != null">
         t.open_id = #{openId}
@@ -310,7 +310,7 @@
     from topic where title = #{title}
   </select>
   <select id="findTopicsByTagId" resultType="map">
-    select t.*, u.username, u.avatar from topic t left join topic_tag tt on t.id = tt.topic_id left join user u on
+    select t.*, u.nick_name, u.avatar_url from topic t left join topic_tag tt on t.id = tt.topic_id left join t_user_info u on
     t.open_id = u.id
     where tt.tag_id = #{tagId}
     <if test="orderBy != null">

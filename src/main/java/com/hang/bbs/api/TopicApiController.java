@@ -40,7 +40,7 @@ public class TopicApiController {
      * @param pageNo 页数
      * @return Page对象，里面有分页信息
      */
-    @GetMapping("/")
+    @GetMapping("/index")
     public BaseRes index(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "5") Integer pageSize) {
         Page<Map> page = topicService.page(pageNo, pageSize);
         return RespUtil.success(page);
