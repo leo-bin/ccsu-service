@@ -58,8 +58,8 @@ public class NotificationService {
      * @return
      */
     public Page<Map> findByTargetUserAndIsRead(Integer pageNo, Integer pageSize, String targetOpenId, Boolean isRead) {
-        List<Map> list = notificationMapper.findByTargetUserId(targetOpenId, isRead, (pageNo - 1) * pageSize, pageSize, "n.is_read asc, n.id desc");
-        int count = notificationMapper.countByTargetUserId(targetOpenId, isRead);
+        List<Map> list = notificationMapper.findByTargetOpenId(targetOpenId, isRead, (pageNo - 1) * pageSize, pageSize, "n.is_read asc, n.id desc");
+        int count = notificationMapper.countByTargetOpenId(targetOpenId, isRead);
         return new Page<>(pageNo, pageSize, count, list);
     }
 
@@ -70,7 +70,7 @@ public class NotificationService {
      * @return
      */
     public long countByTargetUserAndIsRead(String targetOpenId, boolean isRead) {
-        return notificationMapper.countByTargetUserId(targetOpenId, isRead);
+        return notificationMapper.countByTargetOpenId(targetOpenId, isRead);
     }
 
     /**
