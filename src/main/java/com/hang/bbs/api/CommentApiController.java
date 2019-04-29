@@ -36,27 +36,27 @@ public class CommentApiController {
      * @return
      */
     @GetMapping("/list")
-    public BaseRes list(Integer topicId) {
+    public BaseRes list(@RequestParam Integer topicId) {
         return RespUtil.success(commentService.findCommentWithTopic(topicId));
     }
 
     /**
      * 保存评论
+     * 回复的评论ID，可以为null
      *
      * @param topicId   话题ID
-     * @param commentId 回复的评论ID，可以为null
      * @param content   评论内容
      * @return
      */
     @PostMapping("/save")
-    public BaseRes save(@OpenId String openId, Integer topicId, Integer commentId, String content) {
+    public BaseRes save(@OpenId String openId, Integer topicId, String content) {
         ApiAssert.notEmpty(content, "评论内容不能为空");
         ApiAssert.notNull(topicId, "话题ID不存在");
 
         TopicWithBLOBs topic = topicService.findById(topicId);
         ApiAssert.notNull(topic, "回复的话题不存在");
 
-        Comment comment = commentService.createComment(openId, topic, commentId, content);
+        Comment comment = commentService.createComment(openId, topic, null, content);
         return RespUtil.success(comment);
     }
 

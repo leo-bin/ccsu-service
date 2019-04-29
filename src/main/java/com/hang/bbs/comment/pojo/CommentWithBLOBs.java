@@ -14,4 +14,6 @@ public class CommentWithBLOBs extends Comment {
 
     private String upIds;
 
+    private String openId;
+
 }
