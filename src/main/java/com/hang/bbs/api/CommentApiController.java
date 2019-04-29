@@ -72,7 +72,7 @@ public class CommentApiController {
      * @param content 评论内容
      * @return
      */
-    @ApiOperation("对某个主题进行编辑")
+    @ApiOperation("对某个评论进行编辑")
     @PostMapping("/edit")
     public BaseRes edit(@OpenId String openId, Integer id, String content) {
         ApiAssert.notEmpty(content, "评论内容不能为空");
@@ -92,6 +92,7 @@ public class CommentApiController {
      * @param action 评论动作，只能填 UP, DOWN
      * @return
      */
+    @ApiOperation("对评论投票")
     @GetMapping("/{id}/vote")
     public BaseRes vote(@OpenId String openId, @PathVariable Integer id, String action) {
         CommentWithBLOBs comment = commentService.findById(id);
