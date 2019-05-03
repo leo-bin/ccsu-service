@@ -22,8 +22,10 @@ public class StudentService {
         }
 
         StudentDO studentDO = studentDAO.selectStudentDOByOpenId(openId);
-        if (StringUtils.isBlank(studentDO.getJwcAccount())) {
-            studentDO.setJwcAccount("未绑定");
+        if(studentDO != null) {
+            if (StringUtils.isBlank(studentDO.getJwcAccount())) {
+                studentDO.setJwcAccount("未绑定");
+            }
         }
         return studentDO;
     }

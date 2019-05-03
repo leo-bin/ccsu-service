@@ -6,6 +6,7 @@ package com.hang.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hang.annotation.OpenId;
+import com.hang.enums.ResultEnum;
 import com.hang.pojo.data.StudentDO;
 import com.hang.pojo.data.UserInfoDO;
 import com.hang.pojo.vo.BaseRes;
@@ -103,6 +104,9 @@ public class UserController {
     public BaseRes personCenter(@OpenId String openId) {
         log.info("openId:{}", openId);
         StudentDO studentInfo = studentService.getStudentInfo(openId);
+        if(studentInfo == null) {
+            return RespUtil.error(ResultEnum.JWC_ACCOUNT_NOT_BIND);
+        }
         return RespUtil.success(studentInfo);
     }
 
