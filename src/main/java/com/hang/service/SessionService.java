@@ -53,7 +53,7 @@ public class SessionService {
         log.info("redis get {} = ", sessionId, sessionInfo);
         if (sessionInfo == null) {
             // 两种情况：sessionId 不存在，sessionId 已过期。这里统一当作过期处理
-            returnJson.put("errcode", 10012);
+            returnJson.put("errcode", -10008);
             returnJson.put("errmsg", "your sessionId was not exist or expired.");
             return returnJson;
         }

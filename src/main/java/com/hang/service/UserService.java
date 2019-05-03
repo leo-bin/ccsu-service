@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hang.constant.WxConstant;
 import com.hang.dao.UserInfoDAO;
 import com.hang.exceptions.ApiException;
+import com.hang.pojo.data.StudentDO;
 import com.hang.pojo.data.UserInfoDO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
@@ -42,8 +43,24 @@ public class UserService {
     @Autowired
     private UserInfoDAO userInfoDAO;
 
+    @Autowired
+    private StudentService studentService;
+
     public UserInfoDO getUserInfoByOpenId(String openId) {
         return userInfoDAO.selectByOpenId(openId);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void bind(String openId, String jwcAccount) {
+        updateJwcAccount(openId, jwcAccount);
+
+        UserInfoDO userInfoDO = userInfoDAO.selectByOpenId(openId);
+        StudentDO studentDO = new StudentDO();
+        studentDO.setJwcAccount(userInfoDO.getJwcAccount());
+        studentDO.setNickName(userInfoDO.getNickName());
+        studentDO.setGrade(userInfoDO.getJwcAccount().substring(1, 5));
+        studentDO.setOpenId(userInfoDO.getOpenId());
+        studentService.saveStudentInfo(studentDO);
     }
 
     @Transactional(rollbackFor = ApiException.class)

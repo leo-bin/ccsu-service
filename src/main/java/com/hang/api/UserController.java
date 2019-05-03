@@ -6,9 +6,11 @@ package com.hang.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hang.annotation.OpenId;
+import com.hang.pojo.data.StudentDO;
 import com.hang.pojo.data.UserInfoDO;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.service.SessionService;
+import com.hang.service.StudentService;
 import com.hang.service.UserService;
 import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
@@ -41,10 +43,14 @@ public class UserController {
     @Autowired
     private SessionService sessionService;
 
+    @Autowired
+    private StudentService studentService;
+
     @ApiOperation("绑定学号信息，openId参数不用传")
     @PostMapping("/bind")
     public BaseRes bind(@OpenId String openId, @RequestParam String jwcAccount) {
-        userService.updateJwcAccount(openId, jwcAccount);
+        log.info("jwcAccount:{}, openId:{}", jwcAccount, openId);
+        userService.bind(openId, jwcAccount);
         return RespUtil.success();
     }
 
@@ -90,6 +96,32 @@ public class UserController {
     @GetMapping("/getUserInfoByOpenId")
     public BaseRes getUserInfoByOpenId(String openId) {
         return RespUtil.success(userService.getUserInfoByOpenId(openId));
+    }
+
+    @ApiOperation("个人中心")
+    @GetMapping("/personCenter")
+    public BaseRes personCenter(@OpenId String openId) {
+        log.info("openId:{}", openId);
+        StudentDO studentInfo = studentService.getStudentInfo(openId);
+        return RespUtil.success(studentInfo);
+    }
+
+    @ApiOperation("修改个人信息")
+    @GetMapping("/modifyStudentInfo")
+    public BaseRes modifyStudentInfo(@OpenId String openId, String jwcAccount, String nickName, String department) {
+        log.info("openId:{}", openId);
+        StudentDO studentDO = new StudentDO();
+        studentDO.setOpenId(openId);
+        UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
+        if(StringUtils.isEmpty(jwcAccount)) {
+            jwcAccount = userInfo.getJwcAccount();
+        }
+        studentDO.setNickName(nickName);
+        studentDO.setDepartment(department);
+        studentDO.setJwcAccount(jwcAccount);
+        userService.updateJwcAccount(openId, jwcAccount);
+        studentService.modifyStudentInfo(studentDO);
+        return RespUtil.success();
     }
 
 }

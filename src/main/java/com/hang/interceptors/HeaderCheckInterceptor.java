@@ -23,8 +23,8 @@ import java.util.Map;
 @Component
 public class HeaderCheckInterceptor extends HandlerInterceptorAdapter {
 
-    @Value("${requiredHeaders: appPlatform,appVersion,sessionId}")
-    private String requiredHeaders = "appPlatform,appVersion,sessionId";
+    @Value("${requiredHeaders}")
+    private String requiredHeaders;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

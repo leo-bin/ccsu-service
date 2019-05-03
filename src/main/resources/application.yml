@@ -35,3 +35,5 @@ mybatis:
 wx:
   appId: wxba259c9cc25c8a20
   appSecret: c911996088c1946f02d1af55d452a539
+
+requiredHeaders: appPlatform,appVersion
