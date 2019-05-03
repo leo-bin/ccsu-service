@@ -4,6 +4,7 @@
  */
 package com.hang.api;
 
+import com.hang.pojo.vo.BaseRes;
 import com.hang.service.SessionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -50,7 +51,7 @@ public class SessionController {
      */
     @ApiOperation("获取会话信息")
     @RequestMapping(value = "/getSessionInfo", method = RequestMethod.GET)
-    public String getSessionInfo(@RequestBody String json, String sessionId) {
+    public BaseRes getSessionInfo(@RequestBody String json, String sessionId) {
         log.info("sessionId: " + request.getHeader("sessionId"));
         log.info("appPlatform: " + request.getHeader("appPlatform"));
         log.info("appVersion: " + request.getHeader("appVersion"));
@@ -58,6 +59,6 @@ public class SessionController {
         if (Strings.isEmpty(sessionId)) {
             sessionId = request.getHeader("sessionId");
         }
-        return sessionService.getSessionInfo(sessionId).toJSONString();
+        return sessionService.getSessionInfo(sessionId);
     }
 }

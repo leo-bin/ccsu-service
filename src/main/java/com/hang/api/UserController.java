@@ -74,7 +74,7 @@ public class UserController {
 
     @ApiOperation("获取用户信息")
     @GetMapping("/getUserInfo")
-    public String getUserInfo(String sessionId) throws IOException {
+    public BaseRes getUserInfo(String sessionId) throws IOException {
         log.info("sessionId: " + request.getHeader("sessionId"));
         log.info("appPlatform: " + request.getHeader("appPlatform"));
         log.info("appVersion: " + request.getHeader("appVersion"));
@@ -82,16 +82,8 @@ public class UserController {
         if (Strings.isEmpty(sessionId)) {
             sessionId = request.getHeader("sessionId");
         }
-        JSONObject returnJson = new JSONObject();
-        JSONObject sessionJson = sessionService.getSessionInfo(sessionId);
-        int errcode = sessionJson.getIntValue("errcode");
-        if (0 != errcode) {
-            returnJson.put("errcode", errcode);
-            returnJson.put("errmsg", sessionJson.getString("errmsg"));
-            return returnJson.toString();
-        }
 
-        return sessionJson.toString();
+        return sessionService.getSessionInfo(sessionId);
     }
 
     @GetMapping("/getUserInfoByOpenId")
@@ -104,7 +96,7 @@ public class UserController {
     public BaseRes personCenter(@OpenId String openId) {
         log.info("openId:{}", openId);
         StudentDO studentInfo = studentService.getStudentInfo(openId);
-        if(studentInfo == null) {
+        if (studentInfo == null) {
             return RespUtil.error(ResultEnum.JWC_ACCOUNT_NOT_BIND);
         }
         return RespUtil.success(studentInfo);
@@ -117,7 +109,7 @@ public class UserController {
         StudentDO studentDO = new StudentDO();
         studentDO.setOpenId(openId);
         UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
-        if(StringUtils.isEmpty(jwcAccount)) {
+        if (StringUtils.isEmpty(jwcAccount)) {
             jwcAccount = userInfo.getJwcAccount();
         }
         studentDO.setNickName(nickName);

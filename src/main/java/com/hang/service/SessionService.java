@@ -4,7 +4,13 @@
  */
 package com.hang.service;
 
+import com.alibaba.druid.support.json.JSONUtils;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.hang.pojo.data.UserInfoDO;
+import com.hang.pojo.vo.BaseRes;
+import com.hang.utils.RedisUtil;
+import com.hang.utils.RespUtil;
 import com.hang.utils.TokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,21 +52,24 @@ public class SessionService {
         return returnJson;
     }
 
-    public JSONObject getSessionInfo(String sessionId) {
-        JSONObject returnJson = new JSONObject();
+    public BaseRes getSessionInfo(String sessionId) {
+        /// JSONObject returnJson = new JSONObject();
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         String sessionInfo = ops.get(sessionId);
-        log.info("redis get {} = ", sessionId, sessionInfo);
+        UserInfoDO userInfoDO = JSON.parseObject(sessionInfo, UserInfoDO.class);
+        log.info("redis sessionId : {}, sessionInfo : {}", sessionId, sessionInfo);
         if (sessionInfo == null) {
             // 两种情况：sessionId 不存在，sessionId 已过期。这里统一当作过期处理
-            returnJson.put("errcode", -10008);
-            returnJson.put("errmsg", "your sessionId was not exist or expired.");
-            return returnJson;
+            /// returnJson.put("errcode", -10008);
+            /// returnJson.put("errmsg", "your sessionId was not exist or expired.");
+            /// return returnJson;
+            return RespUtil.error(-10008, "your sessionId was not exist or expired.");
         }
         redisTemplate.expire(sessionId, expiredIn, TimeUnit.SECONDS);
-        returnJson.put("errcode", 0);
-        returnJson.put("errmsg", "success");
-        returnJson.put("userInfo", sessionInfo);
-        return returnJson;
+        /// returnJson.put("errcode", 0);
+        /// returnJson.put("errmsg", "success");
+        /// returnJson.put("userInfo", sessionInfo);
+        /// return returnJson;
+        return RespUtil.success(userInfoDO);
     }
 }

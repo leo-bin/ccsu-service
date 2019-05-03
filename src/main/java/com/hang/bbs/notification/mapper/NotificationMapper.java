@@ -30,13 +30,12 @@ public interface NotificationMapper {
 
     List<Map> findByTargetOpenId(
             @Param("targetOpenId") String targetOpenId,
-            @Param("isRead") Boolean isRead,
             @Param("pageNo") Integer pageNo,
             @Param("pageSize") Integer pageSize,
             @Param("orderBy") String orderBy
     );
 
-    int countByTargetOpenId(@Param("targetOpenId") String targetOpenId, @Param("isRead") Boolean isRead);
+    int countByTargetOpenId(@Param("targetOpenId") String targetOpenId);
 
     void updateByIsRead(String targetOpenId);
 

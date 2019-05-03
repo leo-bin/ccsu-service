@@ -54,28 +54,26 @@ public class NotificationService {
     /**
      * 根据用户查询通知
      *
-     * @param isRead
      * @return
      */
-    public Page<Map> findByTargetUserAndIsRead(Integer pageNo, Integer pageSize, String targetOpenId, Boolean isRead) {
-        List<Map> list = notificationMapper.findByTargetOpenId(targetOpenId, isRead, (pageNo - 1) * pageSize, pageSize, "n.is_read asc, n.id desc");
-        int count = notificationMapper.countByTargetOpenId(targetOpenId, isRead);
+    public Page<Map> findByTargetUserAndIsRead(Integer pageNo, Integer pageSize, String targetOpenId) {
+        List<Map> list = notificationMapper.findByTargetOpenId(targetOpenId, (pageNo - 1) * pageSize, pageSize,
+                "n.is_read asc, n.id desc");
+        int count = notificationMapper.countByTargetOpenId(targetOpenId);
         return new Page<>(pageNo, pageSize, count, list);
     }
 
     /**
-     * 根据用户查询已读/未读的通知
+     * 根据用户查询通知
      *
-     * @param isRead
      * @return
      */
-    public long countByTargetUserAndIsRead(String targetOpenId, boolean isRead) {
-        return notificationMapper.countByTargetOpenId(targetOpenId, isRead);
+    public long countByTargetUserAndIsRead(String targetOpenId) {
+        return notificationMapper.countByTargetOpenId(targetOpenId);
     }
 
     /**
      * 批量更新通知的状态
-     *
      */
     public void updateByIsRead(String targetOpenId) {
         notificationMapper.updateByIsRead(targetOpenId);
@@ -83,7 +81,6 @@ public class NotificationService {
 
     /**
      * 删除目标用户的通知
-     *
      */
     public void deleteByTargetUser(String targetOpenId) {
         notificationMapper.deleteNotification(targetOpenId, null, null);

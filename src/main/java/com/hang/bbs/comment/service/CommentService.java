@@ -1,12 +1,17 @@
 package com.hang.bbs.comment.service;
 
 import com.google.common.collect.Lists;
+import com.hang.bbs.comment.pojo.Comment;
 import com.hang.bbs.common.Page;
 import com.hang.bbs.comment.mapper.CommentMapper;
 import com.hang.bbs.comment.pojo.CommentWithBLOBs;
 import com.hang.bbs.common.VoteAction;
+import com.hang.bbs.notification.pojo.NotificationEnum;
+import com.hang.bbs.notification.service.NotificationService;
 import com.hang.bbs.topic.pojo.TopicWithBLOBs;
 import com.hang.bbs.topic.service.TopicService;
+import com.hang.pojo.data.UserInfoDO;
+import com.hang.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +31,12 @@ public class CommentService {
 
     @Autowired
     private TopicService topicService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     public CommentWithBLOBs findById(Integer id) {
         return commentMapper.selectByPrimaryKey(id);
@@ -98,6 +109,17 @@ public class CommentService {
         topic.setCommentCount(topic.getCommentCount() + 1);
         topic.setLastCommentTime(new Date());
         topicService.update(topic);
+
+        // 通知
+        if (commentId != null) {
+            Comment replyComment = this.findById(commentId);
+            if (!openId.equals(replyComment.getOpenId())) {
+                notificationService.sendNotification(openId, replyComment.getOpenId(), NotificationEnum.REPLY, topic.getId(), content);
+            }
+        }
+        // if (!topic.getOpenId().equals(openId)) {
+            notificationService.sendNotification(openId, topic.getOpenId(), NotificationEnum.COMMENT, topic.getId(), content);
+        // }
         return comment;
     }
 
@@ -184,6 +206,7 @@ public class CommentService {
         Map<String, Object> map = new HashMap<>(16);
         List<String> upIds = new ArrayList<>();
         List<String> downIds = new ArrayList<>();
+        UserInfoDO commentUser = userService.getUserInfoByOpenId(comment.getOpenId());
         if (!StringUtils.isEmpty(comment.getUpIds())) {
             upIds = Lists.newArrayList(comment.getUpIds().split(","));
         }
@@ -235,6 +258,9 @@ public class CommentService {
         comment.setUpIds(StringUtils.collectionToCommaDelimitedString(upIds));
         comment.setDownIds(StringUtils.collectionToCommaDelimitedString(downIds));
         update(comment);
+
+        // 通知
+        notificationService.sendNotification(openId, commentUser.getOpenId(), NotificationEnum.UP, comment.getTopicId(), null);
         return map;
     }
 }

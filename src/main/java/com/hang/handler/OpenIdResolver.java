@@ -1,9 +1,9 @@
 package com.hang.handler;
 
-
-import com.alibaba.fastjson.JSONObject;
 import com.hang.annotation.OpenId;
 import com.hang.constant.WxConstant;
+import com.hang.pojo.data.UserInfoDO;
+import com.hang.pojo.vo.BaseRes;
 import com.hang.service.SessionService;
 import com.hang.utils.HeaderParser;
 import lombok.extern.slf4j.Slf4j;
@@ -49,11 +49,11 @@ public class OpenIdResolver implements HandlerMethodArgumentResolver {
             return WxConstant.TEST_OPEN_ID;
         }
 
-        JSONObject sessionInfo = sessionService.getSessionInfo(sessionId);
-        JSONObject userInfo = sessionInfo.getJSONObject("userInfo");
+        BaseRes sessionInfo = sessionService.getSessionInfo(sessionId);
+        UserInfoDO userInfo = (UserInfoDO) sessionInfo.getData();
         if (userInfo != null) {
             log.info("body: " + userInfo.toString());
-            result = userInfo.getString("openId");
+            result = userInfo.getOpenId();
         } else {
             // 测试
             result = WxConstant.TEST_OPEN_ID;
