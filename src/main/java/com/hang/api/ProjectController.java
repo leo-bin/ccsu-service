@@ -1,5 +1,6 @@
 package com.hang.api;
 
+import com.hang.aop.StatisticsTime;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.pojo.vo.ProjectVO;
 import com.hang.service.ProjectService;
@@ -32,6 +33,7 @@ public class ProjectController {
      * @param projectId
      * @return
      */
+    @StatisticsTime("getProjectByProjectId")
     @ApiOperation("根据projectId获取项目信息")
     @GetMapping("/getProjectByProjectId")
     public BaseRes getProjectByProjectId(@RequestParam int projectId) {
@@ -48,6 +50,7 @@ public class ProjectController {
      * @param properties
      * @return
      */
+    @StatisticsTime("updateProject")
     @ApiOperation("更新项目基本信息")
     @GetMapping("/updateProject")
     public BaseRes updateProject(int projectId, String name, String description, String properties) {
@@ -62,6 +65,7 @@ public class ProjectController {
      * @param honor
      * @return
      */
+    @StatisticsTime("addHonor2Project")
     @ApiOperation("为项目添加荣誉")
     @GetMapping("/addHonor2Project")
     public BaseRes addHonor2Project(int projectId, String honor) {
@@ -76,6 +80,7 @@ public class ProjectController {
      * @param schedule
      * @return
      */
+    @StatisticsTime("addSchedule2Project")
     @ApiOperation("为项目追加进度")
     @GetMapping("/addSchedule2Project")
     public BaseRes addSchedule2Project(int projectId, String schedule) {

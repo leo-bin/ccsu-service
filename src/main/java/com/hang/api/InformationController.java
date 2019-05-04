@@ -2,6 +2,7 @@ package com.hang.api;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.hang.annotation.OpenId;
+import com.hang.aop.StatisticsTime;
 import com.hang.enums.ApplyStatusEnum;
 import com.hang.enums.ResultEnum;
 import com.hang.exceptions.ApiException;
@@ -43,6 +44,7 @@ public class InformationController {
      *
      * @return
      */
+    @StatisticsTime("categoryList")
     @ApiOperation("请求类别列表")
     @GetMapping("categoryList")
     public BaseRes categoryList() {
@@ -58,6 +60,7 @@ public class InformationController {
      * @param category
      * @return
      */
+    @StatisticsTime("createInformation")
     @ApiOperation("请求一个information")
     @PostMapping("/createInformation")
     public BaseRes createInformation(String title, String content, String authors, String category) {
@@ -80,6 +83,7 @@ public class InformationController {
      * @param id
      * @return
      */
+    @StatisticsTime("removeInformation")
     @ApiOperation("删除information")
     @PostMapping("/removeInformation")
     public BaseRes removeInformation(@RequestParam int id) {
@@ -96,6 +100,7 @@ public class InformationController {
      * @param authors
      * @return
      */
+    @StatisticsTime("modifyInformation")
     @ApiOperation("修改information")
     @PostMapping("/modifyInformation")
     public BaseRes modifyInformation(int id, String title, String content, String authors) {
@@ -122,6 +127,7 @@ public class InformationController {
      * @param id
      * @return
      */
+    @StatisticsTime("getInformationById")
     @ApiOperation("根据id获取information")
     @JsonView(InformationDO.DetailInformation.class)
     @GetMapping("/getInformationById")
@@ -136,6 +142,7 @@ public class InformationController {
      * @param informationId
      * @return
      */
+    @StatisticsTime("activityApply")
     @ApiOperation("申请活动")
     @PostMapping("/applyActivity")
     public BaseRes activityApply(@OpenId String openId, int informationId) {
@@ -160,6 +167,7 @@ public class InformationController {
      * @param applyId
      * @return
      */
+    @StatisticsTime("modifyStatusSuccess")
     @ApiOperation("更新activity 申请状态为成功")
     @GetMapping("/modifyActivityStatusSuccess")
     public BaseRes modifyStatusSuccess(int applyId) {
@@ -173,6 +181,7 @@ public class InformationController {
      * @param applyId
      * @return
      */
+    @StatisticsTime("modifyStatusFailure")
     @ApiOperation("更新activity 申请状态为失败")
     @GetMapping("/modifyActivityStatusFailure")
     public BaseRes modifyStatusFailure(int applyId) {

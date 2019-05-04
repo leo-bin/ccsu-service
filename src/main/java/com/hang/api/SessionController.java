@@ -4,6 +4,7 @@
  */
 package com.hang.api;
 
+import com.hang.aop.StatisticsTime;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.service.SessionService;
 import io.swagger.annotations.Api;
@@ -37,6 +38,7 @@ public class SessionController {
      * @param data
      * @return 新的会话ID
      */
+    @StatisticsTime("newSession")
     @ApiOperation("新建立一个会话")
     @RequestMapping("/newSession")
     public String newSession(@RequestParam String data) {
@@ -49,6 +51,7 @@ public class SessionController {
      * @param sessionId
      * @return 会话信息
      */
+    @StatisticsTime("getSessionInfo")
     @ApiOperation("获取会话信息")
     @RequestMapping(value = "/getSessionInfo", method = RequestMethod.GET)
     public BaseRes getSessionInfo(@RequestBody String json, String sessionId) {

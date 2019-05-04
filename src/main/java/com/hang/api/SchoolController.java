@@ -1,6 +1,7 @@
 package com.hang.api;
 
 import com.hang.annotation.OpenId;
+import com.hang.aop.StatisticsTime;
 import com.hang.enums.LostPropertyAndRecruitEnum;
 import com.hang.enums.ResultEnum;
 import com.hang.exceptions.ApiException;
@@ -39,6 +40,7 @@ public class SchoolController {
     @Autowired
     private UserService userService;
 
+    @StatisticsTime("getCourseByWeek")
     @ApiOperation("查询第n周的课表,OpenId参数不用传")
     @GetMapping("/course/getCourseByWeek")
     public BaseRes getCourseByWeek(@OpenId String openId, @RequestParam Integer week,
@@ -51,6 +53,7 @@ public class SchoolController {
         return RespUtil.success(courseVOS);
     }
 
+    @StatisticsTime("getAllCourse")
     @ApiOperation("查询全部课表,OpenId参数不用传")
     @GetMapping("/course/getAllCourse")
     public BaseRes getAllCourse(@OpenId String openId,
@@ -63,6 +66,7 @@ public class SchoolController {
         return RespUtil.success(allCourse);
     }
 
+    @StatisticsTime("initiatorMessage")
     @ApiOperation("发布失物与招领 code=0为发布失物 code=1为发布招领,默认code为0")
     @GetMapping("/initiatorMessage")
     public BaseRes initiatorLostAndRecruitMessage(@ModelAttribute LostPropertyAndRecruitVO lostPropertyAndRecruitVO,
@@ -75,6 +79,7 @@ public class SchoolController {
         return RespUtil.success();
     }
 
+    @StatisticsTime("listLostAndRecruitMessage")
     @ApiOperation("发布失物与招领列表 code=0为查询失物 code=1为查询招领,默认code为0")
     @GetMapping("/listLostAndRecruitMessage")
     public BaseRes listLostAndRecruitMessage(@RequestParam(required = false, defaultValue = "0") int code,
@@ -87,6 +92,7 @@ public class SchoolController {
         }
     }
 
+    @StatisticsTime("getFreeClassroom")
     @ApiOperation("获取当前空闲教室")
     @GetMapping("/getFreeClassroom")
     public BaseRes getFreeClassroom(@ApiParam("学期，默认为2018-2019-2") @RequestParam(required = false, defaultValue = "2018-2019-2") String semester,

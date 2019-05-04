@@ -4,6 +4,7 @@ package com.hang.api;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hang.annotation.OpenId;
+import com.hang.aop.StatisticsTime;
 import com.hang.enums.ResultEnum;
 import com.hang.pojo.data.ProjectDO;
 import com.hang.pojo.vo.BaseRes;
@@ -44,6 +45,7 @@ public class TeamController {
      *
      * @return
      */
+    @StatisticsTime("getAllTeam")
     @ApiOperation("无差别获取团队信息")
     @GetMapping("/getAllTeam")
     public BaseRes getAllTeam(@RequestParam(required = false, defaultValue = "0") int start,
@@ -57,6 +59,7 @@ public class TeamController {
      * @param openId
      * @return
      */
+    @StatisticsTime("getTeamHomePage")
     @ApiOperation("获取用户自己的团队以及项目信息")
     @GetMapping("/getTeamHomePage")
     public BaseRes getTeamHomePage(@OpenId String openId) {
@@ -80,6 +83,7 @@ public class TeamController {
      * @param openId
      * @return
      */
+    @StatisticsTime("getTeamByUserId")
     @ApiOperation("查询用户所属的团队")
     @GetMapping("/getTeamByUserId")
     public BaseRes getTeamByUserId(@OpenId String openId) {
@@ -94,6 +98,7 @@ public class TeamController {
      * @param teamId
      * @return
      */
+    @StatisticsTime("getTeamByTeamId")
     @ApiOperation("根据teamId查询team")
     @GetMapping("/getTeamByTeamId")
     public BaseRes getTeamByTeamId(@RequestParam int teamId) {
@@ -110,6 +115,7 @@ public class TeamController {
      * @param groupMemberVO
      * @return
      */
+    @StatisticsTime("addMember2Team")
     @ApiOperation("team添加成员")
     @GetMapping("/addMember2Team")
     public BaseRes addMember2Team(@RequestParam int teamId, @ModelAttribute GroupMemberVO groupMemberVO) {
@@ -124,6 +130,7 @@ public class TeamController {
      * @param openId
      * @return
      */
+    @StatisticsTime("addUser2Team")
     @ApiOperation("项目添加成员")
     @GetMapping("/addUser2Team")
     public BaseRes addUser2Team(int teamId, @OpenId String openId) {
@@ -139,6 +146,7 @@ public class TeamController {
      * @param groupMemberVOS
      * @return
      */
+    @StatisticsTime("updateMember2Team")
     @ApiOperation("直接更新team的团队信息")
     @GetMapping("/updateMember2Team")
     public BaseRes updateMember2Team(@RequestParam int teamId, @RequestParam ArrayList<GroupMemberVO> groupMemberVOS) {
@@ -157,6 +165,7 @@ public class TeamController {
      * @param projectDescription
      * @return
      */
+    @StatisticsTime("addProject2Team")
     @ApiOperation("为team添加项目")
     @GetMapping("/addProject2Team")
     public BaseRes addProject2Team(@RequestParam int teamId, String projectName, String projectDescription) {
@@ -174,6 +183,7 @@ public class TeamController {
      * @param honor
      * @return
      */
+    @StatisticsTime("addHonor2Team")
     @ApiOperation("team添加荣耀")
     @GetMapping("/addHonor2Team")
     public BaseRes addHonor2Team(int teamId, String honor) {
@@ -188,6 +198,7 @@ public class TeamController {
      * @param log
      * @return
      */
+    @StatisticsTime("addLog2Team")
     @ApiOperation("team添加日志")
     @GetMapping("/addLog2Team")
     public BaseRes addLog2Team(int teamId, String log) {

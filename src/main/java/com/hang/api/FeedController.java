@@ -1,6 +1,7 @@
 package com.hang.api;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.hang.aop.StatisticsTime;
 import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.InformationDO;
 import com.hang.pojo.vo.BaseRes;
@@ -39,6 +40,7 @@ public class FeedController {
      *
      * @return
      */
+    @StatisticsTime("latest")
     @ApiOperation("请求最新得十条feed流数据")
     @JsonView(InformationDO.SimpleInformation.class)
     @GetMapping("/latest")
@@ -52,6 +54,7 @@ public class FeedController {
      *
      * @return
      */
+    @StatisticsTime("hot")
     @ApiOperation("请求点击最多的feed流数据")
     @JsonView(InformationDO.SimpleInformation.class)
     @GetMapping("/hot")
@@ -71,6 +74,7 @@ public class FeedController {
      * @param offset
      * @return
      */
+    @StatisticsTime("listByCategory")
     @ApiOperation("根据类别查询feed流数据")
     @JsonView(InformationDO.SimpleInformation.class)
     @GetMapping("/listByCategory")

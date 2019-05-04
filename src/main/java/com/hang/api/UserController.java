@@ -6,6 +6,7 @@ package com.hang.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hang.annotation.OpenId;
+import com.hang.aop.StatisticsTime;
 import com.hang.enums.ResultEnum;
 import com.hang.pojo.data.StudentDO;
 import com.hang.pojo.data.UserInfoDO;
@@ -47,6 +48,7 @@ public class UserController {
     @Autowired
     private StudentService studentService;
 
+    @StatisticsTime("bind")
     @ApiOperation("绑定学号信息，openId参数不用传")
     @PostMapping("/bind")
     public BaseRes bind(@OpenId String openId, @RequestParam String jwcAccount) {
@@ -55,6 +57,7 @@ public class UserController {
         return RespUtil.success();
     }
 
+    @StatisticsTime("login")
     @ApiOperation("登录，获取sessionId")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(@RequestParam String code, @RequestParam String rawData) {
@@ -72,6 +75,7 @@ public class UserController {
         return userService.login(code, rawData);
     }
 
+    @StatisticsTime("getUserInfo")
     @ApiOperation("获取用户信息")
     @GetMapping("/getUserInfo")
     public BaseRes getUserInfo(String sessionId) throws IOException {
@@ -86,11 +90,13 @@ public class UserController {
         return sessionService.getSessionInfo(sessionId);
     }
 
+    @StatisticsTime("getUserInfoByOpenId")
     @GetMapping("/getUserInfoByOpenId")
     public BaseRes getUserInfoByOpenId(String openId) {
         return RespUtil.success(userService.getUserInfoByOpenId(openId));
     }
 
+    @StatisticsTime("personCenter")
     @ApiOperation("个人中心")
     @GetMapping("/personCenter")
     public BaseRes personCenter(@OpenId String openId) {
@@ -102,6 +108,7 @@ public class UserController {
         return RespUtil.success(studentInfo);
     }
 
+    @StatisticsTime("modifyStudentInfo")
     @ApiOperation("修改个人信息")
     @GetMapping("/modifyStudentInfo")
     public BaseRes modifyStudentInfo(@OpenId String openId, String jwcAccount, String nickName, String department) {

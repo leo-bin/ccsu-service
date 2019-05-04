@@ -42,7 +42,7 @@ public class HeaderCheckInterceptor extends HandlerInterceptorAdapter {
         }
 
         String[] rqh = requiredHeaders.split(",");
-        headers.forEach((k, v) -> log.info("k:{}, v:{}", k, v));
+        /// headers.forEach((k, v) -> log.info("k:{}, v:{}", k, v));
         log.info("requiredHeaders: {}, conut: {}", requiredHeaders, rqh.length);
 
         for (String h : rqh) {
