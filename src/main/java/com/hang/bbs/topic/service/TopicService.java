@@ -104,7 +104,7 @@ public class TopicService {
      *
      * @param openId
      */
-    public void deleteByopenId(String openId) {
+    public void deleteByOpenId(String openId) {
         topicMapper.deleteByOpenId(openId);
     }
 
@@ -181,11 +181,12 @@ public class TopicService {
             // 如果点赞ID里没有，就添加上，并将up + 1
             if (!upIds.contains(openId)) {
                 topic.setUp(topic.getUp() + 1);
+                upIds.add(openId);
                 map.put("isUp", true);
                 map.put("isDown", false);
             } else {
-                upIds.remove(openId);
                 topic.setUp(topic.getUp() - 1);
+                upIds.remove(openId);
                 map.put("isUp", false);
                 map.put("isDown", false);
             }

@@ -17,6 +17,8 @@ public class TeamVO {
 
     private Integer id;
 
+    private String avatar;
+
     private String name;
 
     /**

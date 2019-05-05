@@ -12,12 +12,10 @@ import com.hang.pojo.vo.TeamVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -35,21 +33,39 @@ public class TeamService {
     @Autowired
     private ProjectService projectService;
 
+    @Transactional(rollbackFor = Exception.class)
+    public TeamVO createTeam(String name) {
+        TeamDO teamDO = new TeamDO();
+        teamDO.setName(name);
+        teamDAO.insertTeam(teamDO);
+        return teamDO2VO(teamDO);
+    }
+
     public TeamVO getTeamByTeamId(int teamId) {
         TeamDO teamPO = teamDAO.selectByTeamId(teamId);
-        TeamVO teamVO = teamPO2VO(teamPO);
+        TeamVO teamVO = teamDO2VO(teamPO);
         return teamVO;
     }
 
     public List<TeamVO> getTeamByUserId(String userId) {
         List<TeamDO> teamDOS = teamDAO.selectTeamByUserId(userId);
-        List<TeamVO> teamVOS = teamDOS.stream().map(teamPO -> teamPO2VO(teamPO)).collect(Collectors.toList());
+        List<TeamVO> teamVOS = teamDOS.stream().map(teamPO -> teamDO2VO(teamPO)).collect(Collectors.toList());
         return teamVOS;
     }
 
     public List<TeamVO> getTeams(int start, int offset) {
         List<TeamDO> teamDOS = teamDAO.selectTeams(start, offset);
-        return teamDOS.stream().map(teamPO -> teamPO2VO(teamPO)).collect(Collectors.toList());
+        return teamDOS.stream().map(teamPO -> teamDO2VO(teamPO)).collect(Collectors.toList());
+    }
+
+    /**
+     * 添加team头像
+     */
+    public void addAvatar2Team(Integer teamId, String avatarUrl) {
+        TeamDO teamDO = new TeamDO();
+        teamDO.setId(teamId);
+        teamDO.setAvatar(avatarUrl);
+        teamDAO.updateTeam(teamDO);
     }
 
     /**
@@ -69,25 +85,13 @@ public class TeamService {
     }
 
     /**
-     * 直接set来update
-     *
-     * @param teamId
-     * @param groupMemberVOS
-     */
-    public void updateMember2Team(int teamId, ArrayList<GroupMemberVO> groupMemberVOS) {
-        TeamDO teamPO = teamDAO.selectByTeamId(teamId);
-        teamPO.setMembers(JSON.toJSONString(groupMemberVOS));
-        teamDAO.updateTeam(teamPO);
-    }
-
-    /**
      * 添加userId到team
      *
      * @param teamId
-     * @param userId
+     * @param openId
      */
-    public void addUser2Team(int teamId, String userId) {
-        teamDAO.insert2TeamUser(teamId, userId);
+    public void addUser2Team(int teamId, String openId) {
+        teamDAO.insert2TeamUser(teamId, openId);
     }
 
     /**
@@ -124,22 +128,27 @@ public class TeamService {
         teamDAO.updateTeam(teamPO);
     }
 
-    public TeamVO teamPO2VO(TeamDO teamPO) {
+    private TeamVO teamDO2VO(TeamDO teamDO) {
         TeamVO teamVO = new TeamVO();
-        String members = teamPO.getMembers();
-        ArrayList<GroupMemberVO> groupMemberVOS = JSON.parseObject(members, new TypeReference<ArrayList<GroupMemberVO>>() {
+        ArrayList<GroupMemberVO> groupMemberVOS = JSON.parseObject(teamDO.getMembers(), new TypeReference<ArrayList<GroupMemberVO>>() {
         });
         teamVO.setGroupMemberVOS(groupMemberVOS);
-        teamVO.setId(teamPO.getId());
-        teamVO.setName(teamPO.getName());
+        teamVO.setId(teamDO.getId());
+        teamVO.setName(teamDO.getName());
 
-        String honor = teamPO.getHonor();
-        String[] split = honor.split(",");
-        teamVO.setHonor(Arrays.asList(split));
+        String honor = teamDO.getHonor();
+        if (StringUtils.isNotBlank(honor)) {
+            String[] split = honor.split(",");
+            teamVO.setHonor(Arrays.asList(split));
+        }
 
-        List<ProjectDO> projectPOS = teamDAO.selectProjectByTeamId(teamPO.getId());
-        List<ProjectVO> projects = projectPOS.stream().map(projectPO -> projectPO2VO(projectPO)).collect(Collectors.toList());
-        teamVO.setProjects(projects);
+        if (!Objects.isNull(teamDO.getId())) {
+            List<ProjectDO> projectPOS = teamDAO.selectProjectByTeamId(teamDO.getId());
+            if (Objects.isNull(projectPOS)) {
+                List<ProjectVO> projects = projectPOS.stream().map(projectPO -> projectPO2VO(projectPO)).collect(Collectors.toList());
+                teamVO.setProjects(projects);
+            }
+        }
         return teamVO;
     }
 

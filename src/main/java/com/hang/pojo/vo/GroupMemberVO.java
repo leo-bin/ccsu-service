@@ -11,12 +11,15 @@ import lombok.Data;
 @Data
 public class GroupMemberVO {
 
+    private String avatar;
+
     private String name;
 
-    // title
     private String title;
 
-    // 角色
+    /**
+     * 角色
+     */
     private String role;
 
 }

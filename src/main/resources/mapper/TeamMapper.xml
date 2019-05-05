@@ -21,11 +21,23 @@
 
     <update id="updateTeam">
       update team
-      set
-        name = #{name},
-        honor = #{honor},
-        log = #{log},
-        members = #{members}
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="honor != null">
+                honor = #{honor},
+            </if>
+            <if test="log != null">
+                log = #{log},
+            </if>
+            <if test="members != null">
+                members = #{members},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar},
+            </if>
+        </set>
       where id = #{id}
     </update>
 

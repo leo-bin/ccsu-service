@@ -41,6 +41,14 @@ public class TeamController {
     @Autowired
     private TeamService teamService;
 
+    @ApiOperation("创建团队")
+    @StatisticsTime("createTeam")
+    @GetMapping("/createTeam")
+    public BaseRes createTeam(@RequestParam String name) {
+        teamService.createTeam(name);
+        return RespUtil.success();
+    }
+
     /**
      * 无差别获取team
      *
@@ -77,7 +85,7 @@ public class TeamController {
     }
 
     /**
-     * 根据userId查询团队数据
+     * 根据openId查询团队数据
      *
      * @param openId
      * @return
@@ -105,7 +113,13 @@ public class TeamController {
         return RespUtil.success(teamById);
     }
 
-    /********成员的curd********/
+    @StatisticsTime("addAvatar2Team")
+    @ApiOperation("为team添加头像")
+    @GetMapping("/addAvatar2Team")
+    public BaseRes addAvatar2Team(@RequestParam Integer teamId, @RequestParam String avatar) {
+        teamService.addAvatar2Team(teamId, avatar);
+        return RespUtil.success();
+    }
 
     /**
      * 增加成员
@@ -123,38 +137,20 @@ public class TeamController {
     }
 
     /**
-     * 增加项目user
+     * 增加wxUser到team
      *
      * @param teamId
      * @param openId
      * @return
      */
-    @StatisticsTime("addUser2Team")
-    @ApiOperation("项目添加成员")
+    @StatisticsTime("addWxUser2Team")
+    @ApiOperation("项目添加微信成员")
     @GetMapping("/addUser2Team")
-    public BaseRes addUser2Team(int teamId, @OpenId String openId) {
-        if (StringUtils.isBlank(openId)) return RespUtil.error(ResultEnum.CAN_NOT_GET_OPEN_ID);
+    public BaseRes addUser2Team(@RequestParam int teamId, @OpenId String openId) {
+        ApiAssert.checkOpenId(openId);
         teamService.addUser2Team(teamId, openId);
         return RespUtil.success();
     }
-
-    /**
-     * 直接更新
-     *
-     * @param teamId
-     * @param groupMemberVOS
-     * @return
-     */
-    @StatisticsTime("updateMember2Team")
-    @ApiOperation("直接更新team的团队信息")
-    @GetMapping("/updateMember2Team")
-    public BaseRes updateMember2Team(@RequestParam int teamId, @RequestParam ArrayList<GroupMemberVO> groupMemberVOS) {
-        teamService.updateMember2Team(teamId, groupMemberVOS);
-
-        return RespUtil.success();
-    }
-
-    /********项目的curd********/
 
     /**
      * 创建project，然后添加到team
@@ -167,7 +163,8 @@ public class TeamController {
     @StatisticsTime("addProject2Team")
     @ApiOperation("为team添加项目")
     @GetMapping("/addProject2Team")
-    public BaseRes addProject2Team(@RequestParam int teamId, String projectName, String projectDescription) {
+    public BaseRes addProject2Team(@RequestParam int teamId, @RequestParam String projectName,
+                                   @RequestParam String projectDescription) {
         ProjectDO projectDO = new ProjectDO();
         projectDO.setDescription(projectDescription);
         projectDO.setName(projectName);
@@ -185,7 +182,7 @@ public class TeamController {
     @StatisticsTime("addHonor2Team")
     @ApiOperation("team添加荣耀")
     @GetMapping("/addHonor2Team")
-    public BaseRes addHonor2Team(int teamId, String honor) {
+    public BaseRes addHonor2Team(@RequestParam int teamId, @RequestParam String honor) {
         teamService.addHonor2Team(teamId, honor);
         return RespUtil.success();
     }
@@ -200,7 +197,7 @@ public class TeamController {
     @StatisticsTime("addLog2Team")
     @ApiOperation("team添加日志")
     @GetMapping("/addLog2Team")
-    public BaseRes addLog2Team(int teamId, String log) {
+    public BaseRes addLog2Team(@RequestParam int teamId, @RequestParam String log) {
         teamService.addLog2Team(teamId, log);
         return RespUtil.success();
     }
