@@ -1,6 +1,7 @@
 package com.hang.bbs.topic.service;
 
 import com.google.common.collect.Lists;
+import com.hang.bbs.comment.service.CommentService;
 import com.hang.bbs.common.Page;
 import com.hang.bbs.common.VoteAction;
 import com.hang.bbs.tag.pojo.Tag;
@@ -8,6 +9,7 @@ import com.hang.bbs.tag.service.TagService;
 import com.hang.bbs.topic.mapper.TopicMapper;
 import com.hang.bbs.topic.pojo.Topic;
 import com.hang.bbs.topic.pojo.TopicWithBLOBs;
+import com.hang.manage.BbsCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +31,13 @@ public class TopicService {
     private TopicTagService topicTagService;
 
     @Autowired
+    private CommentService commentService;
+
+    @Autowired
     private TagService tagService;
+
+    @Autowired
+    private BbsCache bbsCache;
 
     public TopicWithBLOBs createTopic(String title, String content, String tag, String openId) {
         TopicWithBLOBs topic = new TopicWithBLOBs();
@@ -64,11 +72,13 @@ public class TopicService {
     }
 
     public TopicWithBLOBs save(TopicWithBLOBs topic) {
+        bbsCache.saveTopicById(topic.getId(), topic);
         topicMapper.insertSelective(topic);
         return topic;
     }
 
     public void update(TopicWithBLOBs topic) {
+        bbsCache.saveTopicById(topic.getId(), topic);
         topicMapper.updateByPrimaryKeySelective(topic);
     }
 
@@ -80,8 +90,9 @@ public class TopicService {
         Topic topic = findById(id);
         if (topic != null) {
             /// 删除话题下面的评论
-            /// commentService.deleteByTopic(id);
+            commentService.deleteByTopic(id);
             //删除话题
+            bbsCache.removeTopicById(id);
             topicMapper.deleteByPrimaryKey(id);
         }
     }

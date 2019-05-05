@@ -29,6 +29,7 @@ public class CommentApiController {
 
     @Autowired
     private TopicService topicService;
+
     @Autowired
     private CommentService commentService;
 
@@ -48,8 +49,8 @@ public class CommentApiController {
      * 保存评论
      * 回复的评论ID，可以为null
      *
-     * @param topicId   话题ID
-     * @param content   评论内容
+     * @param topicId 话题ID
+     * @param content 评论内容
      * @return
      */
     @ApiOperation("对某个主题进行评价")
@@ -57,6 +58,7 @@ public class CommentApiController {
     public BaseRes save(@OpenId String openId, Integer topicId, String content) {
         ApiAssert.notEmpty(content, "评论内容不能为空");
         ApiAssert.notNull(topicId, "话题ID不存在");
+        ApiAssert.checkOpenId(openId);
 
         TopicWithBLOBs topic = topicService.findById(topicId);
         ApiAssert.notNull(topic, "回复的话题不存在");
@@ -75,6 +77,7 @@ public class CommentApiController {
     @ApiOperation("对某个评论进行编辑")
     @PostMapping("/edit")
     public BaseRes edit(@OpenId String openId, Integer id, String content) {
+        ApiAssert.checkOpenId(openId);
         ApiAssert.notEmpty(content, "评论内容不能为空");
         CommentWithBLOBs comment = commentService.findById(id);
         CommentWithBLOBs oldComment = comment;
@@ -95,6 +98,7 @@ public class CommentApiController {
     @ApiOperation("对评论投票")
     @GetMapping("/{id}/vote")
     public BaseRes vote(@OpenId String openId, @PathVariable Integer id, String action) {
+        ApiAssert.checkOpenId(openId);
         CommentWithBLOBs comment = commentService.findById(id);
 
         ApiAssert.notNull(comment, "评论不存在");
@@ -104,4 +108,5 @@ public class CommentApiController {
         Map<String, Object> map = commentService.vote(openId, comment, action);
         return RespUtil.success(map);
     }
+
 }

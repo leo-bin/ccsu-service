@@ -4,6 +4,7 @@ import com.hang.annotation.OpenId;
 import com.hang.aop.StatisticsTime;
 import com.hang.enums.LostPropertyAndRecruitEnum;
 import com.hang.enums.ResultEnum;
+import com.hang.exceptions.ApiAssert;
 import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.CourseDO;
 import com.hang.pojo.data.UserInfoDO;
@@ -11,6 +12,7 @@ import com.hang.pojo.vo.BaseRes;
 import com.hang.pojo.vo.CourseVO;
 import com.hang.pojo.vo.LostPropertyAndRecruitVO;
 import com.hang.service.SchoolService;
+import com.hang.service.StudentService;
 import com.hang.service.UserService;
 import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
@@ -38,6 +40,9 @@ public class SchoolController {
     private SchoolService schoolService;
 
     @Autowired
+    private StudentService studentService;
+
+    @Autowired
     private UserService userService;
 
     @StatisticsTime("getCourseByWeek")
@@ -45,7 +50,7 @@ public class SchoolController {
     @GetMapping("/course/getCourseByWeek")
     public BaseRes getCourseByWeek(@OpenId String openId, @RequestParam Integer week,
                                    @RequestParam(required = false, defaultValue = "2018-2019-2") String semester) {
-        openIdCheck(openId);
+        ApiAssert.checkOpenId(openId);
         UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
         jwcAccountCheck(userInfo);
 
@@ -58,7 +63,7 @@ public class SchoolController {
     @GetMapping("/course/getAllCourse")
     public BaseRes getAllCourse(@OpenId String openId,
                                 @RequestParam(required = false, defaultValue = "2018-2019-2") String semester) {
-        openIdCheck(openId);
+        ApiAssert.checkOpenId(openId);
         UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
         jwcAccountCheck(userInfo);
 
@@ -102,10 +107,18 @@ public class SchoolController {
         return RespUtil.success(schoolService.getFreeClassroom(semester, section, week, weekDay));
     }
 
-    private void openIdCheck(String openId) {
-        if (StringUtils.isEmpty(openId)) {
-            throw new ApiException(ResultEnum.CAN_NOT_GET_OPEN_ID);
-        }
+    @ApiOperation("加综测")
+    @GetMapping("/addComprehensiveFraction")
+    public BaseRes addComprehensiveFraction(@OpenId String openId, Double comprehensiveFraction) {
+        studentService.addComprehensiveFraction(openId, comprehensiveFraction);
+        return RespUtil.success();
+    }
+
+    @ApiOperation("学生列表")
+    @GetMapping("/studentList")
+    public BaseRes studentList(@RequestParam(required = false, defaultValue = "0") int start,
+                               @RequestParam(required = false, defaultValue = "10") int offset) {
+        return RespUtil.success(studentService.studentList(0, 10));
     }
 
     private void jwcAccountCheck(UserInfoDO userInfo) {

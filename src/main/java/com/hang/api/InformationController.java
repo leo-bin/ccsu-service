@@ -3,13 +3,16 @@ package com.hang.api;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.hang.annotation.OpenId;
 import com.hang.aop.StatisticsTime;
+import com.hang.constant.InformationConstant;
 import com.hang.enums.ApplyStatusEnum;
 import com.hang.enums.ResultEnum;
+import com.hang.exceptions.ApiAssert;
 import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.InformationDO;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.service.ApplyService;
 import com.hang.service.InformationService;
+import com.hang.service.StudentService;
 import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,6 +42,9 @@ public class InformationController {
     @Autowired
     private ApplyService applyService;
 
+    @Autowired
+    private StudentService studentService;
+
     /**
      * 列表类目list
      *
@@ -67,11 +73,13 @@ public class InformationController {
         if (!CATEGORY_MAP.containsKey(category)) {
             throw new ApiException(-1, "category不存在");
         }
+
         InformationDO information = new InformationDO();
         information.setTitle(title);
         information.setAuthors(authors);
         information.setContent(content);
         information.setCategory(category);
+        information.setCategoryName(CATEGORY_MAP.get(category));
         information.setReleaseTime(new Date());
         informationService.addInformation(information);
         return RespUtil.success();
@@ -146,6 +154,7 @@ public class InformationController {
     @ApiOperation("申请活动")
     @PostMapping("/applyActivity")
     public BaseRes activityApply(@OpenId String openId, int informationId) {
+        ApiAssert.checkOpenId(openId);
         if (StringUtils.isEmpty(openId)) {
             return RespUtil.error(ResultEnum.CAN_NOT_GET_OPEN_ID);
         }
@@ -170,7 +179,9 @@ public class InformationController {
     @StatisticsTime("modifyStatusSuccess")
     @ApiOperation("更新activity 申请状态为成功")
     @GetMapping("/modifyActivityStatusSuccess")
-    public BaseRes modifyStatusSuccess(int applyId) {
+    public BaseRes modifyStatusSuccess(@OpenId String openId, int applyId) {
+        ApiAssert.checkOpenId(openId);
+        studentService.addComprehensiveFraction(openId, 1.0);
         applyService.updateApplyStatus(applyId, ApplyStatusEnum.SUCCESS);
         return RespUtil.success();
     }

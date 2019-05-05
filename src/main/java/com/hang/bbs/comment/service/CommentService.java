@@ -117,7 +117,7 @@ public class CommentService {
                 notificationService.sendNotification(openId, replyComment.getOpenId(), NotificationEnum.REPLY, topic.getId(), content);
             }
         }
-        // if (!topic.getOpenId().equals(openId)) {
+        // if (!topic.getOpenId().equals(checkOpenId)) {
             notificationService.sendNotification(openId, topic.getOpenId(), NotificationEnum.COMMENT, topic.getId(), content);
         // }
         return comment;

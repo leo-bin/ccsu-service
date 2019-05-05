@@ -44,7 +44,7 @@ public class OpenIdResolver implements HandlerMethodArgumentResolver {
         HttpServletRequest request = (HttpServletRequest) nativeWebRequest.getNativeRequest();
         Map<String, String> parse = HeaderParser.parse(request);
         String sessionId = parse.get("sessionId");
-        if (StringUtils.isEmpty(sessionId)) {
+        if (StringUtils.equals(sessionId, WxConstant.TEST_SESSION_ID)) {
             // 测试
             return WxConstant.TEST_OPEN_ID;
         }
@@ -54,10 +54,8 @@ public class OpenIdResolver implements HandlerMethodArgumentResolver {
         if (userInfo != null) {
             log.info("body: " + userInfo.toString());
             result = userInfo.getOpenId();
-        } else {
-            // 测试
-            result = WxConstant.TEST_OPEN_ID;
         }
+
         return result;
     }
 }

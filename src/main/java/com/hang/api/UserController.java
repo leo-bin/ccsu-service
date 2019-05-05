@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hang.annotation.OpenId;
 import com.hang.aop.StatisticsTime;
 import com.hang.enums.ResultEnum;
+import com.hang.exceptions.ApiAssert;
 import com.hang.pojo.data.StudentDO;
 import com.hang.pojo.data.UserInfoDO;
 import com.hang.pojo.vo.BaseRes;
@@ -52,7 +53,7 @@ public class UserController {
     @ApiOperation("绑定学号信息，openId参数不用传")
     @PostMapping("/bind")
     public BaseRes bind(@OpenId String openId, @RequestParam String jwcAccount) {
-        log.info("jwcAccount:{}, openId:{}", jwcAccount, openId);
+        log.info("jwcAccount:{}, checkOpenId:{}", jwcAccount, openId);
         userService.bind(openId, jwcAccount);
         return RespUtil.success();
     }
@@ -100,7 +101,7 @@ public class UserController {
     @ApiOperation("个人中心")
     @GetMapping("/personCenter")
     public BaseRes personCenter(@OpenId String openId) {
-        log.info("openId:{}", openId);
+        ApiAssert.checkOpenId(openId);
         StudentDO studentInfo = studentService.getStudentInfo(openId);
         if (studentInfo == null) {
             return RespUtil.error(ResultEnum.JWC_ACCOUNT_NOT_BIND);
@@ -112,7 +113,7 @@ public class UserController {
     @ApiOperation("修改个人信息")
     @GetMapping("/modifyStudentInfo")
     public BaseRes modifyStudentInfo(@OpenId String openId, String jwcAccount, String nickName, String department) {
-        log.info("openId:{}", openId);
+        ApiAssert.checkOpenId(openId);
         StudentDO studentDO = new StudentDO();
         studentDO.setOpenId(openId);
         UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);

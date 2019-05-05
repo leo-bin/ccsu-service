@@ -31,7 +31,7 @@ public interface TeamDAO {
      * @param userId
      * @return
      */
-    int insert2TeamUser(@Param("teamId") int teamId, @Param("openId") String userId);
+    int insert2TeamUser(@Param("teamId") int teamId, @Param("checkOpenId") String userId);
 
     /**
      * 插入project与team的映射

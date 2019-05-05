@@ -1,13 +1,11 @@
-/*
- * Created by Long Duping
- * Date 2018/12/5 14:35
- */
 package com.hang.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hang.constant.WxConstant;
 import com.hang.dao.UserInfoDAO;
+import com.hang.exceptions.ApiAssert;
 import com.hang.exceptions.ApiException;
+import com.hang.manage.UserCache;
 import com.hang.pojo.data.StudentDO;
 import com.hang.pojo.data.UserInfoDO;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +21,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Date;
+import java.util.Objects;
 
 /**
- * @author test
+ * @author hangs.zhang
  */
 @Slf4j
 @Service
@@ -46,8 +45,15 @@ public class UserService {
     @Autowired
     private StudentService studentService;
 
+    private UserCache userCache;
+
     public UserInfoDO getUserInfoByOpenId(String openId) {
-        return userInfoDAO.selectByOpenId(openId);
+        UserInfoDO userInfo = userCache.getUserInfo(openId);
+        if (Objects.isNull(userInfo)) {
+            userInfo = userInfoDAO.selectByOpenId(openId);
+            userCache.saveUserInfo(openId, userInfo);
+        }
+        return userInfo;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -66,14 +72,12 @@ public class UserService {
     @Transactional(rollbackFor = ApiException.class)
     public void updateJwcAccount(String openId, String jwcAccount) {
         int i = userInfoDAO.updateJwcAccount(openId, jwcAccount.toUpperCase());
-        if (i != 1) {
-            throw new ApiException(-1, "绑定失败");
-        }
+        ApiAssert.nonEqualInteger(i, 1, "更新失败");
     }
 
     public String login(String code, String rawData) {
         JSONObject returnJson = new JSONObject();
-        // 用code 去微信服务器拿 openId 和 session_key
+        // 用code 去微信服务器拿 checkOpenId 和 session_key
         JSONObject openIdAndSessionKey = code2session(code);
         int errcode = openIdAndSessionKey.getIntValue("errcode");
         if (errcode != 0) {
@@ -83,7 +87,7 @@ public class UserService {
             return returnJson.toJSONString();
         }
         // 根据openId 查询用户信息
-        String openId = openIdAndSessionKey.getString("openId");
+        String openId = openIdAndSessionKey.getString("checkOpenId");
         log.debug("openid: {}", openId);
 
         UserInfoDO userInfo = new UserInfoDO();
@@ -146,7 +150,7 @@ public class UserService {
             returnJson.put("errcode", errcode);
             if (0 == errcode) {
                 // 请求成功
-                returnJson.put("openId", res.getString("openid"));
+                returnJson.put("checkOpenId", res.getString("openid"));
                 returnJson.put("sessionKey", res.getString("session_key"));
             } else {
                 returnJson.put("errmsg", res.getString("errmsg"));

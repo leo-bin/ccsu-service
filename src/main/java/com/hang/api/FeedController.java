@@ -34,7 +34,6 @@ public class FeedController {
     @Autowired
     private InformationService informationService;
 
-
     /**
      * 最新的10条
      *
@@ -78,7 +77,7 @@ public class FeedController {
     @ApiOperation("根据类别查询feed流数据")
     @JsonView(InformationDO.SimpleInformation.class)
     @GetMapping("/listByCategory")
-    public BaseRes listByCategory(String category,
+    public BaseRes listByCategory(@RequestParam String category,
                                   @RequestParam(required = false, defaultValue = "0") int start,
                                   @RequestParam(required = false, defaultValue = "10") int offset) {
         if (!CATEGORY_MAP.containsKey(category)) {

@@ -26,4 +26,6 @@ public class WxConstant {
 
     public static final String TEST_OPEN_ID = "o8Tn70BKPhACUHANmCmh0S9amdkM";
 
+    public static final String TEST_SESSION_ID = "test-session-id";
+
 }

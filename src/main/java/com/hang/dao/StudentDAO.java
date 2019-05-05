@@ -4,6 +4,8 @@ import com.hang.pojo.data.StudentDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author zhanghang
  */
@@ -33,5 +35,9 @@ public interface StudentDAO {
      * @return
      */
     int update(StudentDO studentDO);
+
+    int updateComprehensiveFraction(@Param("comprehensiveFraction") Double comprehensiveFraction, @Param("checkOpenId") String openId);
+
+    List<StudentDO> list(@Param("start") int start, @Param("offset") int offset);
 
 }

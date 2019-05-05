@@ -49,6 +49,14 @@ public class TopicApiController {
         return RespUtil.success(page);
     }
 
+    @ApiOperation("删除主题")
+    @GetMapping("/remove/{id}")
+    public BaseRes remove(@OpenId String openId, @PathVariable Integer id) {
+        ApiAssert.checkOpenId(openId);
+        topicService.deleteById(id, openId);
+        return RespUtil.success();
+    }
+
     @ApiOperation("查看主题详情")
     @GetMapping("/{id}")
     public BaseRes detail(@PathVariable Integer id) {
@@ -78,10 +86,11 @@ public class TopicApiController {
     @ApiOperation("新建主题")
     @GetMapping("/save")
     public BaseRes save(@OpenId String openId, String title, String content, String tag) {
+        ApiAssert.checkOpenId(openId);
         ApiAssert.notEmpty(title, "请输入标题");
         ApiAssert.notEmpty(tag, "标签不能为空");
+        ApiAssert.notEmpty(content, "内容不能为空");
 
-        /// ApiAssert.notTrue(topicService.findByTitle(title) != null, "话题标题已经存在");
         Topic topic = topicService.createTopic(title, content, tag, openId);
         return RespUtil.success(topic);
     }
@@ -98,6 +107,7 @@ public class TopicApiController {
     @ApiOperation("编辑主题")
     @GetMapping("/edit")
     public BaseRes update(@OpenId String openId, Integer id, String title, String content, String tag) {
+        ApiAssert.checkOpenId(openId);
         ApiAssert.notEmpty(title, "请输入标题");
         ApiAssert.notEmpty(content, "请输入内容");
         ApiAssert.notEmpty(tag, "标签不能为空");
@@ -116,19 +126,18 @@ public class TopicApiController {
     /**
      * 给话题投票
      *
-     * @param id     话题ID
-     * @param action 赞成或者反对，只能填：UP, DOWN
+     * @param id 话题ID
      * @return
      */
     @ApiOperation("为主题点赞")
     @GetMapping("/{id}/vote")
-    public BaseRes vote(@OpenId String openId, @PathVariable Integer id, String action) {
+    public BaseRes vote(@OpenId String openId, @PathVariable Integer id) {
+        ApiAssert.checkOpenId(openId);
         TopicWithBLOBs topic = topicService.findById(id);
         ApiAssert.notNull(topic, "话题不存在");
         ApiAssert.notTrue(openId.equals(topic.getOpenId()), "不能给自己的话题投票");
-        ApiAssert.isTrue(EnumUtil.isDefined(VoteAction.values(), action), "参数错误");
 
-        Map<String, Object> map = topicService.vote(openId, topic, action);
+        Map<String, Object> map = topicService.vote(openId, topic, VoteAction.UP.name());
         return RespUtil.success(map);
     }
 }

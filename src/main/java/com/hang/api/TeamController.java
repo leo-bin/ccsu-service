@@ -6,6 +6,7 @@ import com.google.common.collect.Sets;
 import com.hang.annotation.OpenId;
 import com.hang.aop.StatisticsTime;
 import com.hang.enums.ResultEnum;
+import com.hang.exceptions.ApiAssert;
 import com.hang.pojo.data.ProjectDO;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.pojo.vo.GroupMemberVO;
@@ -63,10 +64,8 @@ public class TeamController {
     @ApiOperation("获取用户自己的团队以及项目信息")
     @GetMapping("/getTeamHomePage")
     public BaseRes getTeamHomePage(@OpenId String openId) {
-        log.info("openId : {}", openId);
-        if (StringUtils.isBlank(openId)) {
-            return RespUtil.error(ResultEnum.CAN_NOT_GET_OPEN_ID);
-        }
+        log.info("checkOpenId : {}", openId);
+        ApiAssert.checkOpenId(openId);
 
         HashMap<String, Object> result = Maps.newHashMap();
         List<TeamVO> teams = teamService.getTeamByUserId(openId);
@@ -87,7 +86,7 @@ public class TeamController {
     @ApiOperation("查询用户所属的团队")
     @GetMapping("/getTeamByUserId")
     public BaseRes getTeamByUserId(@OpenId String openId) {
-        if (StringUtils.isBlank(openId)) return RespUtil.error(ResultEnum.CAN_NOT_GET_OPEN_ID);
+        ApiAssert.checkOpenId(openId);
         List<TeamVO> teamVOS = teamService.getTeamByUserId(openId);
         return RespUtil.success(teamVOS);
     }

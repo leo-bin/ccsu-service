@@ -4,6 +4,7 @@ package com.hang.bbs.tag.service;
 import com.hang.bbs.tag.mapper.TagMapper;
 import com.hang.bbs.tag.pojo.Tag;
 import com.hang.bbs.topic.mapper.TopicTagMapper;
+import com.hang.manage.BbsCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by tomoya at 2018/3/27
+ *
  * @author test
  */
 @Service
@@ -26,8 +29,16 @@ public class TagService {
     @Autowired
     private TopicTagMapper topicTagMapper;
 
+    @Autowired
+    private BbsCache bbsCache;
+
     public Tag findById(Integer id) {
-        return tagMapper.selectByPrimaryKey(id);
+        Tag tag = bbsCache.getTagById(id);
+        if (Objects.isNull(tag)) {
+            tag = tagMapper.selectByPrimaryKey(id);
+            bbsCache.saveTagById(id, tag);
+        }
+        return tag;
     }
 
     public void save(Tag tag) {
@@ -36,6 +47,7 @@ public class TagService {
 
     public void update(Tag tag) {
         tagMapper.updateByPrimaryKeySelective(tag);
+        bbsCache.saveTagById(tag.getId(), tag);
     }
 
     public void save(List<Tag> tags) {
@@ -45,7 +57,12 @@ public class TagService {
     }
 
     public Tag findByName(String name) {
-        return tagMapper.findByName(name);
+        Tag tag = bbsCache.getTagByName(name);
+        if (Objects.isNull(tag)) {
+            tag = tagMapper.findByName(name);
+            bbsCache.saveTagByName(name, tag);
+        }
+        return tag;
     }
 
     public List<Tag> save(String[] tags) {
@@ -67,16 +84,24 @@ public class TagService {
         return tagList;
     }
 
-    // 查询话题的标签
+    /**
+     * 查询话题的标签
+     *
+     * @param topicId
+     * @return
+     */
     public List<Tag> findByTopicId(Integer topicId) {
         return tagMapper.findByTopicId(topicId);
     }
 
     public void deleteById(Integer id) {
+        bbsCache.removeTagById(id);
         tagMapper.deleteByPrimaryKey(id);
     }
 
-    //同步标签的话题数
+    /**
+     * 同步标签的话题数
+     */
     public void async() {
         List<Tag> tags = tagMapper.findAll(null, null, null);
         //删除无效的关联

@@ -51,4 +51,7 @@ public class InformationDO {
     @JsonView(SimpleInformation.class)
     private String category;
 
+    @JsonView(SimpleInformation.class)
+    private String categoryName;
+
 }

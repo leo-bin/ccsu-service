@@ -32,9 +32,18 @@
         where open_id = #{openId}
     </update>
 
+    <update id="updateComprehensiveFraction">
+        update student_info set comprehensive_fraction = #{comprehensiveFraction}
+        where open_id = #{openId}
+    </update>
+
 
     <select id="selectStudentDOByOpenId" resultType="com.hang.pojo.data.StudentDO">
         select * from student_info where open_id = #{openId}
+    </select>
+
+    <select id="list" resultType="com.hang.pojo.data.StudentDO">
+        select * from student_info limit #{start}, #{offset}
     </select>
 
 </mapper>
