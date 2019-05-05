@@ -77,7 +77,7 @@ public class UserService {
 
     public String login(String code, String rawData) {
         JSONObject returnJson = new JSONObject();
-        // 用code 去微信服务器拿 checkOpenId 和 session_key
+        // 用code 去微信服务器拿 openId 和 session_key
         JSONObject openIdAndSessionKey = code2session(code);
         int errcode = openIdAndSessionKey.getIntValue("errcode");
         if (errcode != 0) {
@@ -87,7 +87,7 @@ public class UserService {
             return returnJson.toJSONString();
         }
         // 根据openId 查询用户信息
-        String openId = openIdAndSessionKey.getString("checkOpenId");
+        String openId = openIdAndSessionKey.getString("openId");
         log.debug("openid: {}", openId);
 
         UserInfoDO userInfo = new UserInfoDO();
@@ -150,7 +150,7 @@ public class UserService {
             returnJson.put("errcode", errcode);
             if (0 == errcode) {
                 // 请求成功
-                returnJson.put("checkOpenId", res.getString("openid"));
+                returnJson.put("openId", res.getString("openid"));
                 returnJson.put("sessionKey", res.getString("session_key"));
             } else {
                 returnJson.put("errmsg", res.getString("errmsg"));

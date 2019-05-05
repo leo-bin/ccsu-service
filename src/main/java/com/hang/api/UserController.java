@@ -53,7 +53,7 @@ public class UserController {
     @ApiOperation("绑定学号信息，openId参数不用传")
     @PostMapping("/bind")
     public BaseRes bind(@OpenId String openId, @RequestParam String jwcAccount) {
-        log.info("jwcAccount:{}, checkOpenId:{}", jwcAccount, openId);
+        log.info("jwcAccount:{}, openId:{}", jwcAccount, openId);
         userService.bind(openId, jwcAccount);
         return RespUtil.success();
     }

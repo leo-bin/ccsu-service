@@ -36,7 +36,7 @@ public interface StudentDAO {
      */
     int update(StudentDO studentDO);
 
-    int updateComprehensiveFraction(@Param("comprehensiveFraction") Double comprehensiveFraction, @Param("checkOpenId") String openId);
+    int updateComprehensiveFraction(@Param("comprehensiveFraction") Double comprehensiveFraction, @Param("openId") String openId);
 
     List<StudentDO> list(@Param("start") int start, @Param("offset") int offset);
 

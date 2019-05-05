@@ -14,13 +14,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserInfoDAO {
 
-    UserInfoDO selectByOpenId(@Param("checkOpenId") String openId);
+    UserInfoDO selectByOpenId(@Param("openId") String openId);
 
-    int updateJwcAccount(@Param("checkOpenId") String openId, @Param("jwcAccount") String jwcAccount);
+    int updateJwcAccount(@Param("openId") String openId, @Param("jwcAccount") String jwcAccount);
 
     int insert(UserInfoDO userInfo);
 
-    boolean isExist(@Param("checkOpenId") String openId);
+    boolean isExist(@Param("openId") String openId);
 
     boolean updateLastLoginTime(String openId);
 }

@@ -44,7 +44,7 @@ public interface CommentMapper {
     List<CommentWithBLOBs> findCommentByTopicId(Integer topicId);
 
     List<Map> findByOpenId(
-            @Param("checkOpenId") String openId,
+            @Param("openId") String openId,
             @Param("pageNo") Integer pageNo,
             @Param("pageSize") Integer pageSize,
             @Param("orderBy") String orderBy
