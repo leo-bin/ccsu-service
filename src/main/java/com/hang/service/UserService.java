@@ -45,6 +45,7 @@ public class UserService {
     @Autowired
     private StudentService studentService;
 
+    @Autowired
     private UserCache userCache;
 
     public UserInfoDO getUserInfoByOpenId(String openId) {

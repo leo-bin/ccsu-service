@@ -8,7 +8,7 @@
         <result column="in_time" jdbcType="TIMESTAMP" property="inTime"/>
         <result column="topic_id" jdbcType="INTEGER" property="topicId"/>
         <result column="up" jdbcType="INTEGER" property="up"/>
-        <result column="user_id" jdbcType="VARCHAR" property="openId"/>
+        <result column="open_id" jdbcType="VARCHAR" property="openId"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hang.bbs.comment.pojo.CommentWithBLOBs">
         <result column="content" jdbcType="LONGVARCHAR" property="content"/>
@@ -16,18 +16,14 @@
         <result column="up_ids" jdbcType="LONGVARCHAR" property="upIds"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, comment_id, down, in_time, topic_id, up, user_id
+    id, comment_id, down, in_time, topic_id, up, open_id
   </sql>
     <sql id="Blob_Column_List">
     content, down_ids, up_ids
   </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
-        select
-        <include refid="Base_Column_List"/>
-        ,
-        <include refid="Blob_Column_List"/>
-        from comment
-        where id = #{id,jdbcType=INTEGER}
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="com.hang.bbs.comment.pojo.CommentWithBLOBs">
+        select * from comment
+        where id = #{id}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     DELETE FROM comment
@@ -38,7 +34,7 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into comment (comment_id, down, in_time,
-        topic_id, up, user_id,
+        topic_id, up, open_id,
         content, down_ids, up_ids
         )
         values (#{commentId,jdbcType=INTEGER}, #{down,jdbcType=INTEGER}, #{inTime,jdbcType=TIMESTAMP},
@@ -129,7 +125,7 @@
                 up = #{up,jdbcType=INTEGER},
             </if>
             <if test="openId != null">
-                user_id = #{openId,jdbcType=INTEGER},
+                open_id = #{openId,jdbcType=INTEGER},
             </if>
             <if test="content != null">
                 content = #{content,jdbcType=LONGVARCHAR},
