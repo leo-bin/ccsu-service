@@ -92,20 +92,18 @@ public class CommentApiController {
      * 对评论投票
      *
      * @param id     评论ID
-     * @param action 评论动作，只能填 UP, DOWN
      * @return
      */
     @ApiOperation("对评论投票")
     @GetMapping("/{id}/vote")
-    public BaseRes vote(@OpenId String openId, @PathVariable Integer id, String action) {
+    public BaseRes vote(@OpenId String openId, @PathVariable Integer id) {
         ApiAssert.checkOpenId(openId);
         CommentWithBLOBs comment = commentService.findById(id);
 
         ApiAssert.notNull(comment, "评论不存在");
         ApiAssert.notTrue(openId.equals(comment.getOpenId()), "不能给自己的评论投票");
-        ApiAssert.isTrue(EnumUtil.isDefined(VoteAction.values(), action), "参数错误");
 
-        Map<String, Object> map = commentService.vote(openId, comment, action);
+        Map<String, Object> map = commentService.vote(openId, comment, "UP");
         return RespUtil.success(map);
     }
 

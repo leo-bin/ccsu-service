@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hang.dao.GradeDAO">
+
+    <select id="selectGradeByJwcAccountAndXnxq" resultType="com.hang.pojo.data.GradeDO">
+        select * from grade where jwc_account = #{jwcAccount} and xnxq = #{xnxq}
+    </select>
+
+</mapper>
