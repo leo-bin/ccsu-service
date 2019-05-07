@@ -8,13 +8,13 @@ import com.hang.pojo.data.ProjectDO;
 import com.hang.pojo.data.TeamDO;
 import com.hang.pojo.vo.GroupMemberVO;
 import com.hang.pojo.vo.ProjectVO;
+import com.hang.pojo.vo.TeamLogVO;
 import com.hang.pojo.vo.TeamVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,20 +42,20 @@ public class TeamService {
     }
 
     public TeamVO getTeamByTeamId(int teamId) {
-        TeamDO teamPO = teamDAO.selectByTeamId(teamId);
-        TeamVO teamVO = teamDO2VO(teamPO);
+        TeamDO teamDO = teamDAO.selectByTeamId(teamId);
+        TeamVO teamVO = teamDO2VO(teamDO);
         return teamVO;
     }
 
     public List<TeamVO> getTeamByUserId(String userId) {
         List<TeamDO> teamDOS = teamDAO.selectTeamByUserId(userId);
-        List<TeamVO> teamVOS = teamDOS.stream().map(teamPO -> teamDO2VO(teamPO)).collect(Collectors.toList());
+        List<TeamVO> teamVOS = teamDOS.stream().map(teamDO -> teamDO2VO(teamDO)).collect(Collectors.toList());
         return teamVOS;
     }
 
     public List<TeamVO> getTeams(int start, int offset) {
         List<TeamDO> teamDOS = teamDAO.selectTeams(start, offset);
-        return teamDOS.stream().map(teamPO -> teamDO2VO(teamPO)).collect(Collectors.toList());
+        return teamDOS.stream().map(teamDO -> teamDO2VO(teamDO)).collect(Collectors.toList());
     }
 
     /**
@@ -75,13 +75,13 @@ public class TeamService {
      * @param groupMemberVO
      */
     public void addMember2Team(int teamId, GroupMemberVO groupMemberVO) {
-        TeamDO teamPO = teamDAO.selectByTeamId(teamId);
-        String members = teamPO.getMembers();
+        TeamDO teamDO = teamDAO.selectByTeamId(teamId);
+        String members = teamDO.getMembers();
         ArrayList<GroupMemberVO> groupMemberVOS = JSON.parseObject(members, new TypeReference<ArrayList<GroupMemberVO>>() {
         });
         groupMemberVOS.add(groupMemberVO);
-        teamPO.setMembers(JSON.toJSONString(groupMemberVOS));
-        teamDAO.updateTeam(teamPO);
+        teamDO.setMembers(JSON.toJSONString(groupMemberVOS));
+        teamDAO.updateTeam(teamDO);
     }
 
     /**
@@ -106,26 +106,29 @@ public class TeamService {
     }
 
     public void addHonor2Team(int teamId, String honor) {
-        TeamDO teamPO = teamDAO.selectByTeamId(teamId);
-        String honors = teamPO.getHonor();
+        TeamDO teamDO = teamDAO.selectByTeamId(teamId);
+        String honors = teamDO.getHonor();
         if (honors != null && honors.contains(",")) {
             honors = honor;
         } else {
             honors += "," + honor;
         }
-        teamPO.setHonor(honors);
-        teamDAO.updateTeam(teamPO);
+        teamDO.setHonor(honors);
+        teamDAO.updateTeam(teamDO);
     }
 
-    public void addLog2Team(int teamId, String log) {
-        TeamDO teamPO = teamDAO.selectByTeamId(teamId);
-        LocalDate localDate = LocalDate.now();
-        log = localDate.toString() + " " + log;
-        if (teamPO.getLog() != null && teamPO.getLog().length() > 0) {
-            log = teamPO.getLog() + "," + log;
+    public void addLog2Team(int teamId, Date time, String log) {
+        TeamDO teamDO = teamDAO.selectByTeamId(teamId);
+        ArrayList<TeamLogVO> teamLogVOS;
+        if (StringUtils.isBlank(teamDO.getLog())) {
+            teamLogVOS = new ArrayList<>();
+        } else {
+            teamLogVOS = JSON.parseObject(teamDO.getLog(), new TypeReference<ArrayList<TeamLogVO>>() {});
         }
-        teamPO.setLog(log);
-        teamDAO.updateTeam(teamPO);
+
+        teamLogVOS.add(new TeamLogVO(time, log));
+        teamDO.setLog(JSON.toJSONString(teamLogVOS));
+        teamDAO.updateTeam(teamDO);
     }
 
     private TeamVO teamDO2VO(TeamDO teamDO) {
@@ -137,6 +140,9 @@ public class TeamService {
         teamVO.setName(teamDO.getName());
         teamVO.setAdvisor(teamDO.getAdvisor());
         teamVO.setAvatar(teamDO.getAvatar());
+        if (StringUtils.isNotBlank(teamDO.getLog())) {
+            teamVO.setTeamLog(JSON.parseObject(teamDO.getLog(), new TypeReference<ArrayList<TeamLogVO>>() {}));
+        }
 
         String honor = teamDO.getHonor();
         if (StringUtils.isNotBlank(honor)) {
@@ -165,9 +171,9 @@ public class TeamService {
         if (StringUtils.isNotBlank(projectPO.getProperties())) {
             projectVO.setProperties(projectPO.getProperties());
         }
-        List<TeamDO> teamDOS = teamDAO.selectTeamByProjectId(projectPO.getId());
-        Map<String, Integer> teams = teamDOS.stream().collect(Collectors.toMap(TeamDO::getName, TeamDO::getId));
-        projectVO.setTeams(teams);
+        /// List<TeamDO> teamDOS = teamDAO.selectTeamByProjectId(projectPO.getId());
+        /// Map<String, Integer> teams = teamDOS.stream().collect(Collectors.toMap(TeamDO::getName, TeamDO::getId));
+        /// projectVO.setTeams(teams);
 
         String schedule = projectPO.getSchedule();
         if (StringUtils.isNotBlank(schedule)) {

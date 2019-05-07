@@ -21,10 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author hangs.zhang
@@ -197,8 +194,9 @@ public class TeamController {
     @StatisticsTime("addLog2Team")
     @ApiOperation("team添加日志")
     @GetMapping("/addLog2Team")
-    public BaseRes addLog2Team(@RequestParam int teamId, @RequestParam String log) {
-        teamService.addLog2Team(teamId, log);
+    public BaseRes addLog2Team(@RequestParam int teamId, @RequestParam Long time, @RequestParam String log) {
+        Date date = new Date(time);
+        teamService.addLog2Team(teamId, date, log);
         return RespUtil.success();
     }
 

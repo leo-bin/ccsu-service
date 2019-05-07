@@ -2,6 +2,7 @@ package com.hang.pojo.vo;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -44,6 +45,6 @@ public class TeamVO {
     /**
      * 团队日志
      */
-    private LinkedHashMap<Date, String> teamLog;
+    private List<TeamLogVO> teamLog;
 
 }

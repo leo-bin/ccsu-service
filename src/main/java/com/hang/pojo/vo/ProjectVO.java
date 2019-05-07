@@ -21,10 +21,7 @@ public class ProjectVO {
 
     private String description;
 
-    /**
-     * 所属团队
-     */
-    private Map<String, Integer> teams;
+    /// private Map<String, Integer> teams;
 
     /**
      * 项目荣誉
