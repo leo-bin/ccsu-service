@@ -146,7 +146,7 @@ public class TeamService {
 
         if (!Objects.isNull(teamDO.getId())) {
             List<ProjectDO> projectPOS = teamDAO.selectProjectByTeamId(teamDO.getId());
-            if (Objects.isNull(projectPOS)) {
+            if (!Objects.isNull(projectPOS)) {
                 List<ProjectVO> projects = projectPOS.stream().map(projectPO -> projectPO2VO(projectPO)).collect(Collectors.toList());
                 teamVO.setProjects(projects);
             }
