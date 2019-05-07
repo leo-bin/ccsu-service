@@ -135,6 +135,8 @@ public class TeamService {
         teamVO.setGroupMemberVOS(groupMemberVOS);
         teamVO.setId(teamDO.getId());
         teamVO.setName(teamDO.getName());
+        teamVO.setAdvisor(teamDO.getAdvisor());
+        teamVO.setAvatar(teamDO.getAvatar());
 
         String honor = teamDO.getHonor();
         if (StringUtils.isNotBlank(honor)) {

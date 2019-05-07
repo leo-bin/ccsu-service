@@ -27,6 +27,11 @@ public class TeamVO {
     private List<GroupMemberVO> groupMemberVOS;
 
     /**
+     * 导师
+     */
+    private String advisor;
+
+    /**
      * 团队项目
      */
     private List<ProjectVO> projects;

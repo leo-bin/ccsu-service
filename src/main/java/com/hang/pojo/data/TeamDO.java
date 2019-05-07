@@ -23,4 +23,6 @@ public class TeamDO {
 
     private String avatar;
 
+    private String advisor;
+
 }
