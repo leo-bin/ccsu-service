@@ -59,7 +59,7 @@ public class HeaderParser {
                 clz.equals(Short.class) ||
                 clz.equals(short.class) ||
                 clz.equals(Boolean.class) ||
-                clz.equals(boolean.class) || clz.equals(boolean.class) ||
+                clz.equals(boolean.class) ||
                 clz.equals(String.class) ||
                 clz.equals(java.util.Date.class) ||
                 clz.equals(java.sql.Date.class)) {
