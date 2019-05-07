@@ -24,7 +24,7 @@ public class ApiAssert extends Assert {
     }
 
     public static void nonEqualInteger(Integer i1, Integer i2, String message) {
-        if (Objects.equals(i1, i2)) {
+        if (!Objects.equals(i1, i2)) {
             throw new ApiException(-1, message);
         }
     }

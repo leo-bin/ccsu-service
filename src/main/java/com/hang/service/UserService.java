@@ -67,12 +67,19 @@ public class UserService {
         studentDO.setNickName(userInfoDO.getNickName());
         studentDO.setGrade(userInfoDO.getJwcAccount().substring(1, 5));
         studentDO.setOpenId(userInfoDO.getOpenId());
-        studentService.saveStudentInfo(studentDO);
+
+        StudentDO studentInfo = studentService.getStudentInfo(openId);
+        if (Objects.isNull(studentInfo)) {
+            studentService.saveStudentInfo(studentDO);
+        } else {
+            studentService.modifyStudentInfo(studentDO);
+        }
     }
 
     @Transactional(rollbackFor = ApiException.class)
     public void updateJwcAccount(String openId, String jwcAccount) {
         int i = userInfoDAO.updateJwcAccount(openId, jwcAccount.toUpperCase());
+        userCache.saveUserInfo(openId, userInfoDAO.selectByOpenId(openId));
         ApiAssert.nonEqualInteger(i, 1, "更新失败");
     }
 

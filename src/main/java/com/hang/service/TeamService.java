@@ -6,10 +6,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.hang.dao.TeamDAO;
 import com.hang.pojo.data.ProjectDO;
 import com.hang.pojo.data.TeamDO;
-import com.hang.pojo.vo.GroupMemberVO;
-import com.hang.pojo.vo.ProjectVO;
-import com.hang.pojo.vo.TeamLogVO;
-import com.hang.pojo.vo.TeamVO;
+import com.hang.pojo.vo.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -160,24 +157,25 @@ public class TeamService {
         return teamVO;
     }
 
-    public ProjectVO projectPO2VO(ProjectDO projectPO) {
+    public ProjectVO projectPO2VO(ProjectDO projectDO) {
         ProjectVO projectVO = new ProjectVO();
-        projectVO.setId(projectPO.getId());
-        projectVO.setName(projectPO.getName());
-        projectVO.setDescription(projectPO.getDescription());
-        if (StringUtils.isNotBlank(projectPO.getHonor())) {
-            projectVO.setHonors(Arrays.asList(projectPO.getHonor().split(",")));
+        projectVO.setId(projectDO.getId());
+        projectVO.setName(projectDO.getName());
+        projectVO.setDescription(projectDO.getDescription());
+        projectVO.setDetailDescription(projectDO.getDetailDescription());
+        if (StringUtils.isNotBlank(projectDO.getHonor())) {
+            projectVO.setHonors(Arrays.asList(projectDO.getHonor().split(",")));
         }
-        if (StringUtils.isNotBlank(projectPO.getProperties())) {
-            projectVO.setProperties(projectPO.getProperties());
+        if (StringUtils.isNotBlank(projectDO.getProperties())) {
+            projectVO.setProperties(projectDO.getProperties());
         }
         /// List<TeamDO> teamDOS = teamDAO.selectTeamByProjectId(projectPO.getId());
         /// Map<String, Integer> teams = teamDOS.stream().collect(Collectors.toMap(TeamDO::getName, TeamDO::getId));
         /// projectVO.setTeams(teams);
 
-        String schedule = projectPO.getSchedule();
+        String schedule = projectDO.getSchedule();
         if (StringUtils.isNotBlank(schedule)) {
-            projectVO.setSchedule(Arrays.asList(schedule.split(",")));
+            projectVO.setSchedule(JSON.parseObject(projectDO.getSchedule(), new TypeReference<ArrayList<ProjectScheduleVO>>() {}));
         }
         return projectVO;
     }

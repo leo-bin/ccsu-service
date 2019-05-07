@@ -21,7 +21,7 @@ public class ProjectVO {
 
     private String description;
 
-    /// private Map<String, Integer> teams;
+    private String detailDescription;
 
     /**
      * 项目荣誉
@@ -36,7 +36,7 @@ public class ProjectVO {
     /**
      * 进展
      */
-    private List<String> schedule;
+    private List<ProjectScheduleVO> schedule;
 
     @Override
     public boolean equals(Object o) {

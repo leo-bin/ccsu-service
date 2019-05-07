@@ -20,6 +20,8 @@ public class ProjectDO {
      */
     private String description;
 
+    private String detailDescription;
+
     /**
      * 项目荣誉 使用,切割
      */

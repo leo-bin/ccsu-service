@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 /**
  * @author hangs.zhang
  * @date 2019/1/25
@@ -83,8 +85,9 @@ public class ProjectController {
     @StatisticsTime("addSchedule2Project")
     @ApiOperation("为项目追加进度")
     @GetMapping("/addSchedule2Project")
-    public BaseRes addSchedule2Project(int projectId, String schedule) {
-        projectService.addSchedule2Project(projectId, schedule);
+    public BaseRes addSchedule2Project(int projectId, Long time, String schedule) {
+        Date date = new Date(time);
+        projectService.addSchedule2Project(projectId, date, schedule);
         return RespUtil.success();
     }
 

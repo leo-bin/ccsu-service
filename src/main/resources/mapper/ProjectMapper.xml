@@ -8,18 +8,32 @@
         <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        insert into project(name, description, honor, schedule, properties)
-        value(#{name}, #{description}, #{honor}, #{schedule}, #{properties})
+        insert into project(name, description, honor, schedule, properties,detail_description)
+        value(#{name}, #{description}, #{honor}, #{schedule}, #{properties}, #{detailDescription})
     </insert>
 
     <update id="updateProject">
         update project
-        set
-          name = #{name},
-          description = #{description},
-          honor = #{honor},
-          properties = #{properties},
-          schedule = #{schedule}
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="honor != null">
+                honor = #{honor},
+            </if>
+            <if test="properties != null">
+                properties = #{properties},
+            </if>
+            <if test="schedule != null">
+                schedule = #{schedule},
+            </if>
+            <if test="detail_description != null">
+                detail_description = #{detailDescription},
+            </if>
+        </set>
         where id = #{id}
     </update>
 

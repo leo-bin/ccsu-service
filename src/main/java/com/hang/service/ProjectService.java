@@ -1,13 +1,20 @@
 package com.hang.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.google.common.collect.Lists;
 import com.hang.dao.ProjectDAO;
 import com.hang.pojo.data.ProjectDO;
+import com.hang.pojo.vo.ProjectScheduleVO;
 import com.hang.pojo.vo.ProjectVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author hangs.zhang
@@ -60,17 +67,18 @@ public class ProjectService {
         projectDAO.updateProject(projectPO);
     }
 
-    public void addSchedule2Project(int projectId, String schedule) {
-        ProjectDO projectPO = projectDAO.selectByProjectId(projectId);
-        String schedules = projectPO.getSchedule();
-        schedule = LocalDate.now().toString() + " " + schedule;
-        if (StringUtils.isBlank(schedules)) {
-            schedules = schedule;
+    public void addSchedule2Project(int projectId, Date time, String schedule) {
+        ProjectDO projectDO = projectDAO.selectByProjectId(projectId);
+        List<ProjectScheduleVO> projectScheduleVOS;
+        if (StringUtils.isNotBlank(projectDO.getSchedule())) {
+            projectScheduleVOS = JSON.parseObject(projectDO.getSchedule(), new TypeReference<ArrayList<ProjectScheduleVO>>() {});
         } else {
-            schedules += "," + schedule;
+            projectScheduleVOS = Lists.newArrayList();
         }
-        projectPO.setSchedule(schedules);
-        projectDAO.updateProject(projectPO);
+
+        projectScheduleVOS.add(new ProjectScheduleVO(time, schedule));
+        projectDO.setSchedule(JSON.toJSONString(projectScheduleVOS));
+        projectDAO.updateProject(projectDO);
     }
 
 }
