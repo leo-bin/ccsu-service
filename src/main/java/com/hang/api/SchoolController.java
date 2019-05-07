@@ -121,6 +121,17 @@ public class SchoolController {
         return RespUtil.success(studentService.studentList(0, 10));
     }
 
+    @StatisticsTime("getGrade")
+    @ApiOperation("查询成绩")
+    @GetMapping("/getGrade")
+    public BaseRes getGrade(@OpenId String openId, @RequestParam(required = false, defaultValue = "2018-2019-1") String semeter) {
+        ApiAssert.checkOpenId(openId);
+        UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
+        jwcAccountCheck(userInfo);
+
+        return RespUtil.success(schoolService.getGrader(userInfo.getJwcAccount(), semeter));
+    }
+
     private void jwcAccountCheck(UserInfoDO userInfo) {
         if (Objects.isNull(userInfo)) {
             throw new ApiException(ResultEnum.CAN_NOT_GET_USER_INFO);

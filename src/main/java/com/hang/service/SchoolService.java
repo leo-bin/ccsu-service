@@ -2,11 +2,13 @@ package com.hang.service;
 
 import com.google.common.collect.Lists;
 import com.hang.dao.CourseDAO;
+import com.hang.dao.GradeDAO;
 import com.hang.dao.LostPropertyAndRecruitDAO;
 import com.hang.dao.StudentDAO;
 import com.hang.enums.LostPropertyAndRecruitEnum;
 import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.CourseDO;
+import com.hang.pojo.data.GradeDO;
 import com.hang.pojo.data.LostPropertyAndRecruitDO;
 import com.hang.pojo.vo.CourseVO;
 import com.hang.pojo.vo.LostPropertyAndRecruitVO;
@@ -36,6 +38,13 @@ public class SchoolService {
 
     @Autowired
     private LostPropertyAndRecruitDAO lostPropertyAndRecruitDAO;
+
+    @Autowired
+    private GradeDAO gradeDAO;
+
+    public List<GradeDO> getGrader(String jwcAccount, String semester) {
+        return gradeDAO.selectGradeByJwcAccountAndXnxq(jwcAccount, semester);
+    }
 
     public List<CourseVO> getCourseByWeek(String jwcAccount, Integer week, String semester) {
         List<CourseVO> result = Lists.newArrayList();
