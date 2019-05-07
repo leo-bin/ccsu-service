@@ -9,4 +9,6 @@ public class CacheConstant {
 
     public static final String BBS_CACHE_TOPIC_PREFIX = "bbs:topic:";
 
+    public static final String USER_OPEN_ID_PREFIX = "user:open_id:";
+
 }

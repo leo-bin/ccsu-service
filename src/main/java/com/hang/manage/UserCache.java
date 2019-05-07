@@ -5,6 +5,8 @@ import com.hang.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static com.hang.constant.CacheConstant.USER_OPEN_ID_PREFIX;
+
 /**
  * @author zhanghang
  */
@@ -15,11 +17,11 @@ public class UserCache {
     private RedisUtil redisUtil;
 
     public void saveUserInfo(String openId, UserInfoDO userInfoDO) {
-        redisUtil.set(openId, userInfoDO);
+        redisUtil.set(USER_OPEN_ID_PREFIX + openId, userInfoDO);
     }
 
     public UserInfoDO getUserInfo(String openId) {
-        return (UserInfoDO) redisUtil.get(openId);
+        return (UserInfoDO) redisUtil.get(USER_OPEN_ID_PREFIX + openId);
     }
 
 }
