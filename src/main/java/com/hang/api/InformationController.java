@@ -200,4 +200,12 @@ public class InformationController {
         return RespUtil.success();
     }
 
+
+    @StatisticsTime("myActivity")
+    @ApiOperation("我参加的活动")
+    @GetMapping("/myActivity")
+    public BaseRes myActivity(@OpenId String openId) {
+        return RespUtil.success(informationService.getInformationByOpenId(openId));
+    }
+
 }

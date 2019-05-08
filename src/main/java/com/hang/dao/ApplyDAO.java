@@ -17,6 +17,8 @@ public interface ApplyDAO {
 
     InformationApplyDO selectById(int id);
 
+    List<InformationApplyDO> selectByOpenId(String openId);
+
     int insert(InformationApplyDO informationApply);
 
     int update(@Param("id") int id, @Param("status") String status);

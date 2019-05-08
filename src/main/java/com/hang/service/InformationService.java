@@ -2,8 +2,12 @@ package com.hang.service;
 
 import com.google.common.collect.Lists;
 import com.hang.dao.InformationDAO;
+import com.hang.enums.ApplyStatusEnum;
 import com.hang.exceptions.ApiException;
+import com.hang.pojo.data.InformationApplyDO;
 import com.hang.pojo.data.InformationDO;
+import com.hang.pojo.vo.MyInformationVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +29,9 @@ public class InformationService {
 
     @Autowired
     private InformationDAO informationDAO;
+
+    @Autowired
+    private ApplyService applyService;
 
     /**
      * 创建,创建之后返回id
@@ -138,6 +145,20 @@ public class InformationService {
      */
     public List<InformationDO> getHotInformation() {
         return cacheService.getHotInformation();
+    }
+
+    public List<MyInformationVO> getInformationByOpenId(String openId) {
+        List<MyInformationVO> result = Lists.newArrayList();
+        List<InformationApplyDO> informationApplyByOpenId = applyService.getInformationApplyByOpenId(openId);
+        informationApplyByOpenId.forEach(e -> {
+            MyInformationVO myInformationVO = new MyInformationVO();
+            InformationDO information = getInformationById(e.getInformationId());
+            BeanUtils.copyProperties(information, myInformationVO);
+            myInformationVO.setStatus(e.getStatus());
+            myInformationVO.setStatusMessage(ApplyStatusEnum.getByName(e.getStatus()).getMessgae());
+            result.add(myInformationVO);
+        });
+        return result;
     }
 
 }

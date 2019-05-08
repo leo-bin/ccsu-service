@@ -94,4 +94,8 @@ public class ApplyService {
         return applyDAO.listAppliesByInformationId(informationId);
     }
 
+    public List<InformationApplyDO> getInformationApplyByOpenId(String openId) {
+        return applyDAO.selectByOpenId(openId);
+    }
+
 }

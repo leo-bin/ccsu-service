@@ -24,6 +24,9 @@
     <select id="selectById" resultType="com.hang.pojo.data.InformationApplyDO">
       select * from activity_apply where apply_id = #{applyId}
     </select>
+    <select id="selectByOpenId" resultType="com.hang.pojo.data.InformationApplyDO">
+        select * from activity_apply where open_id = #{openId}
+    </select>
 
 
 </mapper>
