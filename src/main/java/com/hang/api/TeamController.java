@@ -42,6 +42,7 @@ public class TeamController {
     @StatisticsTime("createTeam")
     @GetMapping("/createTeam")
     public BaseRes createTeam(@RequestParam String name) {
+
         teamService.createTeam(name);
         return RespUtil.success();
     }
