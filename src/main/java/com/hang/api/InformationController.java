@@ -219,14 +219,14 @@ public class InformationController {
     @StatisticsTime("listApply")
     @GetMapping("/listApply")
     public BaseRes listApply(@RequestParam(required = false, defaultValue = "0") int start,
-                             @RequestParam(required = false, defaultValue = "10") int offset) {
+                             @RequestParam(required = false, defaultValue = "100") int offset) {
         return RespUtil.success(applyService.getAllApply(start, offset));
     }
 
     @StatisticsTime("listActivity")
     @GetMapping("/listActivity")
     public BaseRes listActivity(@RequestParam(required = false, defaultValue = "0") int start,
-                                @RequestParam(required = false, defaultValue = "10") int offset) {
+                                @RequestParam(required = false, defaultValue = "100") int offset) {
         List<InformationDO> informations = informationService.getInformationByCategory(InformationCategoryEnum.ACTIVITY.name(),
                 start, offset);
 
@@ -237,7 +237,7 @@ public class InformationController {
     @StatisticsTime("listAll")
     @GetMapping("/listAll")
     public BaseRes listAll(@RequestParam(required = false, defaultValue = "0") int start,
-                           @RequestParam(required = false, defaultValue = "10") int offset) {
+                           @RequestParam(required = false, defaultValue = "100") int offset) {
         return RespUtil.success(informationService.list(start, offset));
     }
 

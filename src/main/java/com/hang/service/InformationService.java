@@ -40,13 +40,13 @@ public class InformationService {
      * @param information
      * @return
      */
-    public int addInformation(InformationDO information) {
+    public void addInformation(InformationDO information) {
         int i = informationDAO.insert(information);
         if (i != 1) {
             throw new ApiException(-1, "添加失败");
         }
         cacheService.addInformation2Cache(information);
-        return information.getId();
+        return;
     }
 
     /**

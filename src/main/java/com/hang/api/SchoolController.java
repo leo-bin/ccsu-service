@@ -117,7 +117,7 @@ public class SchoolController {
     @ApiOperation("学生列表")
     @GetMapping("/studentList")
     public BaseRes studentList(@RequestParam(required = false, defaultValue = "0") int start,
-                               @RequestParam(required = false, defaultValue = "10") int offset) {
+                               @RequestParam(required = false, defaultValue = "100") int offset) {
         return RespUtil.success(studentService.studentList(start, offset));
     }
 

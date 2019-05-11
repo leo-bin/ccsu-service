@@ -79,7 +79,7 @@ public class FeedController {
     @GetMapping("/listByCategory")
     public BaseRes listByCategory(@RequestParam String category,
                                   @RequestParam(required = false, defaultValue = "0") int start,
-                                  @RequestParam(required = false, defaultValue = "10") int offset) {
+                                  @RequestParam(required = false, defaultValue = "100") int offset) {
         if (!CATEGORY_MAP.containsKey(category)) {
             throw new ApiException(-1, "category不存在");
         }
