@@ -68,8 +68,8 @@ public class UserController {
         log.info("rawData: {}", rawData);
         if (StringUtils.isEmpty(code)) {
             JSONObject returnJson = new JSONObject();
-            returnJson.put("errcode", 10000);
-            returnJson.put("errmsg", "code is empty");
+            returnJson.put("code", 10000);
+            returnJson.put("msg", "code is empty");
             log.error(returnJson.toString());
             return returnJson.toString();
         }

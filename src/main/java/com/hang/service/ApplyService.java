@@ -1,11 +1,15 @@
 package com.hang.service;
 
+import com.google.common.collect.Lists;
 import com.hang.dao.ApplyDAO;
 import com.hang.enums.ApplyStatusEnum;
 import com.hang.enums.InformationCategoryEnum;
 import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.InformationApplyDO;
 import com.hang.pojo.data.InformationDO;
+import com.hang.pojo.data.UserInfoDO;
+import com.hang.pojo.vo.ApplyMessageVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +30,9 @@ public class ApplyService {
 
     @Autowired
     private InformationService informationService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 报名
@@ -92,6 +99,26 @@ public class ApplyService {
      */
     public List<InformationApplyDO> getApplyByInformationId(int informationId) {
         return applyDAO.listAppliesByInformationId(informationId);
+    }
+
+    public List<ApplyMessageVO> getAllApply(int start, int offset) {
+        List<ApplyMessageVO> result = Lists.newArrayList();
+        List<InformationApplyDO> applyDOS = applyDAO.list(start, offset);
+        applyDOS.forEach(e -> {
+            ApplyMessageVO applyMessageVO = new ApplyMessageVO();
+            InformationDO information = informationService.getInformationById(e.getInformationId());
+            applyMessageVO.setActivityName(information.getTitle());
+
+            UserInfoDO userInfo = userService.getUserInfoByOpenId(e.getOpenId());
+            applyMessageVO.setJwcAccount(userInfo.getJwcAccount());
+            applyMessageVO.setNickName(userInfo.getNickName());
+            applyMessageVO.setOpenId(userInfo.getOpenId());
+
+            applyMessageVO.setStatus(e.getStatus());
+            applyMessageVO.setStatusMessage(ApplyStatusEnum.getByName(e.getStatus()).getMessgae());
+            result.add(applyMessageVO);
+        });
+        return result;
     }
 
     public List<InformationApplyDO> getInformationApplyByOpenId(String openId) {

@@ -21,7 +21,7 @@ public class WxConstant {
     }
 
     public static final class WxApi {
-        public static final String CODE_TO_SESSION = "https://api.weixin.qq.com/sns/jscode2session?appid={appId}&secret={appSecret}&js_code={errcode}&grant_type=authorization_code";
+        public static final String CODE_TO_SESSION = "https://api.weixin.qq.com/sns/jscode2session?appid={appId}&secret={appSecret}&js_code={code}&grant_type=authorization_code";
     }
 
     public static final String TEST_OPEN_ID = "o8Tn70BKPhACUHANmCmh0S9amdkM";

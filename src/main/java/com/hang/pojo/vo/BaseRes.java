@@ -17,12 +17,12 @@ public class BaseRes<T> {
     /**
      * 错误代码
      */
-    private Integer errcode;
+    private Integer code;
 
     /**
      * 错误信息
      */
-    private String errmsg;
+    private String msg;
 
     private T data;
 

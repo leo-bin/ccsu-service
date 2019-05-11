@@ -19,8 +19,8 @@ public class RespUtil {
 
     public static BaseRes success(Object obj) {
         BaseRes baseRes = new BaseRes();
-        baseRes.setErrcode(ResultEnum.SUCCESS.getCode());
-        baseRes.setErrmsg(ResultEnum.SUCCESS.getMsg());
+        baseRes.setCode(ResultEnum.SUCCESS.getCode());
+        baseRes.setMsg(ResultEnum.SUCCESS.getMsg());
         baseRes.setData(obj);
         return baseRes;
     }
@@ -31,16 +31,16 @@ public class RespUtil {
 
     public static BaseRes error(Integer code, String msg) {
         BaseRes baseRes = new BaseRes();
-        baseRes.setErrcode(code);
-        baseRes.setErrmsg(msg);
+        baseRes.setCode(code);
+        baseRes.setMsg(msg);
         baseRes.setData(null);
         return baseRes;
     }
 
     public static BaseRes error(ResultEnum resultEnum) {
         BaseRes baseRes = new BaseRes();
-        baseRes.setErrcode(resultEnum.getCode());
-        baseRes.setErrmsg(resultEnum.getMsg());
+        baseRes.setCode(resultEnum.getCode());
+        baseRes.setMsg(resultEnum.getMsg());
         baseRes.setData(null);
         return baseRes;
     }

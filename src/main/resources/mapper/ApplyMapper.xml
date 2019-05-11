@@ -27,6 +27,9 @@
     <select id="selectByOpenId" resultType="com.hang.pojo.data.InformationApplyDO">
         select * from activity_apply where open_id = #{openId}
     </select>
+    <select id="list" resultType="com.hang.pojo.data.InformationApplyDO">
+        select * from activity_apply limit #{start}, #{offset}
+    </select>
 
 
 </mapper>

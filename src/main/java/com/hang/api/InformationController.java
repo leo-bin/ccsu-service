@@ -208,4 +208,16 @@ public class InformationController {
         return RespUtil.success(informationService.getInformationByOpenId(openId));
     }
 
+    /**
+     * 查询申请列表
+     *
+     * @return
+     */
+    @StatisticsTime("listApply")
+    @GetMapping("/listApply")
+    public BaseRes listApply(@RequestParam(required = false, defaultValue = "0") int start,
+                             @RequestParam(required = false, defaultValue = "10") int offset) {
+        return RespUtil.success(applyService.getAllApply(start, offset));
+    }
+
 }

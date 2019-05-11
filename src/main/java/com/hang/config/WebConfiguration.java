@@ -37,6 +37,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        /// registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/");
     }
 
     @Override
@@ -53,6 +54,7 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .addPathPatterns("/api/**")
                 // 不拦截
                 .excludePathPatterns("/user/getUserInfoByOpenId")
+                .excludePathPatterns("/information/listApply")
                 .excludePathPatterns("/user/login");
     }
 

@@ -25,4 +25,6 @@ public interface ApplyDAO {
 
     List<InformationApplyDO> listAppliesByInformationId(int informationId);
 
+    List<InformationApplyDO> list(@Param("start") int start, @Param("offset") int offset);
+
 }

@@ -87,10 +87,10 @@ public class UserService {
         JSONObject returnJson = new JSONObject();
         // 用code 去微信服务器拿 openId 和 session_key
         JSONObject openIdAndSessionKey = code2session(code);
-        int errcode = openIdAndSessionKey.getIntValue("errcode");
+        int errcode = openIdAndSessionKey.getIntValue("code");
         if (errcode != 0) {
-            returnJson.put("errcode", 10011);
-            returnJson.put("errmsg", openIdAndSessionKey.getString("errmsg"));
+            returnJson.put("code", 10011);
+            returnJson.put("msg", openIdAndSessionKey.getString("msg"));
             log.error(returnJson.toString());
             return returnJson.toJSONString();
         }
@@ -122,21 +122,21 @@ public class UserService {
                     userInfoDAO.insert(userInfo);
                 }
             } catch (Exception e) {
-                returnJson.put("errcode", 10000);
-                returnJson.put("errmsg", "error:" + e.getMessage());
+                returnJson.put("code", 10000);
+                returnJson.put("msg", "error:" + e.getMessage());
                 return returnJson.toString();
             }
         }
         // 将用户信息写入会话缓存
         JSONObject sessionJson = sessionService.newSession(JSONObject.toJSONString(userInfo));
-        errcode = sessionJson.getIntValue("errcode");
+        errcode = sessionJson.getIntValue("code");
         if (0 != errcode) {
-            returnJson.put("errcode", errcode);
-            returnJson.put("errmsg", sessionJson.getString("errmsg"));
+            returnJson.put("code", errcode);
+            returnJson.put("msg", sessionJson.getString("msg"));
             return returnJson.toString();
         }
-        returnJson.put("errcode", 0);
-        returnJson.put("errmsg", "success");
+        returnJson.put("code", 0);
+        returnJson.put("msg", "success");
         returnJson.put("userInfo", userInfo);
         returnJson.put("sessionId", sessionJson.getString("sessionId"));
         return returnJson.toString();
@@ -154,19 +154,19 @@ public class UserService {
         ResponseEntity<String> entity = restTemplate.getForEntity(uri, String.class);
         if (HttpStatus.OK == entity.getStatusCode()) {
             JSONObject res = JSONObject.parseObject(entity.getBody());
-            int errcode = res.getIntValue("errcode");
-            returnJson.put("errcode", errcode);
+            int errcode = res.getIntValue("code");
+            returnJson.put("code", errcode);
             if (0 == errcode) {
                 // 请求成功
                 returnJson.put("openId", res.getString("openid"));
                 returnJson.put("sessionKey", res.getString("session_key"));
             } else {
-                returnJson.put("errmsg", res.getString("errmsg"));
+                returnJson.put("msg", res.getString("msg"));
             }
             return returnJson;
         }
-        returnJson.put("errcode", entity.getStatusCodeValue());
-        returnJson.put("errmsg", "http connect " + uri.toString() + " failed");
+        returnJson.put("code", entity.getStatusCodeValue());
+        returnJson.put("msg", "http connect " + uri.toString() + " failed");
         return returnJson;
     }
 

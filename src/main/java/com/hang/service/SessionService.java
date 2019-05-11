@@ -45,8 +45,8 @@ public class SessionService {
         String sessionId = TokenUtils.getToken();
         log.info("redis set {} = {}", sessionId, data);
         ops.set(sessionId, data == null ? "null" : data, expiredIn, TimeUnit.SECONDS);
-        returnJson.put("errcode", 0);
-        returnJson.put("errmsg", "success");
+        returnJson.put("code", 0);
+        returnJson.put("msg", "success");
         returnJson.put("sessionId", sessionId);
         returnJson.put("expired_in", expiredIn);
         return returnJson;
@@ -60,14 +60,14 @@ public class SessionService {
         log.info("redis sessionId : {}, sessionInfo : {}", sessionId, sessionInfo);
         if (sessionInfo == null) {
             // 两种情况：sessionId 不存在，sessionId 已过期。这里统一当作过期处理
-            /// returnJson.put("errcode", -10008);
-            /// returnJson.put("errmsg", "your sessionId was not exist or expired.");
+            /// returnJson.put("code", -10008);
+            /// returnJson.put("msg", "your sessionId was not exist or expired.");
             /// return returnJson;
             return RespUtil.error(-10008, "your sessionId was not exist or expired.");
         }
         redisTemplate.expire(sessionId, expiredIn, TimeUnit.SECONDS);
-        /// returnJson.put("errcode", 0);
-        /// returnJson.put("errmsg", "success");
+        /// returnJson.put("code", 0);
+        /// returnJson.put("msg", "success");
         /// returnJson.put("userInfo", sessionInfo);
         /// return returnJson;
         return RespUtil.success(userInfoDO);
