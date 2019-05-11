@@ -5,6 +5,7 @@ import com.hang.annotation.OpenId;
 import com.hang.aop.StatisticsTime;
 import com.hang.constant.InformationConstant;
 import com.hang.enums.ApplyStatusEnum;
+import com.hang.enums.InformationCategoryEnum;
 import com.hang.enums.ResultEnum;
 import com.hang.exceptions.ApiAssert;
 import com.hang.exceptions.ApiException;
@@ -20,7 +21,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import static com.hang.constant.InformationConstant.CATEGORY_MAP;
 
@@ -218,6 +221,24 @@ public class InformationController {
     public BaseRes listApply(@RequestParam(required = false, defaultValue = "0") int start,
                              @RequestParam(required = false, defaultValue = "10") int offset) {
         return RespUtil.success(applyService.getAllApply(start, offset));
+    }
+
+    @StatisticsTime("listActivity")
+    @GetMapping("/listActivity")
+    public BaseRes listActivity(@RequestParam(required = false, defaultValue = "0") int start,
+                                @RequestParam(required = false, defaultValue = "10") int offset) {
+        List<InformationDO> informations = informationService.getInformationByCategory(InformationCategoryEnum.ACTIVITY.name(),
+                start, offset);
+
+        Collections.reverse(informations);
+        return RespUtil.success(informations);
+    }
+
+    @StatisticsTime("listAll")
+    @GetMapping("/listAll")
+    public BaseRes listAll(@RequestParam(required = false, defaultValue = "0") int start,
+                           @RequestParam(required = false, defaultValue = "10") int offset) {
+        return RespUtil.success(informationService.list(start, offset));
     }
 
 }

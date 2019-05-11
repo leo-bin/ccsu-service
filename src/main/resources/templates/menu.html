@@ -21,6 +21,9 @@
                     <a class="" href="javascript:;">主页</a>
                     <dl class="layui-nav-child">
                         <dd><a id="activityApply" href="#">活动申请审核</a></dd>
+                        <dd><a id="activityList" href="#">活动列表</a></dd>
+                        <dd><a id="feedList" href="#">首页feed列表</a></dd>
+                        <dd><a id="studentList" href="#">学生列表</a></dd>
                     </dl>
                 </li>
             </ul>
@@ -40,13 +43,25 @@
     });
     //用于页面加载时候显示
     $(document).ready(function () {
-        $("#iframe").attr('src', '/page/page1');
-    })
+        $("#iframe").attr('src', '/page/applyList');
+    });
 
     //根据点击进行跳转
     $("#activityApply").click(function () {
-        $("#iframe").attr('src', '/page/page1');
-    })
+        $("#iframe").attr('src', '/page/applyList');
+    });
+
+    $("#activityList").click(function () {
+        $("#iframe").attr('src', '/page/activityList');
+    });
+
+    $("#feedList").click(function () {
+        $("#iframe").attr('src', '/page/feedList');
+    });
+
+    $("#studentList").click(function () {
+        $("#iframe").attr('src', '/page/studentList');
+    });
 </script>
 </body>
 </html>

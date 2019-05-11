@@ -3,6 +3,7 @@ package com.hang.api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -21,9 +22,9 @@ public class PageController {
         return "menu";
     }
 
-    @GetMapping("/page1")
-    public String page1() {
-        return "page1";
+    @GetMapping("/{page}")
+    public String page1(@PathVariable String page) {
+        return page;
     }
 
 }

@@ -55,6 +55,9 @@ public class WebConfiguration implements WebMvcConfigurer {
                 // 不拦截
                 .excludePathPatterns("/user/getUserInfoByOpenId")
                 .excludePathPatterns("/information/listApply")
+                .excludePathPatterns("/information/listActivity")
+                .excludePathPatterns("/information/listAll")
+                .excludePathPatterns("/school/studentList")
                 .excludePathPatterns("/user/login");
     }
 

@@ -15,14 +15,13 @@
 		<span id="show" style="display:none">123</span>
 		<script type="text/html" id="toolbarDemo">
 			<div class="layui-btn-container">
-    <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
-    <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
-    <button class="layui-btn layui-btn-sm" lay-event="isAll" id="all">验证是否全选</button>
+<!--    <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>-->
+<!--    <button class="layui-btn layui-btn-sm" lay-event="isAll" id="all">验证是否全选</button>-->
   </div>
 </script>
 		<script type="text/html" id="barDemo">
 			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
 
@@ -38,7 +37,7 @@
 				table.render({
 
 					elem: '#test',
-					url: '/information/listApply',
+					url: '/information/listActivity',
 					toolbar: '#toolbarDemo',
 					title: '用户数据表',
 					totalRow: true,
@@ -47,34 +46,33 @@
 							type: 'checkbox',
 							fixed: 'left'
 						}, {
-							// totalRowText: '合计',
-							field: 'nickName',
-							title: '申请人微信昵称',
+							field: 'id',
+							title: 'ID',
 							width: 180,
 							// fixed: 'left',
 							unresize: true,
 							sort: true,
 
 						}, {
-							field: 'openId',
-							title: '微信openId',
+							field: 'title',
+							title: '活动标题',
 							width: 300,
 							edit: 'text'
 						}, {
-							field: 'jwcAccount',
-							title: '学号',
-							width: 200,
+							field: 'content',
+							title: '活动内容',
+							width: 600,
 							sort: true,
 							// totalRow: true
 						}, {
-							field: 'activityName',
-							title: '申请活动名称',
+							field: 'releaseTime',
+							title: '发布时间',
 							width: 200,
 							edit: 'text',
 							sort: true
 						}, {
-							field: 'statusMessage',
-							title: '当前申请状态',
+							field: 'authors',
+							title: '作者',
 							width: 200
 						}, {
 							// fixed: 'right',
@@ -87,9 +85,6 @@
 
 
 				});
-
-
-
 
 				var arr = [];
 				table.on('checkbox(test)', function(obj) {
@@ -118,11 +113,6 @@
 						}
 					}
 				});
-
-
-
-
-
 
 				//工具栏事件
 				table.on('toolbar(test)', function(obj) {
@@ -162,12 +152,11 @@
 						});
 					} else if (obj.event === 'edit') {
 						console.log(obj.data);
-						
-						$('#show').html(JSON.stringify(data));
-						$("#show").toggle();
-						var table = $(this).parents().find(".layui-form")[0]
-						$(table).toggle();
 
+						// $('#show').html(JSON.stringify(data));
+						// $("#show").toggle();
+						// var table = $(this).parents().find(".layui-form")[0]
+						// $(table).toggle();
 					}
 				});
 			});

@@ -118,7 +118,7 @@ public class SchoolController {
     @GetMapping("/studentList")
     public BaseRes studentList(@RequestParam(required = false, defaultValue = "0") int start,
                                @RequestParam(required = false, defaultValue = "10") int offset) {
-        return RespUtil.success(studentService.studentList(0, 10));
+        return RespUtil.success(studentService.studentList(start, offset));
     }
 
     @StatisticsTime("getGrade")
