@@ -29,6 +29,12 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
+    @StatisticsTime("list")
+    @GetMapping("/list")
+    public BaseRes list() {
+        return RespUtil.success(projectService.list());
+    }
+
     /**
      * 根据projectId查询项目
      *

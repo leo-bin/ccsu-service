@@ -40,10 +40,10 @@ public class TeamController {
 
     @ApiOperation("创建团队")
     @StatisticsTime("createTeam")
-    @GetMapping("/createTeam")
-    public BaseRes createTeam(@RequestParam String name) {
-
-        teamService.createTeam(name);
+    @PostMapping("/createTeam")
+    public BaseRes createTeam(@RequestParam String name, @RequestParam String advisor) {
+        log.info("advisor:{}", advisor);
+        teamService.createTeam(name, advisor);
         return RespUtil.success();
     }
 

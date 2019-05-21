@@ -25,6 +25,7 @@
                         <dd><a id="feedList" href="#">首页feed列表</a></dd>
                         <dd><a id="studentList" href="#">学生列表</a></dd>
                         <dd><a id="teamList" href="#">团队列表</a></dd>
+                        <dd><a id="projectList" href="#">项目列表</a></dd>
                         <dd><a id="releaseActivity" href="#">发布首页information信息</a></dd>
                         <dd><a id="releaseTeam" href="#">发布团队信息</a></dd>
                     </dl>
@@ -64,6 +65,10 @@
 
     $("#teamList").click(function () {
         $("#iframe").attr('src', '/page/teamList');
+    });
+
+    $("#projectList").click(function () {
+        $("#iframe").attr('src', '/page/projectList');
     });
 
     $("#studentList").click(function () {

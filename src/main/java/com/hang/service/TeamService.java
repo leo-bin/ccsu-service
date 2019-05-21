@@ -31,9 +31,10 @@ public class TeamService {
     private ProjectService projectService;
 
     @Transactional(rollbackFor = Exception.class)
-    public TeamVO createTeam(String name) {
+    public TeamVO createTeam(String name, String advisor) {
         TeamDO teamDO = new TeamDO();
         teamDO.setName(name);
+        teamDO.setAdvisor(advisor);
         teamDAO.insertTeam(teamDO);
         return teamDO2VO(teamDO);
     }

@@ -5,8 +5,8 @@
 <mapper namespace="com.hang.dao.TeamDAO">
 
     <insert id="insertTeam">
-      insert into team(name, honor, log, members)
-      value(#{name}, #{honor}, #{log}, #{members})
+      insert into team(name, honor, log, members, advisor)
+      values (#{name}, #{honor}, #{log}, #{members}, #{advisor})
     </insert>
 
     <insert id="insert2TeamUser">

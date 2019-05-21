@@ -53,7 +53,9 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .addPathPatterns("/shcool/**")
                 .addPathPatterns("/api/**")
                 // 不拦截
+                .excludePathPatterns("/project/list")
                 .excludePathPatterns("/team/getAllTeam")
+                .excludePathPatterns("/team/createTeam")
                 .excludePathPatterns("/user/getUserInfoByOpenId")
                 .excludePathPatterns("/information/listApply")
                 .excludePathPatterns("/information/listActivity")

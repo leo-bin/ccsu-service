@@ -3,6 +3,8 @@ package com.hang.dao;
 import com.hang.pojo.data.ProjectDO;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author hangs.zhang
  * @date 2019/1/26
@@ -35,5 +37,7 @@ public interface ProjectDAO {
      * @return
      */
     int updateProject(ProjectDO projectPO);
+
+    List<ProjectDO> list();
 
 }

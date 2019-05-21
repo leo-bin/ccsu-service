@@ -37,7 +37,7 @@
 				table.render({
 
 					elem: '#test',
-					url: '/information/listActivity',
+					url: '/project/list',
 					toolbar: '#toolbarDemo',
 					title: '用户数据表',
 					totalRow: true,
@@ -51,39 +51,36 @@
 							width: 180,
 							// fixed: 'left',
 							unresize: true,
-							sort: true
+							sort: true,
 
 						}, {
-							field: 'title',
-							title: '活动标题',
+							field: 'name',
+							title: '项目名称',
 							width: 300,
 							edit: 'text'
 						}, {
-							field: 'content',
-							title: '活动内容',
+							field: 'description',
+							title: '项目描述',
 							width: 600,
 							sort: true,
 							// totalRow: true
 						}, {
-							field: 'releaseTime',
-							title: '发布时间',
+							field: 'detailDescription',
+							title: '详细描述',
 							width: 200,
 							edit: 'text',
 							sort: true
 						}, {
-							field: 'authors',
-							title: '作者',
+							field: 'honor',
+							title: '荣誉',
 							width: 200
 						}, {
-							// fixed: 'right',
-							title: '操作',
-							toolbar: '#barDemo',
-							width: 150
+							field: 'properties',
+							title: '性质',
+							width: 200
 						}]
 					],
-					page: false,
-
-
+					page: false
 				});
 
 				var arr = [];

@@ -31,6 +31,10 @@ public class ProjectService {
     @Autowired
     private TeamService teamService;
 
+    public List<ProjectDO> list() {
+        return projectDAO.list();
+    }
+
     public ProjectDO addProject(ProjectDO projectPO) {
         projectDAO.insertProject(projectPO);
         return projectPO;
