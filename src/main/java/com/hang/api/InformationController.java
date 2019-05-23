@@ -182,7 +182,7 @@ public class InformationController {
     @StatisticsTime("modifyStatusSuccess")
     @ApiOperation("更新activity 申请状态为成功")
     @GetMapping("/modifyActivityStatusSuccess")
-    public BaseRes modifyStatusSuccess(@OpenId String openId, int applyId) {
+    public BaseRes modifyStatusSuccess(String openId, int applyId) {
         ApiAssert.checkOpenId(openId);
         studentService.addComprehensiveFraction(openId, 1.0);
         applyService.updateApplyStatus(applyId, ApplyStatusEnum.SUCCESS);

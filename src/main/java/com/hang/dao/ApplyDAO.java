@@ -21,7 +21,7 @@ public interface ApplyDAO {
 
     int insert(InformationApplyDO informationApply);
 
-    int update(@Param("id") int id, @Param("status") String status);
+    int update(@Param("applyId") int applyId, @Param("status") String status);
 
     List<InformationApplyDO> listAppliesByInformationId(int informationId);
 

@@ -13,6 +13,8 @@ public class ApplyMessageVO {
 
     private String openId;
 
+    private Integer applyId;
+
     private String jwcAccount;
 
     private String nickName;

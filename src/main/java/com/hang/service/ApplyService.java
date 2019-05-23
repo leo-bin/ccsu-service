@@ -9,7 +9,6 @@ import com.hang.pojo.data.InformationApplyDO;
 import com.hang.pojo.data.InformationDO;
 import com.hang.pojo.data.UserInfoDO;
 import com.hang.pojo.vo.ApplyMessageVO;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,6 +106,7 @@ public class ApplyService {
         applyDOS.forEach(e -> {
             ApplyMessageVO applyMessageVO = new ApplyMessageVO();
             InformationDO information = informationService.getInformationById(e.getInformationId());
+            if (information == null) return;
             applyMessageVO.setActivityName(information.getTitle());
 
             UserInfoDO userInfo = userService.getUserInfoByOpenId(e.getOpenId());
@@ -114,6 +114,7 @@ public class ApplyService {
             applyMessageVO.setNickName(userInfo.getNickName());
             applyMessageVO.setOpenId(userInfo.getOpenId());
 
+            applyMessageVO.setApplyId(e.getApplyId());
             applyMessageVO.setStatus(e.getStatus());
             applyMessageVO.setStatusMessage(ApplyStatusEnum.getByName(e.getStatus()).getMessgae());
             result.add(applyMessageVO);

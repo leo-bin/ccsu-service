@@ -45,7 +45,7 @@ public class WebConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(headerCheckInterceptor)
                 // 拦截
                 .addPathPatterns("/feed/**")
-                .addPathPatterns("/information/**")
+                // .addPathPatterns("/information/**")
                 .addPathPatterns("/team/**")
                 .addPathPatterns("/project/**")
                 .addPathPatterns("/user/**")
@@ -61,6 +61,9 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .excludePathPatterns("/information/listActivity")
                 .excludePathPatterns("/information/listAll")
                 .excludePathPatterns("/information/createInformation")
+                .excludePathPatterns("/information/removeInformation")
+//                .excludePathPatterns("/information/modifyActivityStatusSuccess")
+//                .excludePathPatterns("/information/modifyActivityStatusFailure")
                 .excludePathPatterns("/school/studentList")
                 .excludePathPatterns("/user/login");
     }
