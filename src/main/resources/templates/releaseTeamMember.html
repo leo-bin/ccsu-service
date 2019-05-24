@@ -11,12 +11,20 @@
 <body>
 
 <div class="layui-form" style="text-align: center;font-size: 30px;">
-    团队发布系统
+    添加团队成员
 </div>
 
 <form id="demo1" class="layui-form" action="/information/createInformation" method="post" style="margin: 30px 0;">
     <div class="layui-form-item">
-        <label class="layui-form-label">团队名称</label>
+        <label class="layui-form-label">团队id</label>
+        <div class="layui-input-block">
+            <input type="text" name="teamId" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
         <div class="layui-input-block">
             <input type="text" name="name" lay-verify="required" placeholder="请输入" autocomplete="off"
                    class="layui-input">
@@ -24,9 +32,17 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">导师</label>
+        <label class="layui-form-label">角色</label>
         <div class="layui-input-block">
-            <input type="text" name="advisor" lay-verify="required" placeholder="请输入" autocomplete="off"
+            <input type="text" name="role" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">title</label>
+        <div class="layui-input-block">
+            <input type="text" name="title" lay-verify="required" placeholder="请输入" autocomplete="off"
                    class="layui-input">
         </div>
     </div>
@@ -92,11 +108,9 @@
             });
             console.log(data);
             $.ajax({
-                url: '/team/createTeam',
-                type: 'POST',
+                url: '/team/addMember2Team',
+                type: 'GET',
                 data: data.field,
-                // processData:false,
-                // contentType:false,
                 success: function (res) {
                     layer.open({
                         title: "结果",

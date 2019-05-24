@@ -28,10 +28,12 @@
                         <dd><a id="projectList" href="#">项目列表</a></dd>
                         <dd><a id="releaseActivity" href="#">发布首页information信息</a></dd>
                         <dd><a id="releaseTeam" href="#">发布团队信息</a></dd>
+                        <dd><a id="releaseTeamMember" href="#">增加团队成员</a></dd>
                         <dd><a id="releaseTeamLog" href="#">增加团队日志</a></dd>
                         <dd><a id="releaseTeamHonor" href="#">增加团队荣誉</a></dd>
                         <dd><a id="releaseTeamProject" href="#">增加团队项目</a></dd>
                         <dd><a id="releaseTeamProjectHonor" href="#">增加团队项目荣誉</a></dd>
+                        <dd><a id="releaseTeamProjectSchedule" href="#">增加团队项目进度</a></dd>
                     </dl>
                 </li>
             </ul>
@@ -87,6 +89,10 @@
         $("#iframe").attr('src', '/page/releaseTeam');
     });
 
+    $("#releaseTeamMember").click(function () {
+        $("#iframe").attr('src', '/page/releaseTeamMember');
+    });
+
     $("#releaseTeamLog").click(function () {
         $("#iframe").attr('src', '/page/releaseTeamLog');
     });
@@ -101,6 +107,10 @@
 
     $("#releaseTeamProjectHonor").click(function () {
         $("#iframe").attr('src', '/page/releaseTeamProjectHonor');
+    });
+
+    $("#releaseTeamProjectSchedule").click(function () {
+        $("#iframe").attr('src', '/page/releaseTeamProjectSchedule');
     });
 </script>
 </body>

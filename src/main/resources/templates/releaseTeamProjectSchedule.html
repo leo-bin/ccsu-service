@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>layui</title>
+    <title>添加团队项目进展</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -11,22 +11,30 @@
 <body>
 
 <div class="layui-form" style="text-align: center;font-size: 30px;">
-    团队发布系统
+    添加团队项目进展
 </div>
 
-<form id="demo1" class="layui-form" action="/information/createInformation" method="post" style="margin: 30px 0;">
+<form id="demo1" class="layui-form" action="/team/addLog2Team" method="post" style="margin: 30px 0;">
     <div class="layui-form-item">
-        <label class="layui-form-label">团队名称</label>
+        <label class="layui-form-label">项目id</label>
         <div class="layui-input-block">
-            <input type="text" name="name" lay-verify="required" placeholder="请输入" autocomplete="off"
+            <input type="text" name="projectId" lay-verify="required" placeholder="请输入" autocomplete="off"
                    class="layui-input">
         </div>
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">导师</label>
+        <label class="layui-form-label">项目进度</label>
         <div class="layui-input-block">
-            <input type="text" name="advisor" lay-verify="required" placeholder="请输入" autocomplete="off"
+            <input type="text" name="schedule" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="time" id="date1" placeholder="YYYY-MM-DD" autocomplete="off"
                    class="layui-input">
         </div>
     </div>
@@ -37,7 +45,6 @@
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
-
 </form>
 
 
@@ -51,9 +58,6 @@
             , laydate = layui.laydate;
 
         //日期
-        laydate.render({
-            elem: '#date'
-        });
         laydate.render({
             elem: '#date1'
         });
@@ -77,33 +81,23 @@
             }
         });
 
-        //监听指定开关
-        form.on('switch(switchTest)', function (data) {
-            layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
-                offset: '6px'
-            });
-            layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
-        });
-
         //监听提交
         form.on('submit(demo1)', function (data) {
             layer.alert(JSON.stringify(data.field), {
                 title: '最终的提交信息'
             });
-            console.log(data);
+            var getTime = new Date().getTime(data.field.time);
+            console.log(getTime);
             $.ajax({
-                url: '/team/createTeam',
-                type: 'POST',
-                data: data.field,
-                // processData:false,
-                // contentType:false,
+                url: '/project/addSchedule2Project',
+                type: 'GET',
+                data: "projectId=" + data.field.projectId + "&time=" + getTime + "&schedule=" + data.field.schedule,
                 success: function (res) {
                     layer.open({
                         title: "结果",
                         content: res.msg
                     });
                     $("#demo1")[0].reset();
-                    // window.location.href='#';
                 },
                 fail: function () {
                     layer.open({
@@ -114,7 +108,6 @@
             });
             return false;
         });
-
     });
 </script>
 

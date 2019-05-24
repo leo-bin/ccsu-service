@@ -55,10 +55,12 @@ public class WebConfiguration implements WebMvcConfigurer {
                 // 不拦截
                 .excludePathPatterns("/project/list")
                 .excludePathPatterns("/project/addHonor2Project")
+                .excludePathPatterns("/project/addSchedule2Project")
                 .excludePathPatterns("/team/getAllTeam")
                 .excludePathPatterns("/team/createTeam")
                 .excludePathPatterns("/team/addLog2Team")
                 .excludePathPatterns("/team/addHonor2Team")
+                .excludePathPatterns("/team/addMember2Team")
                 .excludePathPatterns("/team/addProject2Team")
                 .excludePathPatterns("/user/getUserInfoByOpenId")
                 .excludePathPatterns("/information/listApply")

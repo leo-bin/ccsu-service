@@ -3,6 +3,7 @@ package com.hang.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.google.common.collect.Lists;
 import com.hang.dao.TeamDAO;
 import com.hang.pojo.data.ProjectDO;
 import com.hang.pojo.data.TeamDO;
@@ -77,6 +78,9 @@ public class TeamService {
         String members = teamDO.getMembers();
         ArrayList<GroupMemberVO> groupMemberVOS = JSON.parseObject(members, new TypeReference<ArrayList<GroupMemberVO>>() {
         });
+        if(groupMemberVOS == null) {
+            groupMemberVOS = Lists.newArrayList();
+        }
         groupMemberVOS.add(groupMemberVO);
         teamDO.setMembers(JSON.toJSONString(groupMemberVOS));
         teamDAO.updateTeam(teamDO);
