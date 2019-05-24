@@ -119,11 +119,11 @@ public class InformationService {
         int maxId = informationDAO.maxId();
         ArrayList<InformationDO> list = informationDAO.list(maxId - 20, maxId);
         if (list.size() > 10) {
-            informations.addAll(list.subList(list.size() - 10, list.size() - 1));
+            informations.addAll(list.subList(list.size() - 10, list.size()));
         } else {
-            Collections.reverse(list);
             informations.addAll(list);
         }
+        Collections.reverse(informations);
         return informations;
     }
 

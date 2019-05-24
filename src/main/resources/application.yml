@@ -24,7 +24,8 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     username: root
     password: zhanghang
-    url: jdbc:mysql://193.112.120.245:3306/micro-platform?characterEncoding=UTF-8&serverTimezone=GMT
+    # url: jdbc:mysql://193.112.120.245:3306/micro-platform?characterEncoding=UTF-8&serverTimezone=GMT
+    url: jdbc:mysql://127.0.0.1:3306/micro-platform?characterEncoding=UTF-8&serverTimezone=GMT
     dbcp2:
       pool-prepared-statements: true
       max-open-prepared-statements: 20

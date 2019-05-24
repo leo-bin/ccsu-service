@@ -162,10 +162,11 @@ public class TeamController {
     @ApiOperation("为team添加项目")
     @GetMapping("/addProject2Team")
     public BaseRes addProject2Team(@RequestParam int teamId, @RequestParam String projectName,
-                                   @RequestParam String projectDescription) {
+                                   @RequestParam String projectDescription, @RequestParam String properties) {
         ProjectDO projectDO = new ProjectDO();
         projectDO.setDescription(projectDescription);
         projectDO.setName(projectName);
+        projectDO.setProperties(properties);
         teamService.addProject2Team(teamId, projectDO);
         return RespUtil.success();
     }

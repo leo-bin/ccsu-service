@@ -28,6 +28,10 @@
                         <dd><a id="projectList" href="#">项目列表</a></dd>
                         <dd><a id="releaseActivity" href="#">发布首页information信息</a></dd>
                         <dd><a id="releaseTeam" href="#">发布团队信息</a></dd>
+                        <dd><a id="releaseTeamLog" href="#">增加团队日志</a></dd>
+                        <dd><a id="releaseTeamHonor" href="#">增加团队荣誉</a></dd>
+                        <dd><a id="releaseTeamProject" href="#">增加团队项目</a></dd>
+                        <dd><a id="releaseTeamProjectHonor" href="#">增加团队项目荣誉</a></dd>
                     </dl>
                 </li>
             </ul>
@@ -81,6 +85,22 @@
 
     $("#releaseTeam").click(function () {
         $("#iframe").attr('src', '/page/releaseTeam');
+    });
+
+    $("#releaseTeamLog").click(function () {
+        $("#iframe").attr('src', '/page/releaseTeamLog');
+    });
+
+    $("#releaseTeamHonor").click(function () {
+        $("#iframe").attr('src', '/page/releaseTeamHonor');
+    });
+
+    $("#releaseTeamProject").click(function () {
+        $("#iframe").attr('src', '/page/releaseTeamProject');
+    });
+
+    $("#releaseTeamProjectHonor").click(function () {
+        $("#iframe").attr('src', '/page/releaseTeamProjectHonor');
     });
 </script>
 </body>

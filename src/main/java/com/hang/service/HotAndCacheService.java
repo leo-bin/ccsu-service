@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -57,6 +58,7 @@ public class HotAndCacheService {
         if (set != null) {
             return set.stream()
                     .map(e -> getInformationFromCacheById((Integer) e))
+                    .filter(Objects::nonNull)
                     .collect(Collectors.toList());
         }
         return Lists.newArrayList();

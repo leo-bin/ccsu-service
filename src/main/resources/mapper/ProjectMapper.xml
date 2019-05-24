@@ -30,7 +30,7 @@
             <if test="schedule != null">
                 schedule = #{schedule},
             </if>
-            <if test="detail_description != null">
+            <if test="detailDescription != null">
                 detail_description = #{detailDescription},
             </if>
         </set>
