@@ -9,9 +9,11 @@ import com.hang.annotation.OpenId;
 import com.hang.aop.StatisticsTime;
 import com.hang.enums.ResultEnum;
 import com.hang.exceptions.ApiAssert;
+import com.hang.pojo.data.AdviserDO;
 import com.hang.pojo.data.StudentDO;
 import com.hang.pojo.data.UserInfoDO;
 import com.hang.pojo.vo.BaseRes;
+import com.hang.service.AdviserService;
 import com.hang.service.SessionService;
 import com.hang.service.StudentService;
 import com.hang.service.UserService;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author test
@@ -48,6 +51,9 @@ public class UserController {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private AdviserService adviserService;
 
     @StatisticsTime("bind")
     @ApiOperation("绑定学号信息，openId参数不用传")
@@ -127,5 +133,50 @@ public class UserController {
         studentService.modifyStudentInfo(studentDO);
         return RespUtil.success();
     }
+
+    @StatisticsTime("getAdvisers")
+    @ApiOperation("查看所有导师的信息")
+    @GetMapping("/getAdvisers")
+    public BaseRes getAdvisers(@RequestParam(required = false, defaultValue = "0") int start,
+                               @RequestParam(required = false, defaultValue = "100") int offset){
+        List<AdviserDO> adviserDOS = adviserService.getAdvisers(start, offset);
+        return RespUtil.success(adviserDOS);
+    }
+
+    /**
+     * 查询导师信息
+     *
+     * @param id
+     * @return
+     */
+    @StatisticsTime("getAdviser")
+    @ApiOperation("根据id获取单个导师信息")
+    @GetMapping("/getAdviser")
+    public BaseRes getInformationById(@RequestParam int id) {
+        return RespUtil.success(adviserService.getAdviser(id));
+    }
+
+    /**
+     * 增加导师信息
+     */
+    @StatisticsTime("insertAdviserInfo")
+    @ApiOperation("增加导师信息")
+    @PostMapping("/insertAdviserInfo")
+    public BaseRes insertAdviserInfo(@RequestParam(value = "id", required = false) Integer id,@RequestParam String adviserName,
+                                     @RequestParam String adviserTel,
+                                     @RequestParam String adviserInfo,
+                                     @RequestParam String  department,
+                                     @RequestParam String  avatar
+    ) {
+        AdviserDO adviserDo=new AdviserDO();
+        adviserDo.setId(id);
+        adviserDo.setName(adviserName);
+        adviserDo.setTel(adviserTel);
+        adviserDo.setInfo(adviserInfo);
+        adviserDo.setDepartment(department);
+        adviserDo.setAvatar(avatar);
+        return RespUtil.success(adviserService.insertAdviserInfo(adviserDo));
+    }
+
 
 }

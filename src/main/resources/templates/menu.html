@@ -3,14 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>微平台后台管理系统</title>
+    <title>长大萌芽后台管理系统</title>
     <script src="/static/layui/jquery-3.3.1.min.js"></script>
     <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
 </head>
+
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo">微平台后台管理系统</div>
+        <div class="layui-logo">长大萌芽后台管理系统</div>
     </div>
 
     <div class="layui-side layui-bg-black">
@@ -24,10 +25,12 @@
                         <dd><a id="activityList" href="#">活动列表</a></dd>
                         <dd><a id="feedList" href="#">首页feed列表</a></dd>
                         <dd><a id="studentList" href="#">学生列表</a></dd>
+                        <dd><a id="getAdvisers" href="#">导师列表</a></dd>
                         <dd><a id="teamList" href="#">团队列表</a></dd>
                         <dd><a id="projectList" href="#">项目列表</a></dd>
                         <dd><a id="releaseActivity" href="#">发布首页information信息</a></dd>
                         <dd><a id="releaseTeam" href="#">发布团队信息</a></dd>
+                        <dd><a id="releaseAdviserInfo" href="#">发布导师信息</a></dd>
                         <dd><a id="releaseTeamMember" href="#">增加团队成员</a></dd>
                         <dd><a id="releaseTeamLog" href="#">增加团队日志</a></dd>
                         <dd><a id="releaseTeamHonor" href="#">增加团队荣誉</a></dd>
@@ -44,6 +47,7 @@
         <iframe id="iframe" width="100%" height="100%"></iframe>
     </div>
 </div>
+
 <script src="/static/layui/layui.js" charset="utf-8"></script>
 
 <script>
@@ -81,12 +85,20 @@
         $("#iframe").attr('src', '/page/studentList');
     });
 
+    $("#getAdvisers").click(function () {
+        $("#iframe").attr('src', '/page/adviserList');
+    });
+
     $("#releaseActivity").click(function () {
         $("#iframe").attr('src', '/page/releaseActivity');
     });
 
     $("#releaseTeam").click(function () {
         $("#iframe").attr('src', '/page/releaseTeam');
+    });
+
+    $("#releaseAdviserInfo").click(function () {
+        $("#iframe").attr('src', '/page/releaseAdviserInfo');
     });
 
     $("#releaseTeamMember").click(function () {

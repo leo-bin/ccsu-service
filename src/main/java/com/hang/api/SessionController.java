@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author test
  */
-@Api("回话服务接口")
+@Api("会话服务接口")
 @RestController
 @RequestMapping("/session")
 public class SessionController {

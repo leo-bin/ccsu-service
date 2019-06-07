@@ -1,11 +1,17 @@
 server:
-  port: 8080
+  port: 8088
+  address: 0.0.0.0
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    protocol-header: x-forwarded-proto
+    port-header: X-Forwarded-Port
+  use-forward-headers: true
 
 spring:
   redis:
-#    host: 106.13.47.65
-    host: 127.0.0.1
-    password: redis
+    host: 47.100.170.169
+   #host: 127.0.0.1
+    password:
     port: 6379
     database: 0
     jedis:
@@ -24,15 +30,16 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     username: root
-    password: zhanghang
-    # url: jdbc:mysql://193.112.120.245:3306/micro-platform?characterEncoding=UTF-8&serverTimezone=GMT
-    url: jdbc:mysql://127.0.0.1:3306/micro-platform?characterEncoding=UTF-8&serverTimezone=GMT
+    password: 115118
+    url: jdbc:mysql://47.100.170.169:3306/micro_platform?characterEncoding=UTF-8&serverTimezone=GMT
+   #url: jdbc:mysql://127.0.0.1:3306/micro-platform?characterEncoding=UTF-8&serverTimezone=GMT
     dbcp2:
       pool-prepared-statements: true
       max-open-prepared-statements: 20
       validation-query: select 'x'
       time-between-eviction-runs-millis: 60000
       min-evictable-idle-time-millis: 300000
+
   thymeleaf:
     suffix: .html
     mode: HTML
@@ -47,8 +54,9 @@ mybatis:
   typeAliasesPackage: com.hang
   config-location: classpath:mybatis-config.xml
 
+
 wx:
-  appId: wxba259c9cc25c8a20
-  appSecret: c911996088c1946f02d1af55d452a539
+  appId: wx012853c78ec74d81
+  appSecret: c8ed436a7e2ac0a5dceb6dea0cd8caef
 
 requiredHeaders: appPlatform,sessionId
