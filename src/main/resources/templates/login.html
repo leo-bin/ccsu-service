@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>长大萌芽后台管理登陆界面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="/static/layui/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+
+</head>
+
+<style type="text/css">
+    body{
+        background-repeat: no-repeat;
+        background-size:100% 100%;
+        background-attachment: fixed;
+    }
+</style>
+
+<body background="/static/layui/images/images/login.jpg">
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 6%">
+    <legend style="margin-left: 40%"><span style="font-weight: bold;font-size:22px;">萌芽后台管理系统</span></legend>
+</fieldset>
+
+<form id="userLogin"  class="form-horizontal" th:action="@{/page/login}"  method="post">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-inline">
+            <input id="userName" name="userName" lay-verify="required" autocomplete="off" class="layui-input" type="tel"/>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">密&nbsp;&nbsp;码</label>
+        <div class="layui-input-inline">
+            <input id="password" name="userPwd" lay-verify="required" autocomplete="off" class="layui-input" type="password"/>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">验证码</label>
+        <div class="layui-input-inline">
+            <input type="text" name="verifyCode" placeholder="验证码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" type="reset">重置</button>
+            <button id="loginBtn" class="layui-btn layui-btn-primary" lay-submit="" lay-filter="login">登录</button>
+        </div>
+    </div>
+</form>
+
+<script src="/static/layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+</body>
+</html>

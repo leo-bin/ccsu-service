@@ -107,6 +107,7 @@ public class TeamService {
         teamDAO.insert2TeamProject(teamId, project.getId());
     }
 
+
     public void addHonor2Team(int teamId, String honor) {
         TeamDO teamDO = teamDAO.selectByTeamId(teamId);
         String honors = teamDO.getHonor();

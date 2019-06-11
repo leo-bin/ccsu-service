@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hang.dao.AdviserDAO">
+
+    <insert id="insertAdviser">
+        insert into
+            adviser_info(id,name,tel,info,department,avatar)
+        values(#{id}, #{name},#{tel},#{info},#{department},#{avatar})
+    </insert>
+
+    <update id="updateAdviserInfo">
+        update adviser_info
+        <set>
+            <if test="adviserName != null">
+                name = #{name},
+            </if>
+
+            <if test="adviserTel != null">
+                tel = #{tel},
+            </if>
+
+            <if test="adviserInfo != null">
+                info = #{info},
+            </if>
+
+            <if test="department != null">
+                department = #{department}
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar}
+            </if>
+        </set>
+        where id = #{adviserId}
+    </update>
+
+    <select id="selectAdviserInfo" resultType="com.hang.pojo.data.AdviserDO">
+        select * from adviser_info where id = #{id}
+    </select>
+
+    <select id="listAdviser" resultType="com.hang.pojo.data.AdviserDO">
+        select * from adviser_info limit #{start}, #{offset}
+    </select>
+
+
+
+</mapper>

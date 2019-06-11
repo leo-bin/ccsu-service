@@ -42,6 +42,12 @@ public interface TeamDAO {
      */
     int insert2TeamProject(@Param("teamId") int teamId, @Param("projectId") int projectId);
 
+
+    /**
+     * 插入导师信息与team映射
+     */
+    int insert2TeamAdviser(@Param("teamId") int teamId, @Param("AdviserId") int adviserId);
+
     /**
      * 根据teamId查询team
      *

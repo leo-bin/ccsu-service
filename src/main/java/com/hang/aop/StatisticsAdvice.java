@@ -72,7 +72,10 @@ public class StatisticsAdvice {
         String[] parameterNames = methodSignature.getParameterNames();
         Object[] args = pjp.getArgs();
         Map<String, Object> map = Maps.newHashMap();
-        for (int i = 0; i < parameterNames.length; i++) map.put(parameterNames[i], args[i]);
+        for (int i = 0; i < parameterNames.length; i++)
+        {
+            map.put(parameterNames[i], args[i]);
+        }
         String format = "###class:%s###method:%s###args:%s###";
         log.info(String.format(format, pjp.getTarget().getClass().getName(), pjp.getSignature().getName(), JSON.toJSONString(map)));
     }

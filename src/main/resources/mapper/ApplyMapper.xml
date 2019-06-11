@@ -31,5 +31,4 @@
         select * from activity_apply limit #{start}, #{offset}
     </select>
 
-
 </mapper>

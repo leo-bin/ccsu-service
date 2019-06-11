@@ -111,6 +111,12 @@ public class TeamController {
         return RespUtil.success(teamById);
     }
 
+    /**
+     * 为团队添加头像
+     * @param teamId
+     * @param avatar
+     * @return
+     */
     @StatisticsTime("addAvatar2Team")
     @ApiOperation("为team添加头像")
     @GetMapping("/addAvatar2Team")
@@ -170,6 +176,7 @@ public class TeamController {
         teamService.addProject2Team(teamId, projectDO);
         return RespUtil.success();
     }
+
 
     /**
      * 增加荣誉

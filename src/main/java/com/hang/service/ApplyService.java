@@ -106,7 +106,9 @@ public class ApplyService {
         applyDOS.forEach(e -> {
             ApplyMessageVO applyMessageVO = new ApplyMessageVO();
             InformationDO information = informationService.getInformationById(e.getInformationId());
-            if (information == null) return;
+            if (information == null) {
+                return;
+            }
             applyMessageVO.setActivityName(information.getTitle());
 
             UserInfoDO userInfo = userService.getUserInfoByOpenId(e.getOpenId());
