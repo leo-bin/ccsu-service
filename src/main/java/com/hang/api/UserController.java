@@ -162,20 +162,48 @@ public class UserController {
     @StatisticsTime("insertAdviserInfo")
     @ApiOperation("增加导师信息")
     @PostMapping("/insertAdviserInfo")
-    public BaseRes insertAdviserInfo(@RequestParam(value = "id", required = false) Integer id,@RequestParam String adviserName,
+    public BaseRes insertAdviserInfo(@RequestParam String adviserName,
                                      @RequestParam String adviserTel,
                                      @RequestParam String adviserInfo,
                                      @RequestParam String  department,
                                      @RequestParam String  avatar
     ) {
-        AdviserDO adviserDo=new AdviserDO();
-        adviserDo.setId(id);
-        adviserDo.setName(adviserName);
-        adviserDo.setTel(adviserTel);
-        adviserDo.setInfo(adviserInfo);
-        adviserDo.setDepartment(department);
-        adviserDo.setAvatar(avatar);
-        return RespUtil.success(adviserService.insertAdviserInfo(adviserDo));
+        if(adviserName==null){
+            return RespUtil.error(ResultEnum.ADVISERNAME_IS_NULL);
+        }
+            AdviserDO adviserDo=new AdviserDO();
+            adviserDo.setName(adviserName);
+            adviserDo.setTel(adviserTel);
+            adviserDo.setInfo(adviserInfo);
+            adviserDo.setDepartment(department);
+            adviserDo.setAvatar(avatar);
+            adviserService.insertAdviserInfo(adviserDo);
+            return RespUtil.success();
+
+
+    }
+
+    /**
+     * 修改导师信息
+     */
+    @StatisticsTime("updateAdviserInfo")
+    @ApiOperation("修改导师信息")
+    @PostMapping("/updateAdviserInfo")
+    public BaseRes updateAdviserInfo(
+                                     @RequestParam Integer id,
+                                     @RequestParam String adviserName,
+                                     @RequestParam String adviserTel,
+                                     @RequestParam String adviserInfo,
+                                     @RequestParam String  department,
+                                     @RequestParam String  avatar){
+        AdviserDO adviserDO=adviserService.getAdviser(id);
+        adviserDO.setName(adviserName);
+        adviserDO.setTel(adviserTel);
+        adviserDO.setInfo(adviserInfo);
+        adviserDO.setDepartment(department);
+        adviserDO.setAvatar(avatar);
+        adviserService.updateAdviserInfo(adviserDO);
+        return RespUtil.success();
     }
 
 

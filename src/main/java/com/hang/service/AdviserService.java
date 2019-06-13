@@ -30,10 +30,9 @@ public class AdviserService {
        ApiAssert.nonEqualInteger(i, 1, "更新失败");
    }
 
-   public int insertAdviserInfo(AdviserDO adviserDo){
+   public void insertAdviserInfo(AdviserDO adviserDo){
        int i=adviserDAO.insertAdviser(adviserDo);
        ApiAssert.nonEqualInteger(i, 1, "更新失败");
-       return i;
    }
 
 

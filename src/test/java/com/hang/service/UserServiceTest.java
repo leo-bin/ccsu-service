@@ -57,4 +57,34 @@ public class UserServiceTest extends CcsuServiceApplicationTests {
             System.out.println(adviserDo);
     }
 
+    @Test
+    public void insertAdviser(){
+        AdviserDO adviserDO=new AdviserDO();
+        adviserDO.setId(14);
+        adviserDO.setName("李四");
+        adviserDO.setTel("151651");
+        adviserDO.setInfo("hhd");
+        adviserDO.setDepartment("shh");
+        adviserDO.setAvatar("dysgdj");
+        AdviserDO adviserDO2=adviserService.getAdviser(14);
+        if(adviserDO2!=null){
+            System.out.println("导师已经存在");
+        }
+        else{
+            adviserService.insertAdviserInfo(adviserDO);
+        }
+
+    }
+
+    @Test
+    public void updateAdviserInfo(){
+        AdviserDO adviserDO=adviserService.getAdviser(1);
+        adviserDO.setName("潘怡");
+        adviserDO.setTel("18230694688");
+        adviserDO.setInfo("sjhduggdjs");
+        adviserDO.setDepartment("计数学院");
+        adviserDO.setAvatar("www.deideidei.top");
+        adviserService.updateAdviserInfo(adviserDO);
+    }
+
 }

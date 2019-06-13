@@ -42,7 +42,18 @@ public enum ResultEnum {
     /**
      * 学号信息未绑定
      */
-    JWC_ACCOUNT_NOT_BIND(-10010, "jwd account not bind");
+    JWC_ACCOUNT_NOT_BIND(-10010, "jwd account not bind"),
+
+    /**
+     * 导师姓名为空
+     */
+    ADVISERNAME_IS_NULL(-10011,"adviser name is null"),
+
+
+    /**
+     * 导师不存在
+     */
+    ADVISER_NOT_EXIT(-10012,"adviser is not exit");
 
     /**
      * 错误码

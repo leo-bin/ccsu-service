@@ -23,7 +23,10 @@
     <legend style="margin-left: 40%"><span style="font-weight: bold;font-size:22px;">萌芽后台管理系统</span></legend>
 </fieldset>
 
-<form id="userLogin"  class="form-horizontal" th:action="@{/page/login}"  method="post">
+
+
+<div style="position:relative; left:35%;">
+<form id="userLogin"  class="form-horizontal" th:action="@{/page/login}"   method="post">
 
     <div class="layui-form-item">
         <label class="layui-form-label">用户名</label>
@@ -53,6 +56,7 @@
         </div>
     </div>
 </form>
+</div>
 
 <script src="/static/layui/layui.js" charset="utf-8"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
