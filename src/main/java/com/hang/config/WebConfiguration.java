@@ -65,6 +65,7 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .excludePathPatterns("/user/getUserInfoByOpenId")
                 .excludePathPatterns("/user/getAdvisers")
                 .excludePathPatterns("/user/insertAdviserInfo")
+                .excludePathPatterns("/user/updateAdviserInfo")
                 .excludePathPatterns("/information/listApply")
                 .excludePathPatterns("/information/listActivity")
                 .excludePathPatterns("/information/listAll")

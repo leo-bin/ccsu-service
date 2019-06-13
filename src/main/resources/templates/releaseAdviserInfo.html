@@ -15,13 +15,6 @@
 </div>
 
 <form id="demo1" class="layui-form" action="/information/createInformation" method="post" style="margin: 30px 0;">
-    <div class="layui-form-item">
-        <label class="layui-form-label">导师id</label>
-        <div class="layui-input-block">
-            <input type="text" name="adviserId" lay-verify="required" placeholder="请输入" autocomplete="off"
-                   class="layui-input">
-        </div>
-    </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">导师姓名</label>
@@ -127,6 +120,7 @@
                 type: 'POST',
                 data: data.field,
                 success: function (res) {
+                    console.log(res),
                     layer.open({
                         title: "结果",
                         content: res.msg

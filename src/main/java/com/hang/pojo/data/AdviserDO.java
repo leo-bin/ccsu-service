@@ -12,7 +12,7 @@ public class AdviserDO {
     /**
      * 导师id
      */
-    private Integer Id;
+    private Integer id;
 
     /**
      * 导师姓名
@@ -22,7 +22,7 @@ public class AdviserDO {
     /**
      * 导师联系方式
      */
-    private String Tel;
+    private String tel;
 
     /**
      * 导师信息

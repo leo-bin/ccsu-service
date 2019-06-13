@@ -14,6 +14,9 @@ public class TopicServiceTest extends CcsuServiceApplicationTests {
     @Autowired
     private TopicService topicService;
 
+    /**
+     * 后台管理系统的测试
+     */
     @Test
     public void page() {
         Page<Map> page = topicService.page(1, 10);

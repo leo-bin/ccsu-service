@@ -5,34 +5,34 @@
 <mapper namespace="com.hang.dao.AdviserDAO">
 
     <insert id="insertAdviser">
-        insert into
-            adviser_info(id,name,tel,info,department,avatar)
-        values(#{id}, #{name},#{tel},#{info},#{department},#{avatar})
-    </insert>
+    insert into
+        adviser_info(id,name,tel,info,department,avatar)
+    values(#{id}, #{name},#{tel},#{info},#{department},#{avatar})
+</insert>
 
     <update id="updateAdviserInfo">
         update adviser_info
         <set>
-            <if test="adviserName != null">
+            <if test="name!= null">
                 name = #{name},
             </if>
 
-            <if test="adviserTel != null">
+            <if test="tel!= null">
                 tel = #{tel},
             </if>
 
-            <if test="adviserInfo != null">
+            <if test="info!= null">
                 info = #{info},
             </if>
 
-            <if test="department != null">
-                department = #{department}
+            <if test="department!= null">
+                department = #{department},
             </if>
-            <if test="avatar != null">
+            <if test="avatar!= null">
                 avatar = #{avatar}
             </if>
         </set>
-        where id = #{adviserId}
+        where id = #{id}
     </update>
 
     <select id="selectAdviserInfo" resultType="com.hang.pojo.data.AdviserDO">
