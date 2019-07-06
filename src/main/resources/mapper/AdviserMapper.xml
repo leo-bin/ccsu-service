@@ -6,8 +6,8 @@
 
     <insert id="insertAdviser">
     insert into
-        adviser_info(id,name,tel,info,department,avatar)
-    values(#{id}, #{name},#{tel},#{info},#{department},#{avatar})
+        adviser_info(id, name, tel, info, department, avatar, email, office, education, position, teachingCourse, researchDirection)
+    values(#{id}, #{name},#{tel},#{info},#{department},#{avatar},#{email},#{office},#{education},#{position},#{teachingCourse},#{researchDirection})
 </insert>
 
     <update id="updateAdviserInfo">
@@ -29,7 +29,25 @@
                 department = #{department},
             </if>
             <if test="avatar!= null">
-                avatar = #{avatar}
+                avatar = #{avatar},
+            </if>
+            <if test="email!=null">
+            email = #{email},
+            </if>
+            <if test="office!=null">
+                office = #{office},
+            </if>
+            <if test="education!=null">
+                education = #{education},
+            </if>
+            <if test="position!=null">
+                position = #{position},
+            </if>
+            <if test="teachingCourse!=null">
+                teachingCourse = #{teachingCourse},
+            </if>
+            <if test="researchDirection!=null">
+                researchDirection = #{researchDirection}
             </if>
         </set>
         where id = #{id}

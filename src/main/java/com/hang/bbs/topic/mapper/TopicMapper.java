@@ -13,6 +13,7 @@ import java.util.Map;
  */
 @Repository
 public interface TopicMapper {
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(TopicWithBLOBs record);

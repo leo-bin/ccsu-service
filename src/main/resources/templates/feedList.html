@@ -19,9 +19,11 @@
         <!--    <button class="layui-btn layui-btn-sm" lay-event="isAll" id="all">验证是否全选</button>-->
     </div>
 </script>
+
 <script type="text/html" id="barDemo">
-<!--    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+    <a class="layui-btn layui-btn-mini layui-btn-normal" lay-event="update">更新缓存</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-mini layui-btn-normal" lay-event="edit">修改信息</a>
 </script>
 
 
@@ -29,10 +31,11 @@
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
 <script>
-    layui.use(['table', 'laypage', 'jquery', 'form', 'laydate'], function () {
+    layui.use(['table', 'laypage','layer', 'jquery', 'form', 'laydate'], function () {
         var table = layui.table;
         var $ = layui.$;
         var form = layui.form;
+        var layer = layui.layer;
 
         table.render({
 
@@ -48,7 +51,7 @@
                 }, {
                     field: 'id',
                     title: 'ID',
-                    width: 180,
+                    width: 75,
                     // fixed: 'left',
                     unresize: true,
                     sort: true,
@@ -56,12 +59,12 @@
                 }, {
                     field: 'title',
                     title: '活动标题',
-                    width: 300,
+                    width: 250,
                     edit: 'text'
                 }, {
                     field: 'content',
                     title: '活动内容',
-                    width: 600,
+                    width: 500,
                     sort: true,
                     // totalRow: true
                 }, {
@@ -73,16 +76,16 @@
                 }, {
                     field: 'authors',
                     title: '作者',
-                    width: 200
+                    width: 100
                 }, {
                     field: 'categoryName',
                     title: '类别',
-                    width: 200
+                    width: 100
                 }, {
                     // fixed: 'right',
                     title: '操作',
                     toolbar: '#barDemo',
-                    width: 150
+                    width: 300
                 }]
             ],
             page: false
@@ -142,30 +145,45 @@
                     break;
             }
         });
+
         //监听行工具事件
         table.on('tool(test)', function (obj) {
             var data = obj.data;
-
-            if (obj.event === 'del') {
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del();
+            if (obj.event === 'update') {
+                layer.confirm('确定更新缓存？', function (index) {
                     layer.close(index);
                     console.log(data.id);
                     $.ajax({
-                        url: '/information/removeInformation',
+                        url: '/information/updateCacheInfo',
                         type: 'POST',
-                        data: "id=" + data.id
+                        data: "id=" + data.id,
+                        success: function (res) {
+                            var returnCode = res.code;//取得返回数据（Sting类型的字符串）的信息进行取值判断
+                            console.log(res.code);
+                            console.log(res);
+                            if (returnCode == 0) {
+                                layer.confirm('更新成功！', function (index) {
+                                    layer.close(index);
+                                })
+                            } else {
+                                layer.confirm('更新失败！', function (index) {
+                                    layer.close(index);
+                                })
+                            }
+                        }
                     })
+                    return false;
                 });
             }
-            // else if (obj.event === 'edit') {
-            //     console.log(obj.data);
-            //     // $('#show').html(JSON.stringify(data));
-            //     // $("#show").toggle();
-            //     // var table = $(this).parents().find(".layui-form")[0]
-            //     // $(table).toggle();
-            // }
+            else if (obj.event === 'edit') {
+                console.log(obj.data);
+            }
+
         });
+
+
+
+
     });
 </script>
 </body>

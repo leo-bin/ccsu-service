@@ -53,7 +53,15 @@ public enum ResultEnum {
     /**
      * 导师不存在
      */
-    ADVISER_NOT_EXIT(-10012,"adviser is not exit");
+    ADVISER_NOT_EXIT(-10012,"adviser is not exit"),
+
+
+    /**
+     * 导师不存在
+     */
+    TOPIC_IS_EXIT(-10013,"topic is exit");
+
+
 
     /**
      * 错误码

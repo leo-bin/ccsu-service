@@ -162,11 +162,17 @@ public class UserController {
     @StatisticsTime("insertAdviserInfo")
     @ApiOperation("增加导师信息")
     @PostMapping("/insertAdviserInfo")
-    public BaseRes insertAdviserInfo(@RequestParam String adviserName,
-                                     @RequestParam String adviserTel,
-                                     @RequestParam String adviserInfo,
+    public BaseRes insertAdviserInfo(@RequestParam String  adviserName,
+                                     @RequestParam String  adviserTel,
+                                     @RequestParam String  adviserInfo,
                                      @RequestParam String  department,
-                                     @RequestParam String  avatar
+                                     @RequestParam String  avatar,
+                                     @RequestParam String  email,
+                                     @RequestParam String  office,
+                                     @RequestParam String  education,
+                                     @RequestParam String  position,
+                                     @RequestParam String  teachingCourse,
+                                     @RequestParam String  reasearchDiretion
     ) {
         if(adviserName==null){
             return RespUtil.error(ResultEnum.ADVISERNAME_IS_NULL);
@@ -177,6 +183,12 @@ public class UserController {
             adviserDo.setInfo(adviserInfo);
             adviserDo.setDepartment(department);
             adviserDo.setAvatar(avatar);
+            adviserDo.setEmail(email);
+            adviserDo.setOffice(office);
+            adviserDo.setEducation(education);
+            adviserDo.setPosition(position);
+            adviserDo.setTeachingCourse(teachingCourse);
+            adviserDo.setResearchDirection(reasearchDiretion);
             adviserService.insertAdviserInfo(adviserDo);
             return RespUtil.success();
 
@@ -195,13 +207,26 @@ public class UserController {
                                      @RequestParam String adviserTel,
                                      @RequestParam String adviserInfo,
                                      @RequestParam String  department,
-                                     @RequestParam String  avatar){
+                                     @RequestParam String  avatar,
+                                     @RequestParam String  email,
+                                     @RequestParam String  office,
+                                     @RequestParam String  education,
+                                     @RequestParam String  position,
+                                     @RequestParam String  teachingCourse,
+                                     @RequestParam(required = false) String  reasearchDiretion
+    ){
         AdviserDO adviserDO=adviserService.getAdviser(id);
         adviserDO.setName(adviserName);
         adviserDO.setTel(adviserTel);
         adviserDO.setInfo(adviserInfo);
         adviserDO.setDepartment(department);
         adviserDO.setAvatar(avatar);
+        adviserDO.setEmail(email);
+        adviserDO.setOffice(office);
+        adviserDO.setEducation(education);
+        adviserDO.setPosition(position);
+        adviserDO.setTeachingCourse(teachingCourse);
+        adviserDO.setResearchDirection(reasearchDiretion);
         adviserService.updateAdviserInfo(adviserDO);
         return RespUtil.success();
     }

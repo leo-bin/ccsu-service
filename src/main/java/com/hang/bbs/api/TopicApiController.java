@@ -9,6 +9,7 @@ import com.hang.bbs.tag.service.TagService;
 import com.hang.bbs.topic.pojo.Topic;
 import com.hang.bbs.topic.pojo.TopicWithBLOBs;
 import com.hang.bbs.topic.service.TopicService;
+import com.hang.enums.ResultEnum;
 import com.hang.exceptions.ApiAssert;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.utils.EnumUtil;
@@ -46,7 +47,7 @@ public class TopicApiController {
     @StatisticsTime("index")
     @ApiOperation("请求主题列表页")
     @GetMapping("/index")
-    public BaseRes index(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "5") Integer pageSize) {
+    public BaseRes index(@RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "100") Integer pageSize) {
         Page<Map> page = topicService.page(pageNo, pageSize);
         return RespUtil.success(page);
     }
@@ -95,7 +96,10 @@ public class TopicApiController {
         ApiAssert.notEmpty(title, "请输入标题");
         ApiAssert.notEmpty(tag, "标签不能为空");
         ApiAssert.notEmpty(content, "内容不能为空");
-
+        //这里设置为不能够在圈子里面发表相同标题的文章
+        if(topicService.findByTitle(title)!=null){
+            return RespUtil.error(ResultEnum.TOPIC_IS_EXIT);
+        }
         Topic topic = topicService.createTopic(title, content, tag, openId);
         return RespUtil.success(topic);
     }
