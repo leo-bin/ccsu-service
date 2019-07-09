@@ -25,7 +25,7 @@ public class AdviserDO {
     private String tel;
 
     /**
-     * 导师信息
+     * 导师个人信息简介
      */
     private String info;
 
@@ -38,4 +38,35 @@ public class AdviserDO {
      * 导师头像
      */
     private String avatar;
+
+    /**
+     * 个人邮箱
+     */
+    private String email;
+
+    /**
+     * 办公地点
+     */
+    private String office;
+
+    /**
+     * 学历
+     */
+    private String education;
+
+    /**
+     * 现任职位
+     */
+    private String position;
+
+    /**
+     * 主讲课程
+     */
+    private String teachingCourse;
+
+    /**
+     * 研究方向
+     */
+    private String researchDirection;
+
 }

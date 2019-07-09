@@ -66,6 +66,12 @@ public class UserServiceTest extends CcsuServiceApplicationTests {
         adviserDO.setInfo("hhd");
         adviserDO.setDepartment("shh");
         adviserDO.setAvatar("dysgdj");
+        adviserDO.setEmail("465464@qq.com");
+        adviserDO.setOffice("djuhd");
+        adviserDO.setEducation("hduhs");
+        adviserDO.setPosition("dhdh");
+        adviserDO.setTeachingCourse("dhuhd");
+        adviserDO.setResearchDirection("dlhdkudhk");
         AdviserDO adviserDO2=adviserService.getAdviser(14);
         if(adviserDO2!=null){
             System.out.println("导师已经存在");
@@ -84,6 +90,12 @@ public class UserServiceTest extends CcsuServiceApplicationTests {
         adviserDO.setInfo("sjhduggdjs");
         adviserDO.setDepartment("计数学院");
         adviserDO.setAvatar("www.deideidei.top");
+        adviserDO.setEmail("151465@qq.com");
+        adviserDO.setOffice("致远楼1609");
+        adviserDO.setEducation("研究生");
+        adviserDO.setPosition("教授");
+        adviserDO.setTeachingCourse("数据库");
+        adviserDO.setResearchDirection("大数据挖掘");
         adviserService.updateAdviserInfo(adviserDO);
     }
 

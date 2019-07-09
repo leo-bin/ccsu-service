@@ -3,7 +3,6 @@ package com.hang.api;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.hang.annotation.OpenId;
 import com.hang.aop.StatisticsTime;
-import com.hang.constant.InformationConstant;
 import com.hang.enums.ApplyStatusEnum;
 import com.hang.enums.InformationCategoryEnum;
 import com.hang.enums.ResultEnum;
@@ -12,6 +11,7 @@ import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.InformationDO;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.service.ApplyService;
+import com.hang.service.HotAndCacheService;
 import com.hang.service.InformationService;
 import com.hang.service.StudentService;
 import com.hang.utils.RespUtil;
@@ -47,6 +47,10 @@ public class InformationController {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private HotAndCacheService hotAndCacheService;
+
 
     /**
      * 列表类目list
@@ -240,5 +244,16 @@ public class InformationController {
                            @RequestParam(required = false, defaultValue = "100") int offset) {
         return RespUtil.success(informationService.list(start, offset));
     }
+
+    /**
+     * 更新redis缓存信息
+     */
+    @PostMapping("/updateCacheInfo")
+    public BaseRes updateCacheInfo(int id){
+        hotAndCacheService.updateInformation(id);
+        return RespUtil.success();
+    }
+
+
 
 }

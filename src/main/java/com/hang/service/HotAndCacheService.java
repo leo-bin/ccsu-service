@@ -64,4 +64,21 @@ public class HotAndCacheService {
         return Lists.newArrayList();
     }
 
+    /**
+     * 更新redis缓存
+     * 采用手动穿透的方法
+     * @param id
+     */
+    public void updateInformation(int id){
+        InformationDO information = (InformationDO) redisUtil.get(INFORMATION_PREFIX + id);
+        if(information!=null){
+            redisUtil.del(INFORMATION_PREFIX + id);
+            information=informationDAO.selectById(id);
+            if (information!=null){
+                redisUtil.set(INFORMATION_PREFIX + information.getId(), information);
+                System.out.println("更新成功");
+            }
+        }
+    }
+
 }

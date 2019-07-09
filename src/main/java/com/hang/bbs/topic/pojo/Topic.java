@@ -18,7 +18,10 @@ public class Topic {
 
   private Boolean good;
 
-  private Date inTime;
+  /**
+   * 这里的时间类型设置成String
+   */
+  private String inTime;
 
   private Date lastCommentTime;
 

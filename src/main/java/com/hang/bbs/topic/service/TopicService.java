@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -40,10 +41,13 @@ public class TopicService {
     private BbsCache bbsCache;
 
     public TopicWithBLOBs createTopic(String title, String content, String tag, String openId) {
+        //将时间格式转换为24小时制
+        SimpleDateFormat sdf24 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        String intime=sdf24.format(new Date());
         TopicWithBLOBs topic = new TopicWithBLOBs();
         topic.setTitle(title);
         topic.setContent(content);
-        topic.setInTime(new Date());
+        topic.setInTime(intime);
         topic.setView(0);
         topic.setOpenId(openId);
         topic.setCommentCount(0);
@@ -72,6 +76,7 @@ public class TopicService {
     }
 
     public TopicWithBLOBs save(TopicWithBLOBs topic) {
+
         bbsCache.saveTopicById(topic.getId(), topic);
         topicMapper.insertSelective(topic);
         return topic;
