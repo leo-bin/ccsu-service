@@ -28,9 +28,11 @@
                         <dd><a id="getAdvisers" href="#">导师列表</a></dd>
                         <dd><a id="teamList" href="#">团队列表</a></dd>
                         <dd><a id="projectList" href="#">项目列表</a></dd>
+                        <dd><a id="lostpropertyList"href="#">失物列表</a></dd>
                         <dd><a id="releaseActivity" href="#">发布首页information信息</a></dd>
                         <dd><a id="releaseTeam" href="#">发布团队信息</a></dd>
                         <dd><a id="releaseAdviserInfo" href="#">发布导师信息</a></dd>
+                        <dd><a id="lostproperty" href="#">发布失物信息</a></dd>
                         <dd><a id="releaseTeamMember" href="#">增加团队成员</a></dd>
                         <dd><a id="releaseTeamLog" href="#">增加团队日志</a></dd>
                         <dd><a id="releaseTeamHonor" href="#">增加团队荣誉</a></dd>
@@ -89,6 +91,10 @@
         $("#iframe").attr('src', '/page/adviserList');
     });
 
+    $("#lostpropertyList").click(function () {
+        $("#iframe").attr('src', '/page/lostpropertyList');
+    });
+
     $("#releaseActivity").click(function () {
         $("#iframe").attr('src', '/page/releaseActivity');
     });
@@ -99,6 +105,10 @@
 
     $("#releaseAdviserInfo").click(function () {
         $("#iframe").attr('src', '/page/releaseAdviserInfo');
+    });
+
+    $("#lostproperty").click(function () {
+        $("#iframe").attr('src', '/page/lostproperty');
     });
 
     $("#releaseTeamMember").click(function () {

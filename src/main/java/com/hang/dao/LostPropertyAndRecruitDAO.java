@@ -22,4 +22,6 @@ public interface LostPropertyAndRecruitDAO {
 
     List<LostPropertyAndRecruitDO> listAll(@Param("start") int start, @Param("offset") int offset);
 
+    int delete(int id);
+
 }

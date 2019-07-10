@@ -17,4 +17,8 @@
         select * from lost_property_and_recurit order by datetime desc limit #{start},#{offset};
     </select>
 
+    <delete id="delete" >
+        delete from lost_property_and_recurit
+        where id=#{id}
+    </delete>
 </mapper>

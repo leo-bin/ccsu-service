@@ -97,6 +97,15 @@ public class SchoolController {
         }
     }
 
+    @StatisticsTime("removeLostAndRecruitMessage")
+    @ApiOperation("删除LostAndRecruitMessage")
+    @GetMapping("/removeLostAndRecruitMessage")
+    public BaseRes removeLostAndRecruitMessage(@RequestParam int id){
+        schoolService.removeLostAndRecruit(id);
+        return RespUtil.success();
+    }
+
+
     @StatisticsTime("getFreeClassroom")
     @ApiOperation("获取当前空闲教室")
     @GetMapping("/getFreeClassroom")

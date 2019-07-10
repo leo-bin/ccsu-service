@@ -95,6 +95,13 @@ public class SchoolService {
         return result;
     }
 
+    public void removeLostAndRecruit(int id){
+        int i=lostPropertyAndRecruitDAO.delete(id);
+        if (i != 1) {
+            throw new ApiException(-1, "删除失败");
+        }
+    }
+
     public Set<String> getFreeClassroom(String semester, String section, String week, String weekDay) {
         Set<String> allClassroom = courseDAO.selectAllClassroom();
         Set<String> classroomNow = courseDAO.selectClassroomNow(semester, section, week, weekDay);
