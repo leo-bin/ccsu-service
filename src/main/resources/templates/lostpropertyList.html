@@ -161,11 +161,12 @@
                     obj.del();
                     layer.close(index);
 
+                    //var iid=parseInt(data.id);
                     console.log(data.id);
                     $.ajax({
                         url: '/school/removeLostAndRecruitMessage',
-                        type: 'POST',
-                        data: "id=" + data.id
+                        type: 'GET',
+                        data: "id=" + data.id,
                     })
                 });
             } else if (obj.event === 'edit') {

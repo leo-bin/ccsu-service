@@ -26,7 +26,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">发起者学号：</label>
         <div class="layui-input-block">
-            <input type="text" name="initiatorJwcAccounte" lay-verify="required" placeholder="请输入" autocomplete="off"
+            <input type="text" name="initiatorJwcAccount" lay-verify="required" placeholder="请输入" autocomplete="off"
                    class="layui-input">
         </div>
     </div>
@@ -48,7 +48,7 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">最近遗失时间</label>
+        <label class="layui-form-label">遗失最近时间</label>
         <div class="layui-input-block">
             <input type="text" name="time" id="date1" placeholder="YYYY-MM-DD" autocomplete="off"
                    class="layui-input">
@@ -74,65 +74,67 @@
 
 <script src="/static/layui/layui.js" charset="utf-8"></script>
 <script>
-layui.use(['form', 'layedit', 'laydate', 'jquery'], function () {
-    var form = layui.form
-        , layer = layui.layer
-        , layedit = layui.layedit
-        , $ = layui.$
-        , laydate = layui.laydate;
+    layui.use(['form', 'layedit', 'laydate', 'jquery'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , $ = layui.$
+            , laydate = layui.laydate;
 
-    //日期
-    laydate.render({
-        elem: '#date1'
-    });
-
-    //创建一个编辑器
-    var editIndex = layedit.build('LAY_demo_editor');
-
-    //自定义验证规则
-    form.verify({
-        title: function (value) {
-            if (value.length < 5) {
-                return '标题至少得5个字符啊';
-            }
-        }
-        , pass: [
-            /^[\S]{6,12}$/
-            , '密码必须6到12位，且不能出现空格'
-        ]
-        , content: function (value) {
-            layedit.sync(editIndex);
-        }
-    });
-
-    //监听提交
-    form.on('submit(demo1)', function (data) {
-        layer.alert(JSON.stringify(data.field), {
-            title: '最终的提交信息'
+        //日期
+        laydate.render({
+            elem: '#date1'
         });
-        var getTime = new Date().getTime(data.field.time);
-        console.log(getTime);
-        $.ajax({
-            url: '/school/initiatorMessage',
-            type: 'GET',
-            data: "projectId=" + data.field.projectId + "&time=" + getTime + "&schedule=" + data.field.schedule,
-            success: function (res) {
-                layer.open({
-                    title: "结果",
-                    content: res.msg
-                });
-                $("#demo1")[0].reset();
-            },
-            fail: function () {
-                layer.open({
-                    title: "失败",
-                    content: '网络错误'
-                })
+
+        //创建一个编辑器
+        var editIndex = layedit.build('LAY_demo_editor');
+
+        //自定义验证规则
+        form.verify({
+            title: function (value) {
+                if (value.length < 5) {
+                    return '标题至少得5个字符啊';
+                }
+            }
+            , pass: [
+                /^[\S]{6,12}$/
+                , '密码必须6到12位，且不能出现空格'
+            ]
+            , content: function (value) {
+                layedit.sync(editIndex);
             }
         });
-        return false;
+
+        //监听提交
+        form.on('submit(demo1)', function (data) {
+            layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            });
+            var getTime = new Date().getTime(data.field.time);
+            console.log(getTime);
+            $.ajax({
+                url: '/school/initiatorMessage',
+                type: 'GET',
+                data: "initiatorName=" + data.field.initiatorName + "&initiatorJwcAccount=" + data.field.initiatorJwcAccount
+                    + "&initiatorMessage=" + data.field.initiatorMessage + "&initiatorLocation=" + data.field.initiatorLocation +
+                    "&occurTime=" + getTime + "&contactInformation=" + data.field.contactInformation,
+                success: function (res) {
+                    layer.open({
+                        title: "结果",
+                        content: res.msg
+                    });
+                    $("#demo1")[0].reset();
+                },
+                fail: function () {
+                    layer.open({
+                        title: "失败",
+                        content: '网络错误'
+                    })
+                }
+            });
+            return false;
+        });
     });
-});
 </script>
 
 

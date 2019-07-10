@@ -26,7 +26,7 @@ public class LostPropertyAndRecruitDAOTest extends CcsuServiceApplicationTests {
     public void insert2() throws Exception {
         LostPropertyAndRecruitDO lostPropertyAndRecruitDO = new LostPropertyAndRecruitDO();
         lostPropertyAndRecruitDO.setInitiatorName("张航");
-        lostPropertyAndRecruitDO.setCategory("Recruit");
+        lostPropertyAndRecruitDO.setCategory("LOSTPROPERTY");
         lostPropertyAndRecruitDO.setInitiatorJwcAccount("B20150304203");
         lostPropertyAndRecruitDO.setContactInformation("18374976843");
         lostPropertyAndRecruitDO.setInitiatorMessage("this is test message 4");
@@ -51,9 +51,9 @@ public class LostPropertyAndRecruitDAOTest extends CcsuServiceApplicationTests {
         lostPropertyAndRecruitDOS2.forEach(System.out::println);
     }
 
-    @Test
-    public void delete() throws Exception{
-        lostPropertyAndRecruitDAO.delete(2);
-
-    }
+    //@Test
+//    public void delete() throws Exception{
+//        lostPropertyAndRecruitDAO.delete(7);
+//
+//    }
 }
