@@ -95,6 +95,18 @@ public class SchoolService {
         return result;
     }
 
+    public List<LostPropertyAndRecruitVO> listLostPropertyAndRecruitAll(int start,int offset){
+        List<LostPropertyAndRecruitDO> lostPropertyAndRecruitDOS=lostPropertyAndRecruitDAO.listAll(start, offset);
+        ArrayList<LostPropertyAndRecruitVO>  result = Lists.newArrayList();
+        lostPropertyAndRecruitDOS.forEach(e->{
+            LostPropertyAndRecruitVO lostPropertyAndRecruitVO = new LostPropertyAndRecruitVO();
+            BeanUtils.copyProperties(e, lostPropertyAndRecruitVO);
+            lostPropertyAndRecruitVO.setOccurTime(e.getOccurTime().getTime());
+            result.add(lostPropertyAndRecruitVO);
+        });
+        return result;
+    }
+
     public void removeLostAndRecruit(int id){
         int i=lostPropertyAndRecruitDAO.delete(id);
         if (i != 1) {

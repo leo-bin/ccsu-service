@@ -45,6 +45,7 @@ public class SchoolController {
     @Autowired
     private UserService userService;
 
+
     @StatisticsTime("getCourseByWeek")
     @ApiOperation("查询第n周的课表,OpenId参数不用传")
     @GetMapping("/course/getCourseByWeek")
@@ -95,6 +96,14 @@ public class SchoolController {
         } else {
             return RespUtil.success(schoolService.listLostPropertyAndRecruit(LostPropertyAndRecruitEnum.RECRUIT, start, offset));
         }
+    }
+
+    @StatisticsTime("listLostAndRecruitAllMessage")
+    @ApiOperation("发布所有失物与招领列表 ")
+    @GetMapping("/listLostAndRecruitAllMessage")
+    public BaseRes listLostAndRecruitAllMessage( @RequestParam(required = false, defaultValue = "0") int start,
+                                                 @RequestParam(required = false, defaultValue = "10") int offset){
+        return  RespUtil.success(schoolService.listLostPropertyAndRecruitAll(start,offset));
     }
 
     @StatisticsTime("removeLostAndRecruitMessage")

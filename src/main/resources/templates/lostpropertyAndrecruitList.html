@@ -37,7 +37,7 @@
         table.render({
 
             elem: '#test',
-            url: '/school/listLostAndRecruitMessage?code=0',
+            url: '/school/listLostAndRecruitAllMessage',
             toolbar: '#toolbarDemo',
             title: '用户数据表',
             totalRow: true,
@@ -66,12 +66,12 @@
                     // totalRow: true
                 }, {
                     field: 'initiatorMessage',
-                    title: '失物信息',
+                    title: '失物招领信息',
                     width: 600,
                     edit: 'text',
                 }, {
                     field: 'initiatorLocation',
-                    title: '失物地点',
+                    title: '失物招领地点',
                     width: 500
                 }, {
                     field: 'occurTime',
