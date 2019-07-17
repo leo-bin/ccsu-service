@@ -7,6 +7,7 @@ import com.hang.enums.ResultEnum;
 import com.hang.exceptions.ApiAssert;
 import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.CourseDO;
+import com.hang.pojo.data.LostPropertyAndRecruitDO;
 import com.hang.pojo.data.UserInfoDO;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.pojo.vo.CourseVO;
@@ -22,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -98,22 +100,41 @@ public class SchoolController {
         }
     }
 
-    @StatisticsTime("listLostAndRecruitAllMessage")
-    @ApiOperation("发布所有失物与招领列表 ")
-    @GetMapping("/listLostAndRecruitAllMessage")
-    public BaseRes listLostAndRecruitAllMessage( @RequestParam(required = false, defaultValue = "0") int start,
-                                                 @RequestParam(required = false, defaultValue = "10") int offset){
-        return  RespUtil.success(schoolService.listLostPropertyAndRecruitAll(start,offset));
-    }
-
     @StatisticsTime("removeLostAndRecruitMessage")
     @ApiOperation("删除LostAndRecruitMessage")
     @GetMapping("/removeLostAndRecruitMessage")
-    public BaseRes removeLostAndRecruitMessage(@RequestParam int id){
+    public BaseRes removeLostAndRecruitMessage(@RequestParam int id) {
         schoolService.removeLostAndRecruit(id);
         return RespUtil.success();
     }
 
+    @StatisticsTime("modifyLostandRecruitMessage")
+    @ApiOperation("修改LostandRecruitMessage")
+    @GetMapping("/modifyLostandRecruitMessage")
+    public BaseRes modifyLostandRecruitMessage(@RequestParam int id,
+                                               @RequestParam String initiatorMessage,
+                                               @RequestParam String initiatorLocation,
+                                               @RequestParam Long occurtime,
+                                               @RequestParam String contactInformation) {
+        LostPropertyAndRecruitDO lostPropertyAndRecruitDO = schoolService.getLostAndRecruit(id);
+        lostPropertyAndRecruitDO.setInitiatorMessage(initiatorMessage);
+        lostPropertyAndRecruitDO.setInitiatorLocation(initiatorLocation);
+        lostPropertyAndRecruitDO.setOccurTime(new Date(occurtime));
+        lostPropertyAndRecruitDO.setContactInformation(contactInformation);
+        schoolService.modifyLostAndRecruit(lostPropertyAndRecruitDO);
+        return RespUtil.success();
+    }
+
+    @StatisticsTime("getReleaseLostPropertyandRecruit")
+    @ApiOperation("查询自己发布的失物招领信息，code=0为查询失物 code=1为查询招领,默认code为0")
+    @GetMapping("/getReleaseLostPropertyandRecruit")
+    public BaseRes getReleaseLostPropertyandRecruit(@OpenId String openid, @RequestParam(required = false, defaultValue = "0") int code) {
+        ApiAssert.checkOpenId(openid);
+        UserInfoDO userInfo = userService.getUserInfoByOpenId(openid);
+        jwcAccountCheck(userInfo);
+
+        return RespUtil.success(schoolService.listLostPropertyAndRecruitSelf(userInfo.getJwcAccount()));
+    }
 
     @StatisticsTime("getFreeClassroom")
     @ApiOperation("获取当前空闲教室")

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -11,8 +12,75 @@
 <body>
 
 <div class="layui-form" style="text-align: center;font-size: 30px;">
-    失物招领
+    发起寻找失物
 </div>
+
+<script src="/static/layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'layedit', 'laydate', 'jquery'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , $ = layui.$
+            , laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#date1',
+            type: 'datetime'
+        });
+
+        //创建一个编辑器
+        var editIndex = layedit.build('LAY_demo_editor');
+
+        //自定义验证规则
+        form.verify({
+            title: function (value) {
+                if (value.length < 5) {
+                    return '标题至少得5个字符啊';
+                }
+            }
+            , pass: [
+                /^[\S]{6,12}$/
+                , '密码必须6到12位，且不能出现空格'
+            ]
+            , content: function (value) {
+                layedit.sync(editIndex);
+            }
+        });
+
+        //监听提交
+        form.on('submit(demo1)', function (data) {
+            layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            });
+            var gettime = new Date(data.field.time).getTime();
+            console.log(data.field.time)
+            console.log(gettime);
+            $.ajax({
+                url: '/school/initiatorMessage?code=1',
+                type: 'GET',
+                data: "&initiatorName=" + data.field.initiatorName + "&initiatorJwcAccount=" + data.field.initiatorJwcAccount
+                    + "&initiatorMessage=" + data.field.initiatorMessage + "&initiatorLocation=" + data.field.initiatorLocation +
+                    "&occurTime=" + gettime + "&contactInformation=" + data.field.contactInformation,
+                success: function (res) {
+                    layer.open({
+                        title: "结果",
+                        content: res.msg
+                    });
+                    $("#demo1")[0].reset();
+                },
+                fail: function () {
+                    layer.open({
+                        title: "失败",
+                        content: '网络错误'
+                    })
+                }
+            });
+            return false;
+        });
+    });
+</script>
 
 <form id="demo1" class="layui-form" action="/school/listLostAndRecruitMessage" method="post" style="margin: 30px 0;">
     <div class="layui-form-item">
@@ -40,7 +108,7 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">发现失物地点：</label>
+        <label class="layui-form-label">失物地点：</label>
         <div class="layui-input-block">
             <input type="text" name="initiatorLocation" lay-verify="required" placeholder="请输入" autocomplete="off"
                    class="layui-input">
@@ -48,9 +116,9 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">发现失物最近时间</label>
+        <label class="layui-form-label">遗失最近时间</label>
         <div class="layui-input-block">
-            <input type="text" name="time" id="date1" placeholder="YYYY-MM-DD" autocomplete="off"
+            <input type="text" name="time" id="date1" placeholder="YYYY-MM-DD:HH:mm:ss" autocomplete="off"
                    class="layui-input">
         </div>
     </div>
@@ -70,72 +138,6 @@
         </div>
     </div>
 </form>
-
-
-<script src="/static/layui/layui.js" charset="utf-8"></script>
-<script>
-    layui.use(['form', 'layedit', 'laydate', 'jquery'], function () {
-        var form = layui.form
-            , layer = layui.layer
-            , layedit = layui.layedit
-            , $ = layui.$
-            , laydate = layui.laydate;
-
-        //日期
-        laydate.render({
-            elem: '#date1'
-        });
-
-        //创建一个编辑器
-        var editIndex = layedit.build('LAY_demo_editor');
-
-        //自定义验证规则
-        form.verify({
-            title: function (value) {
-                if (value.length < 5) {
-                    return '标题至少得5个字符啊';
-                }
-            }
-            , pass: [
-                /^[\S]{6,12}$/
-                , '密码必须6到12位，且不能出现空格'
-            ]
-            , content: function (value) {
-                layedit.sync(editIndex);
-            }
-        });
-
-        //监听提交
-        form.on('submit(demo1)', function (data) {
-            layer.alert(JSON.stringify(data.field), {
-                title: '最终的提交信息'
-            });
-            var getTime = new Date().getTime(data.field.time);
-            console.log(getTime);
-            $.ajax({
-                url: '/school/initiatorMessage?code=1',
-                type: 'GET',
-                data: "initiatorName=" + data.field.initiatorName + "&initiatorJwcAccount=" + data.field.initiatorJwcAccount
-                    + "&initiatorMessage=" + data.field.initiatorMessage + "&initiatorLocation=" + data.field.initiatorLocation +
-                    "&occurTime=" + getTime + "&contactInformation=" + data.field.contactInformation,
-                success: function (res) {
-                    layer.open({
-                        title: "结果",
-                        content: res.msg
-                    });
-                    $("#demo1")[0].reset();
-                },
-                fail: function () {
-                    layer.open({
-                        title: "失败",
-                        content: '网络错误'
-                    })
-                }
-            });
-            return false;
-        });
-    });
-</script>
 
 
 </body>

@@ -21,6 +21,9 @@
                 <li class="layui-nav-item layui-nav-itemed">
                     <a class="" href="javascript:;">主页</a>
                     <dl class="layui-nav-child">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">信息列表</a>
+                    <dl class="layui-nav-child">
                         <dd><a id="activityApply" href="#">活动申请审核</a></dd>
                         <dd><a id="activityList" href="#">活动列表</a></dd>
                         <dd><a id="feedList" href="#">首页feed列表</a></dd>
@@ -28,14 +31,22 @@
                         <dd><a id="getAdvisers" href="#">导师列表</a></dd>
                         <dd><a id="teamList" href="#">团队列表</a></dd>
                         <dd><a id="projectList" href="#">项目列表</a></dd>
-                        <dd><a id="lostpropertyList"href="#">失物列表</a></dd>
-                        <dd><a id="recruitList"href="#">招领列表</a></dd>
-                        <dd><a id="lostpropertyAndrecruitList" href="#">失物招领信息</a></dd>
+                        <dd><a id="lostAndRecruitList" href="#">失物招领列表</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">信息发布</a>
+                    <dl class="layui-nav-child">
                         <dd><a id="releaseActivity" href="#">发布首页information信息</a></dd>
                         <dd><a id="releaseTeam" href="#">发布团队信息</a></dd>
                         <dd><a id="releaseAdviserInfo" href="#">发布导师信息</a></dd>
                         <dd><a id="releaseLostProperty" href="#">发布失物信息</a></dd>
-                        <dd><a id="releaseRecruit" href="#">发布招领</a></dd>
+                        <dd><a id="releaseRecruit" href="#">发布招领信息</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">信息修改</a>
+                    <dl class="layui-nav-child">
                         <dd><a id="releaseTeamMember" href="#">增加团队成员</a></dd>
                         <dd><a id="releaseTeamLog" href="#">增加团队日志</a></dd>
                         <dd><a id="releaseTeamHonor" href="#">增加团队荣誉</a></dd>
@@ -43,6 +54,8 @@
                         <dd><a id="releaseTeamProjectHonor" href="#">增加团队项目荣誉</a></dd>
                         <dd><a id="releaseTeamProjectSchedule" href="#">增加团队项目进度</a></dd>
                     </dl>
+                </li>
+                </dl>
                 </li>
             </ul>
         </div>
@@ -59,96 +72,89 @@
     //JavaScript代码区域
     layui.use('element', function () {
         var element = layui.element;
-    });
-    //用于页面加载时候显示
-    $(document).ready(function () {
-        $("#iframe").attr('src', '/page/applyList');
-    });
 
-    //根据点击进行跳转
-    $("#activityApply").click(function () {
-        $("#iframe").attr('src', '/page/applyList');
-    });
+        //用于页面加载时候显示
+        $(document).ready(function () {
+            $("#iframe").attr('src', '/page/applyList');
+        });
 
-    $("#activityList").click(function () {
-        $("#iframe").attr('src', '/page/activityList');
-    });
+        //根据点击进行跳转
+        $("#activityApply").click(function () {
+            $("#iframe").attr('src', '/page/applyList');
+        });
 
-    $("#feedList").click(function () {
-        $("#iframe").attr('src', '/page/feedList');
-    });
+        $("#activityList").click(function () {
+            $("#iframe").attr('src', '/page/activityList');
+        });
 
-    $("#teamList").click(function () {
-        $("#iframe").attr('src', '/page/teamList');
-    });
+        $("#feedList").click(function () {
+            $("#iframe").attr('src', '/page/feedList');
+        });
 
-    $("#projectList").click(function () {
-        $("#iframe").attr('src', '/page/projectList');
-    });
+        $("#teamList").click(function () {
+            $("#iframe").attr('src', '/page/teamList');
+        });
 
-    $("#studentList").click(function () {
-        $("#iframe").attr('src', '/page/studentList');
-    });
+        $("#projectList").click(function () {
+            $("#iframe").attr('src', '/page/projectList');
+        });
 
-    $("#getAdvisers").click(function () {
-        $("#iframe").attr('src', '/page/adviserList');
-    });
+        $("#studentList").click(function () {
+            $("#iframe").attr('src', '/page/studentList');
+        });
 
-    $("#lostpropertyList").click(function () {
-        $("#iframe").attr('src', '/page/lostpropertyList');
-    });
+        $("#getAdvisers").click(function () {
+            $("#iframe").attr('src', '/page/adviserList');
+        });
 
-    $("#recruitList").click(function () {
-        $("#iframe").attr('src', '/page/recruitList');
-    });
+        $("#lostAndRecruitList").click(function () {
+            $("#iframe").attr('src', '/page/lostAndRecruitList');
+        });
 
-    $("#lostpropertyAndrecruitList").click(function () {
-        $("#iframe").attr('src', '/page/lostpropertyAndrecruitList');
-    });
+        $("#releaseActivity").click(function () {
+            $("#iframe").attr('src', '/page/releaseActivity');
+        });
 
-    $("#releaseActivity").click(function () {
-        $("#iframe").attr('src', '/page/releaseActivity');
-    });
+        $("#releaseTeam").click(function () {
+            $("#iframe").attr('src', '/page/releaseTeam');
+        });
 
-    $("#releaseTeam").click(function () {
-        $("#iframe").attr('src', '/page/releaseTeam');
-    });
+        $("#releaseAdviserInfo").click(function () {
+            $("#iframe").attr('src', '/page/releaseAdviserInfo');
+        });
 
-    $("#releaseAdviserInfo").click(function () {
-        $("#iframe").attr('src', '/page/releaseAdviserInfo');
-    });
+        $("#releaseLostProperty").click(function () {
+            $("#iframe").attr('src', '/page/releaseLostProperty');
+        });
 
-    $("#releaseLostProperty").click(function () {
-        $("#iframe").attr('src', '/page/releaseLostProperty');
-    });
+        $("#releaseRecruit").click(function () {
+            $("#iframe").attr('src', '/page/releaseRecruit');
+        });
 
-    $("#releaseRecruit").click(function () {
-        $("#iframe").attr('src', '/page/releaseRecruit');
-    });
+        $("#releaseTeamMember").click(function () {
+            $("#iframe").attr('src', '/page/releaseTeamMember');
+        });
 
-    $("#releaseTeamMember").click(function () {
-        $("#iframe").attr('src', '/page/releaseTeamMember');
-    });
+        $("#releaseTeamLog").click(function () {
+            $("#iframe").attr('src', '/page/releaseTeamLog');
+        });
 
-    $("#releaseTeamLog").click(function () {
-        $("#iframe").attr('src', '/page/releaseTeamLog');
-    });
+        $("#releaseTeamHonor").click(function () {
+            $("#iframe").attr('src', '/page/releaseTeamHonor');
+        });
 
-    $("#releaseTeamHonor").click(function () {
-        $("#iframe").attr('src', '/page/releaseTeamHonor');
-    });
+        $("#releaseTeamProject").click(function () {
+            $("#iframe").attr('src', '/page/releaseTeamProject');
+        });
 
-    $("#releaseTeamProject").click(function () {
-        $("#iframe").attr('src', '/page/releaseTeamProject');
-    });
+        $("#releaseTeamProjectHonor").click(function () {
+            $("#iframe").attr('src', '/page/releaseTeamProjectHonor');
+        });
 
-    $("#releaseTeamProjectHonor").click(function () {
-        $("#iframe").attr('src', '/page/releaseTeamProjectHonor');
-    });
-
-    $("#releaseTeamProjectSchedule").click(function () {
-        $("#iframe").attr('src', '/page/releaseTeamProjectSchedule');
-    });
+        $("#releaseTeamProjectSchedule").click(function () {
+            $("#iframe").attr('src', '/page/releaseTeamProjectSchedule');
+        })
+    })
 </script>
 </body>
 </html>

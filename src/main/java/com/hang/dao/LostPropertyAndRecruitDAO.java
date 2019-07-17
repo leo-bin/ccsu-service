@@ -15,6 +15,11 @@ import java.util.List;
 @Repository
 public interface LostPropertyAndRecruitDAO {
 
+    /**
+     * 查询失物招领信息
+     */
+    LostPropertyAndRecruitDO selectLostPropertyAndRecruit(int id);
+
     int insert(LostPropertyAndRecruitDO lostPropertyAndRecruitDO);
 
     List<LostPropertyAndRecruitDO> listByCategory(@Param("category") String category, @Param("start") int start,
@@ -24,4 +29,7 @@ public interface LostPropertyAndRecruitDAO {
 
     int delete(int id);
 
+    int update(LostPropertyAndRecruitDO lostPropertyAndRecruitDO);
+
+    List<LostPropertyAndRecruitDO> listByJwcAccount(@Param("jwcAccount") String jwcAccount);
 }

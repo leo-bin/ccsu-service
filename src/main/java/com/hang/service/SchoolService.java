@@ -95,8 +95,26 @@ public class SchoolService {
         return result;
     }
 
-    public List<LostPropertyAndRecruitVO> listLostPropertyAndRecruitAll(int start,int offset){
-        List<LostPropertyAndRecruitDO> lostPropertyAndRecruitDOS=lostPropertyAndRecruitDAO.listAll(start, offset);
+   public LostPropertyAndRecruitDO getLostAndRecruit(int id){
+        return lostPropertyAndRecruitDAO.selectLostPropertyAndRecruit(id);
+   }
+
+    public void removeLostAndRecruit(int id){
+        int i=lostPropertyAndRecruitDAO.delete(id);
+        if (i != 1) {
+            throw new ApiException(-1, "删除失败");
+        }
+    }
+
+    public void modifyLostAndRecruit(LostPropertyAndRecruitDO lostPropertyAndRecruit){
+        int i = lostPropertyAndRecruitDAO.update(lostPropertyAndRecruit);
+        if(i!=1){
+            throw new ApiException(-1, "修改失败");
+        }
+    }
+
+    public List<LostPropertyAndRecruitVO> listLostPropertyAndRecruitSelf(String jwcAccount){
+        List<LostPropertyAndRecruitDO> lostPropertyAndRecruitDOS=lostPropertyAndRecruitDAO.listByJwcAccount(jwcAccount);
         ArrayList<LostPropertyAndRecruitVO>  result = Lists.newArrayList();
         lostPropertyAndRecruitDOS.forEach(e->{
             LostPropertyAndRecruitVO lostPropertyAndRecruitVO = new LostPropertyAndRecruitVO();
@@ -105,13 +123,6 @@ public class SchoolService {
             result.add(lostPropertyAndRecruitVO);
         });
         return result;
-    }
-
-    public void removeLostAndRecruit(int id){
-        int i=lostPropertyAndRecruitDAO.delete(id);
-        if (i != 1) {
-            throw new ApiException(-1, "删除失败");
-        }
     }
 
     public Set<String> getFreeClassroom(String semester, String section, String week, String weekDay) {

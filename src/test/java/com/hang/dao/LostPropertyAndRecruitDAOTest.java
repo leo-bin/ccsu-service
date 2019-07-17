@@ -6,6 +6,7 @@ import com.hang.pojo.data.LostPropertyAndRecruitDO;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +32,11 @@ public class LostPropertyAndRecruitDAOTest extends CcsuServiceApplicationTests {
         lostPropertyAndRecruitDO.setContactInformation("18374976843");
         lostPropertyAndRecruitDO.setInitiatorMessage("this is test message 4");
         lostPropertyAndRecruitDO.setInitiatorLocation("致远楼");
-        lostPropertyAndRecruitDO.setOccurTime(new Date());
+        String dateStr = "2018-08-12";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = sdf.parse(dateStr);
+        lostPropertyAndRecruitDO.setOccurTime(date);
+        //lostPropertyAndRecruitDO.setOccurTime(new Date());
         lostPropertyAndRecruitDO.setDatetime(new Date());
         lostPropertyAndRecruitDAO.insert(lostPropertyAndRecruitDO);
     }
@@ -51,9 +56,15 @@ public class LostPropertyAndRecruitDAOTest extends CcsuServiceApplicationTests {
         lostPropertyAndRecruitDOS2.forEach(System.out::println);
     }
 
-    //@Test
-//    public void delete() throws Exception{
-//        lostPropertyAndRecruitDAO.delete(7);
-//
-//    }
+    @Test
+    public void delete() throws Exception{
+        lostPropertyAndRecruitDAO.delete(19);
+
+    }
+
+    @Test
+    public void testjwc() throws Exception {
+        List<LostPropertyAndRecruitDO> lostPropertyAndRecruitDOS = lostPropertyAndRecruitDAO.listByJwcAccount("B20150304203");
+        lostPropertyAndRecruitDOS.forEach(System.out::println);
+    }
 }
