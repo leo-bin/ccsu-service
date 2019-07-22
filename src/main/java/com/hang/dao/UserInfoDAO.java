@@ -5,6 +5,7 @@
 package com.hang.dao;
 
 import com.hang.pojo.data.UserInfoDO;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -23,4 +24,6 @@ public interface UserInfoDAO {
     boolean isExist(@Param("openId") String openId);
 
     boolean updateLastLoginTime(String openId);
+
+    int updateUserRole(String openId,Integer role);
 }

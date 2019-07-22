@@ -6,8 +6,8 @@
 
     <insert id="insert">
         insert into
-        student_info(jwc_account, open_id, quality_fraction, comprehensive_fraction, grade, nick_name, department)
-        values(#{jwcAccount}, #{openId}, #{qualityFraction}, #{comprehensiveFraction}, #{grade}, #{nickName}, #{department})
+        student_info(jwc_account, open_id, quality_fraction, comprehensive_fraction, grade, nick_name, department,code)
+        values(#{jwcAccount}, #{openId}, #{qualityFraction}, #{comprehensiveFraction}, #{grade}, #{nickName}, #{department},#{code})
     </insert>
 
     <update id="update">
@@ -26,8 +26,11 @@
             </if>
 
             <if test="jwcAccount != null">
-                jwc_account = #{jwcAccount}
+                jwc_account = #{jwcAccount},
             </if>
+          <if test="code!=null">
+              code=#{code}
+          </if>
         </set>
         where open_id = #{openId}
     </update>

@@ -76,7 +76,6 @@ public class HotAndCacheService {
             information=informationDAO.selectById(id);
             if (information!=null){
                 redisUtil.set(INFORMATION_PREFIX + information.getId(), information);
-                System.out.println("更新成功");
             }
         }
     }

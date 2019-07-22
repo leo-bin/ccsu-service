@@ -8,16 +8,20 @@ import com.hang.aop.StatisticsTime;
 import com.hang.enums.ResultEnum;
 import com.hang.exceptions.ApiAssert;
 import com.hang.pojo.data.ProjectDO;
+import com.hang.pojo.data.TeacherDO;
+import com.hang.pojo.data.TeamDO;
+import com.hang.pojo.data.UserInfoDO;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.pojo.vo.GroupMemberVO;
 import com.hang.pojo.vo.ProjectVO;
 import com.hang.pojo.vo.TeamVO;
+import com.hang.service.TeacherService;
 import com.hang.service.TeamService;
+import com.hang.service.UserService;
 import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +41,12 @@ public class TeamController {
 
     @Autowired
     private TeamService teamService;
+
+    @Autowired
+    private TeacherService teacherService;
+
+    @Autowired
+    private UserService userService;
 
     @ApiOperation("创建团队")
     @StatisticsTime("createTeam")
@@ -72,13 +82,24 @@ public class TeamController {
     public BaseRes getTeamHomePage(@OpenId String openId) {
         log.info("checkOpenId : {}", openId);
         ApiAssert.checkOpenId(openId);
-
+        UserInfoDO userInfoDO=userService.getUserInfoByOpenId(openId);
+        Integer roleId=userInfoDO.getRoleId();
         HashMap<String, Object> result = Maps.newHashMap();
-        List<TeamVO> teams = teamService.getTeamByUserId(openId);
-        result.put("teams", teams);
-        Set<ProjectVO> projects = Sets.newHashSet();
-        teams.forEach(e -> projects.addAll(e.getProjects()));
-        result.put("projects", projects);
+        if (roleId.equals(2)){
+            TeacherDO teacherDO=teacherService.getTeacherInfo(openId);
+            List<TeamVO> teams=teamService.getTeamsByAdvisor(teacherDO.getName());
+            result.put("teams", teams);
+            Set<ProjectVO> projects = Sets.newHashSet();
+            teams.forEach(e -> projects.addAll(e.getProjects()));
+            result.put("projects", projects);
+        }
+        else{
+            List<TeamVO> teams = teamService.getTeamByUserId(openId);
+            result.put("teams",teams);
+            Set<ProjectVO> projects = Sets.newHashSet();
+            teams.forEach(e1 -> projects.addAll(e1.getProjects()));
+            result.put("projects", projects);
+        }
         return RespUtil.success(result);
     }
 
@@ -207,6 +228,30 @@ public class TeamController {
         Date date = new Date(time);
         teamService.addLog2Team(teamId, date, log);
         return RespUtil.success();
+    }
+
+    /**
+     * 修改团队信息
+     */
+    @StatisticsTime("updateTeamInfo")
+    @ApiOperation("修改团队信息")
+    @PostMapping("/updateTeamInfo")
+    public BaseRes updateTeamInfo(@RequestParam Integer id,
+                                  @RequestParam String name,
+                                  @RequestParam String advisor,
+                                  @RequestParam Integer state){
+        TeamVO teamVO=teamService.getTeamByTeamId(id);
+        TeamDO teamDO=new TeamDO();
+        teamDO.setId(id);
+        teamDO.setName(name);
+        teamDO.setAdvisor(advisor);
+        teamDO.setState(state);
+        if (teamVO!=null){
+            return RespUtil.success(teamService.updateTeamInfo(teamDO));
+        }
+        else{
+            return RespUtil.error(ResultEnum.TEAM_NOT_EXIT);
+        }
     }
 
 

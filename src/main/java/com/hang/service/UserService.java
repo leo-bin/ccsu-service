@@ -6,7 +6,6 @@ import com.hang.dao.UserInfoDAO;
 import com.hang.exceptions.ApiAssert;
 import com.hang.exceptions.ApiException;
 import com.hang.manage.UserCache;
-import com.hang.pojo.data.StudentDO;
 import com.hang.pojo.data.UserInfoDO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
@@ -21,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -43,11 +43,15 @@ public class UserService {
     private UserInfoDAO userInfoDAO;
 
     @Autowired
-    private StudentService studentService;
-
-    @Autowired
     private UserCache userCache;
 
+
+    /**
+     * 获取用户信息
+     *
+     * @param openId
+     * @return
+     */
     public UserInfoDO getUserInfoByOpenId(String openId) {
         UserInfoDO userInfo = userCache.getUserInfo(openId);
         if (Objects.isNull(userInfo)) {
@@ -57,25 +61,13 @@ public class UserService {
         return userInfo;
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public void bind(String openId, String jwcAccount) {
-        updateJwcAccount(openId, jwcAccount);
 
-        UserInfoDO userInfoDO = userInfoDAO.selectByOpenId(openId);
-        StudentDO studentDO = new StudentDO();
-        studentDO.setJwcAccount(userInfoDO.getJwcAccount());
-        studentDO.setNickName(userInfoDO.getNickName());
-        studentDO.setGrade(userInfoDO.getJwcAccount().substring(1, 5));
-        studentDO.setOpenId(userInfoDO.getOpenId());
-
-        StudentDO studentInfo = studentService.getStudentInfo(openId);
-        if (Objects.isNull(studentInfo)) {
-            studentService.saveStudentInfo(studentDO);
-        } else {
-            studentService.modifyStudentInfo(studentDO);
-        }
-    }
-
+    /**
+     * 更新用户信息
+     *
+     * @param openId
+     * @param jwcAccount
+     */
     @Transactional(rollbackFor = ApiException.class)
     public void updateJwcAccount(String openId, String jwcAccount) {
         int i = userInfoDAO.updateJwcAccount(openId, jwcAccount.toUpperCase());
@@ -83,6 +75,13 @@ public class UserService {
         ApiAssert.nonEqualInteger(i, 1, "更新失败");
     }
 
+    /**
+     * 用户登陆
+     *
+     * @param code
+     * @param rawData
+     * @return
+     */
     public String login(String code, String rawData) {
         JSONObject returnJson = new JSONObject();
         // 用code 去微信服务器拿 openId 和 session_key
@@ -101,7 +100,6 @@ public class UserService {
         UserInfoDO userInfo = new UserInfoDO();
         userInfo.setOpenId(openId);
         if (!Strings.isEmpty(rawData)) {
-
             try {
                 JSONObject json = JSONObject.parseObject(rawData);
                 log.debug("rawData: {}", rawData);
@@ -142,6 +140,12 @@ public class UserService {
         return returnJson.toString();
     }
 
+    /**
+     * 微信code解码
+     *
+     * @param code
+     * @return
+     */
     private JSONObject code2session(String code) {
         JSONObject returnJson = new JSONObject();
         log.debug("appid={},appSecret={}", appId, appSecret);
@@ -169,5 +173,14 @@ public class UserService {
         returnJson.put("msg", "http connect " + uri.toString() + " failed");
         return returnJson;
     }
+
+    /**
+     * 修改用户的角色
+     */
+    public void updateUserRole(String openId, Integer role) {
+        int i = userInfoDAO.updateUserRole(openId, role);
+        ApiAssert.nonEqualInteger(i, 1, "修改失败");
+    }
+
 
 }

@@ -30,6 +30,9 @@ public class UserInfoDO {
 
     private String country;
 
+    /**
+     * 用户角色: 0代表普通学生，1代表老师，2代表团队负责人
+     */
     private Integer roleId;
 
     private String stuNumber;
@@ -40,6 +43,9 @@ public class UserInfoDO {
 
     private Date lastLoginTime;
 
+    /**
+     * 登陆账号：分为两种，学生和老师
+     */
     private String jwcAccount;
 
 }

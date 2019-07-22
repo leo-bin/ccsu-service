@@ -61,6 +61,4 @@
         select * from adviser_info limit #{start}, #{offset}
     </select>
 
-
-
 </mapper>

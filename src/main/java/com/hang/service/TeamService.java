@@ -58,6 +58,14 @@ public class TeamService {
     }
 
     /**
+     * 根据导师姓名获取团队
+     */
+    public List<TeamVO> getTeamsByAdvisor(String advisor){
+        List<TeamDO> teamDOS=teamDAO.selectTeamsByAdvisor(advisor);
+        return teamDOS.stream().map(teamDO -> teamDO2VO(teamDO)).collect(Collectors.toList());
+    }
+
+    /**
      * 添加team头像
      */
     public void addAvatar2Team(Integer teamId, String avatarUrl) {
@@ -134,6 +142,11 @@ public class TeamService {
         teamDAO.updateTeam(teamDO);
     }
 
+    /**
+     * 团队实体的DO到VO的转换
+     * @param teamDO
+     * @return
+     */
     private TeamVO teamDO2VO(TeamDO teamDO) {
         TeamVO teamVO = new TeamVO();
         ArrayList<GroupMemberVO> groupMemberVOS = JSON.parseObject(teamDO.getMembers(), new TypeReference<ArrayList<GroupMemberVO>>() {
@@ -143,6 +156,7 @@ public class TeamService {
         teamVO.setName(teamDO.getName());
         teamVO.setAdvisor(teamDO.getAdvisor());
         teamVO.setAvatar(teamDO.getAvatar());
+        teamVO.setState(teamDO.getState());
         if (StringUtils.isNotBlank(teamDO.getLog())) {
             teamVO.setTeamLog(JSON.parseObject(teamDO.getLog(), new TypeReference<ArrayList<TeamLogVO>>() {}));
         }
@@ -163,6 +177,11 @@ public class TeamService {
         return teamVO;
     }
 
+    /**
+     * 项目的DO到VO的转换
+     * @param projectDO
+     * @return
+     */
     public ProjectVO projectPO2VO(ProjectDO projectDO) {
         ProjectVO projectVO = new ProjectVO();
         projectVO.setId(projectDO.getId());
@@ -184,6 +203,14 @@ public class TeamService {
             projectVO.setSchedule(JSON.parseObject(projectDO.getSchedule(), new TypeReference<ArrayList<ProjectScheduleVO>>() {}));
         }
         return projectVO;
+    }
+
+
+    /**
+     * 修改团队信息
+     */
+    public Boolean updateTeamInfo(TeamDO teamDO){
+        return teamDAO.updateTeam(teamDO);
     }
 
 }

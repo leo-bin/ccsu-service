@@ -34,4 +34,9 @@ public interface InformationDAO {
 
     int maxId();
 
+    /**
+     * 导师发布消息
+     */
+    int releaseInfo(InformationDO informationDO);
+
 }

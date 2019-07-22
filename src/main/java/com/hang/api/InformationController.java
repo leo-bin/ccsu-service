@@ -76,11 +76,10 @@ public class InformationController {
     @StatisticsTime("createInformation")
     @ApiOperation("请求一个information")
     @PostMapping("/createInformation")
-    public BaseRes createInformation(String title, String content, String authors, String category) {
+    public BaseRes createInformation(String title, String content, String authors, String category,String notes) {
         if (!CATEGORY_MAP.containsKey(category)) {
             throw new ApiException(-1, "category不存在");
         }
-
         InformationDO information = new InformationDO();
         information.setTitle(title);
         information.setAuthors(authors);
@@ -88,6 +87,7 @@ public class InformationController {
         information.setCategory(category);
         information.setCategoryName(CATEGORY_MAP.get(category));
         information.setReleaseTime(new Date());
+        information.setNotes(notes);
         informationService.addInformation(information);
         return RespUtil.success();
     }
@@ -253,7 +253,5 @@ public class InformationController {
         hotAndCacheService.updateInformation(id);
         return RespUtil.success();
     }
-
-
 
 }

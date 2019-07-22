@@ -38,7 +38,7 @@
         table.render({
 
             elem: '#test',
-            url: '/user/getAdvisers',
+            url: '/creative/getAdvisers',
             toolbar: '#toolbarDemo',
             title: '用户数据表',
             totalRow: true,
@@ -57,7 +57,7 @@
                 }, {
                     field: 'name',
                     title: '导师姓名',
-                    width: 300,
+                    width: 150,
                     edit: 'text'
                 }, {
                     field: 'tel',
@@ -197,7 +197,7 @@
                 form.on('submit(sub)', function(massage) {
                     console.log(massage);
                     $.ajax({
-                        url:'/user/updateAdviserInfo',
+                        url:'/creative/updateAdviserInfo',
                         type:'POST',
                         data:{
                                id:data.id,  //原来的数据：id
@@ -265,9 +265,7 @@
                 ,"researchDirection": data.researchDirection
             })
         }
-    }
-
-    );
+    });
 </script>
 
 <div class="layui-row" id="popUpdateTest" style="display:none;">

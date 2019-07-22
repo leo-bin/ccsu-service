@@ -37,6 +37,9 @@
             <if test="avatar != null">
                 avatar = #{avatar},
             </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
         </set>
       where id = #{id}
     </update>
@@ -69,6 +72,12 @@
 
     <select id="selectTeams" resultType="com.hang.pojo.data.TeamDO">
         select * from team limit #{start}, #{offset}
+    </select>
+
+    <select id="getTeamsByAdvisor" resultType="com.hang.pojo.data.TeamDO">
+        select *
+        from team
+        where advisor = #{advisor}
     </select>
 
 </mapper>

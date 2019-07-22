@@ -4,20 +4,43 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hang.dao.CourseDAO">
 
+    <insert id="addCourse">
+        insert into course(jwc_account, weekday, class_time, section, subject_name, class_name, teacher, week_seq,
+                           week_str, location, xnxqh)
+        values (#{jwcAccount}, #{weekday}, #{classTime}, #{section}, #{subjectName}, #{className}, #{teacher},
+                #{weekSeq}, #{weekStr}, #{location}, #{xnxqh})
+    </insert>
+
     <select id="selectAllCourseByJwcAccount" resultType="com.hang.pojo.data.CourseDO">
-        select * from course where jwc_account = #{jwcAccount}
+        select *
+        from course
+        where jwc_account = #{jwcAccount}
     </select>
 
     <select id="selectAllCourseByJwcAccountAndSemester" resultType="com.hang.pojo.data.CourseDO">
-        select * from course where jwc_account = #{jwcAccount} and xnxqh = #{semester}
+        select *
+        from course
+        where jwc_account = #{jwcAccount}
+          and xnxqh = #{semester}
     </select>
 
+    <!-- locate("-"+#{week}+"-",week_seq)>0 locate('A','Abs'):判断逗号左边的内容在逗号右边中的内容出现的第一次的位置 将位置结果返回 -->
     <select id="selectClassroomNow" resultType="java.lang.String">
-        select distinct(location) from course where section=#{section} and weekday = #{weekDay} and xnxqh = #{semester} and locate("-"+#{week}+"-",week_seq) > 0;
+        select distinct(location)
+        from course
+        where section = #{section}
+          and weekday = #{weekDay}
+          and xnxqh = #{semester}
+          and locate("-" + #{week} + "-", week_seq) > 0;
     </select>
 
-    <select id="selectAllClassroom" resultType="java.lang.String">
-        select distinct(location) from course;
+    <select id="selectFreeClassroom" resultType="java.lang.String">
+        select location
+        from free_classroom
+        where section = #{section}
+          and weekday = #{weekDay}
+          and xnxqh = #{semester}
+          and week = #{week}
+          and building = #{building}
     </select>
-
 </mapper>

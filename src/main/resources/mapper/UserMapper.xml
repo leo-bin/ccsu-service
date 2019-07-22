@@ -20,6 +20,10 @@
         update t_user_info set jwc_account = #{jwcAccount} where open_id = #{openId}
     </update>
 
+    <update id="updateUserRole">
+        update t_user_info set role_id=#{role} where open_id=#{openId}
+    </update>
+
     <insert id="insert">
         insert into t_user_info(open_id,create_time,last_login_time,nick_name,avatar_url,gender,city,province,country)
         values(#{openId}, NOW(), NOW(),#{nickName},#{avatarUrl},#{gender},#{city},#{province},#{country});

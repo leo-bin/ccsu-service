@@ -1,6 +1,7 @@
 package com.hang.dao;
 
 import com.hang.pojo.data.AdviserDO;
+import com.hang.pojo.data.InformationDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -33,6 +34,5 @@ public interface AdviserDAO {
      * 增加导师信息
      */
     int insertAdviser(AdviserDO adviserDo);
-
 
 }

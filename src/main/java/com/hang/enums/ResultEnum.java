@@ -40,9 +40,9 @@ public enum ResultEnum {
     CAN_NOT_GET_USER_INFO(-10009, "can not get user info"),
 
     /**
-     * 学号信息未绑定
+     * 账号未绑定
      */
-    JWC_ACCOUNT_NOT_BIND(-10010, "jwd account not bind"),
+    ACCOUNT_NOT_BIND(-10010, "jwd account not bind"),
 
     /**
      * 导师姓名为空
@@ -57,10 +57,30 @@ public enum ResultEnum {
 
 
     /**
-     * 导师不存在
+     * 话题已经存在
      */
-    TOPIC_IS_EXIT(-10013,"topic is exit");
+    TOPIC_IS_EXIT(-10013,"topic is exit"),
 
+
+    /**
+     * 团队不存在
+     */
+    TEAM_NOT_EXIT(-10014,"team is not exit"),
+
+    /**
+     * 权限错误
+     */
+    AUTHORIZE_ERROR(-10015,"you have no authorize"),
+
+    /**
+     * 学号密码错误
+     */
+    JWC_ACCOUNT_OR_CODE_ERROR(-10016,"student number or code is wrong"),
+
+    /**
+     * 教工号格式错误
+     */
+    STAFF_NUMBER_ERROR(-10017,"teacher number is wrong");
 
 
     /**

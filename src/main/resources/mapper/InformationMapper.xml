@@ -5,8 +5,8 @@
 <mapper namespace="com.hang.dao.InformationDAO">
 
     <insert id="insert">
-        insert into information(title, content, authors, release_time, category, category_name)
-        values(#{title}, #{content}, #{authors}, #{releaseTime}, #{category}, #{categoryName})
+        insert into information(title, content, authors, release_time, category, category_name,notes)
+        values(#{title}, #{content}, #{authors}, #{releaseTime}, #{category}, #{categoryName},#{notes})
     </insert>
 
     <update id="update">

@@ -98,4 +98,6 @@ public interface TeamDAO {
 
     List<TeamDO> selectTeams(@Param("start") int start, @Param("offset") int offset);
 
+    List<TeamDO> selectTeamsByAdvisor(String advisor);
+
 }

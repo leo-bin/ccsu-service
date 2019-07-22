@@ -16,15 +16,29 @@ public class StudentDO {
 
     private String jwcAccount;
 
+    /**
+     * 素拓
+     */
     private Double qualityFraction;
 
+    /**
+     * 综测
+     */
     private Double comprehensiveFraction;
 
+    /**
+     * 学生年级
+     */
     private String grade;
 
     /**
      * 院系
      */
     private String department;
+
+    /**
+     * 密码
+     */
+    private String code;
 
 }

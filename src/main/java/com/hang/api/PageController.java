@@ -1,7 +1,13 @@
 package com.hang.api;
 
 import com.hang.pojo.data.AdminUserInfoDO;
+import com.hang.pojo.data.GradeDO;
+import com.hang.service.CourseCrawlerService;
+import com.hang.service.GradeCrawlerService;
+import com.hang.service.SchoolService;
+import com.hang.service.TeacherService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 /**
@@ -30,10 +37,23 @@ public class PageController {
 
     private static final String AdminPwd="admin1204";
 
+    @Autowired
+    private TeacherService teacherService;
+
     @GetMapping("/{page}")
     public String page1(@PathVariable String page) {
         return page;
     }
+
+    /**
+     * test
+     */
+    @ResponseBody
+    @RequestMapping("/test")
+    public String test(){
+        return "test";
+    }
+
 
     /**
      * 设置默认打开地址http://localhost:8088的跳转(需要在拦截器中排除)

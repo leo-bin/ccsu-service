@@ -6,7 +6,6 @@ import com.hang.enums.ApplyStatusEnum;
 import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.InformationApplyDO;
 import com.hang.pojo.data.InformationDO;
-import com.hang.pojo.vo.ApplyMessageVO;
 import com.hang.pojo.vo.MyInformationVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +47,6 @@ public class InformationService {
         cacheService.addInformation2Cache(information);
         return;
     }
-
     /**
      * 删除
      *

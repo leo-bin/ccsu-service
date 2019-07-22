@@ -7,6 +7,7 @@ import com.hang.enums.ResultEnum;
 import com.hang.exceptions.ApiAssert;
 import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.CourseDO;
+import com.hang.pojo.data.StudentDO;
 import com.hang.pojo.data.UserInfoDO;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.pojo.vo.CourseVO;
@@ -45,6 +46,13 @@ public class SchoolController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 查询第n周的课表
+     * @param openId
+     * @param week
+     * @param semester
+     * @return
+     */
     @StatisticsTime("getCourseByWeek")
     @ApiOperation("查询第n周的课表,OpenId参数不用传")
     @GetMapping("/course/getCourseByWeek")
@@ -53,11 +61,16 @@ public class SchoolController {
         ApiAssert.checkOpenId(openId);
         UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
         jwcAccountCheck(userInfo);
-
         List<CourseVO> courseVOS = schoolService.getCourseByWeek(userInfo.getJwcAccount(), week, semester);
         return RespUtil.success(courseVOS);
     }
 
+    /**
+     * 查询全部课表
+     * @param openId
+     * @param semester
+     * @return
+     */
     @StatisticsTime("getAllCourse")
     @ApiOperation("查询全部课表,OpenId参数不用传")
     @GetMapping("/course/getAllCourse")
@@ -97,15 +110,27 @@ public class SchoolController {
         }
     }
 
+    /**
+     * 获取空闲教室
+     * @param semester
+     * @param section
+     * @param week
+     * @param weekDay
+     * @param building
+     * @return
+     */
     @StatisticsTime("getFreeClassroom")
-    @ApiOperation("获取当前空闲教室")
+    @ApiOperation("获取本学期空闲教室")
     @GetMapping("/getFreeClassroom")
-    public BaseRes getFreeClassroom(@ApiParam("学期，默认为2018-2019-2") @RequestParam(required = false, defaultValue = "2018-2019-2") String semester,
+    public BaseRes getFreeClassroom(@ApiParam("学期，默认为2018-2019-2") @RequestParam(required = false, defaultValue = "2017-2018-2") String semester,
                                     @ApiParam("课程时间节数 1-2或3-4或5-6等") String section,
                                     @ApiParam("周数") String week,
-                                    @ApiParam("星期") String weekDay) {
-        return RespUtil.success(schoolService.getFreeClassroom(semester, section, week, weekDay));
+                                    @ApiParam("星期") String weekDay,
+                                    @ApiParam("教学楼") String building)
+    {
+        return RespUtil.success(schoolService.getFreeClassroom(semester, section, week, weekDay,building));
     }
+
 
     @ApiOperation("加综测")
     @GetMapping("/addComprehensiveFraction")
@@ -114,6 +139,7 @@ public class SchoolController {
         return RespUtil.success();
     }
 
+
     @ApiOperation("学生列表")
     @GetMapping("/studentList")
     public BaseRes studentList(@RequestParam(required = false, defaultValue = "0") int start,
@@ -121,22 +147,32 @@ public class SchoolController {
         return RespUtil.success(studentService.studentList(start, offset));
     }
 
+    /**
+     * 查询成绩
+     * @param openId
+     * @param semeter
+     * @return
+     */
     @StatisticsTime("getGrade")
     @ApiOperation("查询成绩")
     @GetMapping("/getGrade")
-    public BaseRes getGrade(@OpenId String openId, @RequestParam(required = false, defaultValue = "2018-2019-1") String semeter) {
+    public BaseRes getGrade(@OpenId String openId, @RequestParam(required = false, defaultValue = "2018-2019-2") String semeter) {
         ApiAssert.checkOpenId(openId);
         UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
         jwcAccountCheck(userInfo);
-
-        return RespUtil.success(schoolService.getGrader(userInfo.getJwcAccount(), semeter));
+        StudentDO studentDO=studentService.getStudentInfo(openId);
+        return RespUtil.success(schoolService.getGrader(userInfo.getJwcAccount(), semeter,studentDO.getCode()));
     }
 
+    /**
+     * 学号确认,判断是否绑定了学号
+     * @param userInfo
+     */
     private void jwcAccountCheck(UserInfoDO userInfo) {
         if (Objects.isNull(userInfo)) {
             throw new ApiException(ResultEnum.CAN_NOT_GET_USER_INFO);
         } else if (StringUtils.isEmpty(userInfo.getJwcAccount())) {
-            throw new ApiException(ResultEnum.JWC_ACCOUNT_NOT_BIND);
+            throw new ApiException(ResultEnum.ACCOUNT_NOT_BIND);
         }
     }
 

@@ -11,12 +11,10 @@ import com.hang.enums.ResultEnum;
 import com.hang.exceptions.ApiAssert;
 import com.hang.pojo.data.AdviserDO;
 import com.hang.pojo.data.StudentDO;
+import com.hang.pojo.data.TeacherDO;
 import com.hang.pojo.data.UserInfoDO;
 import com.hang.pojo.vo.BaseRes;
-import com.hang.service.AdviserService;
-import com.hang.service.SessionService;
-import com.hang.service.StudentService;
-import com.hang.service.UserService;
+import com.hang.service.*;
 import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -53,17 +51,39 @@ public class UserController {
     private StudentService studentService;
 
     @Autowired
-    private AdviserService adviserService;
+    private TeacherService teacherService;
 
+
+    /**
+     * 绑定账户信息
+     * @param openId
+     * @param account
+     * @return
+     */
     @StatisticsTime("bind")
-    @ApiOperation("绑定学号信息，openId参数不用传")
+    @ApiOperation("绑定账户信息，openId参数不用传")
     @PostMapping("/bind")
-    public BaseRes bind(@OpenId String openId, @RequestParam String jwcAccount) {
-        log.info("jwcAccount:{}, openId:{}", jwcAccount, openId);
-        userService.bind(openId, jwcAccount);
-        return RespUtil.success();
+    public BaseRes bind(@OpenId String openId, @RequestParam String account,@RequestParam String code) {
+        log.info("account:{}, openId:{}", account, openId);
+        if ("B".equals(account.substring(0,1))||"b".equals(account.substring(0,1))){
+            studentService.bindForStudent(openId, account,code);
+            return RespUtil.success();
+        }
+        else if ("Z".equals(code.substring(0,1))&&code.length()==9){
+            teacherService.bindForTeacher(openId, account,code);
+            return RespUtil.success();
+        }
+        else{
+            return RespUtil.error(ResultEnum.STAFF_NUMBER_ERROR);
+        }
     }
 
+    /**
+     * 用户登陆
+     * @param code
+     * @param rawData
+     * @return
+     */
     @StatisticsTime("login")
     @ApiOperation("登录，获取sessionId")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -89,13 +109,12 @@ public class UserController {
         log.info("sessionId: " + request.getHeader("sessionId"));
         log.info("appPlatform: " + request.getHeader("appPlatform"));
         log.info("appVersion: " + request.getHeader("appVersion"));
-
         if (Strings.isEmpty(sessionId)) {
             sessionId = request.getHeader("sessionId");
         }
-
         return sessionService.getSessionInfo(sessionId);
     }
+
 
     @StatisticsTime("getUserInfoByOpenId")
     @GetMapping("/getUserInfoByOpenId")
@@ -103,133 +122,75 @@ public class UserController {
         return RespUtil.success(userService.getUserInfoByOpenId(openId));
     }
 
+
+    /**
+     * 用户个人中心
+     * 根据角色Id判断返回对象
+     * @param openId
+     * @return
+     */
     @StatisticsTime("personCenter")
     @ApiOperation("个人中心")
     @GetMapping("/personCenter")
     public BaseRes personCenter(@OpenId String openId) {
         ApiAssert.checkOpenId(openId);
-        StudentDO studentInfo = studentService.getStudentInfo(openId);
-        if (studentInfo == null) {
-            return RespUtil.error(ResultEnum.JWC_ACCOUNT_NOT_BIND);
+        StudentDO studentInfo=null;
+        TeacherDO teacherDO=null;
+        Integer roleId=userService.getUserInfoByOpenId(openId).getRoleId();
+        if (roleId.equals(0)||roleId.equals(2)){
+           studentInfo = studentService.getStudentInfo(openId);
+            if (studentInfo == null) {
+                return RespUtil.error(ResultEnum.ACCOUNT_NOT_BIND);
+            }
+            return RespUtil.success(studentInfo);
         }
-        return RespUtil.success(studentInfo);
+        else{
+            teacherDO=teacherService.getTeacherInfo(openId);
+            if (teacherDO==null){
+                return RespUtil.error(ResultEnum.ACCOUNT_NOT_BIND);
+            }
+        }
+        return RespUtil.success(teacherDO);
     }
 
-    @StatisticsTime("modifyStudentInfo")
-    @ApiOperation("修改个人信息")
-    @GetMapping("/modifyStudentInfo")
-    public BaseRes modifyStudentInfo(@OpenId String openId, String jwcAccount, String nickName, String department) {
-        ApiAssert.checkOpenId(openId);
-        StudentDO studentDO = new StudentDO();
-        studentDO.setOpenId(openId);
-        UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
-        if (StringUtils.isEmpty(jwcAccount)) {
-            jwcAccount = userInfo.getJwcAccount();
-        }
-        studentDO.setNickName(nickName);
-        studentDO.setDepartment(department);
-        studentDO.setJwcAccount(jwcAccount);
-        userService.updateJwcAccount(openId, jwcAccount);
-        studentService.modifyStudentInfo(studentDO);
-        return RespUtil.success();
-    }
-
-    @StatisticsTime("getAdvisers")
-    @ApiOperation("查看所有导师的信息")
-    @GetMapping("/getAdvisers")
-    public BaseRes getAdvisers(@RequestParam(required = false, defaultValue = "0") int start,
-                               @RequestParam(required = false, defaultValue = "100") int offset){
-        List<AdviserDO> adviserDOS = adviserService.getAdvisers(start, offset);
-        return RespUtil.success(adviserDOS);
-    }
 
     /**
-     * 查询导师信息
-     *
-     * @param id
+     * 更改绑定
+     * @param openId
+     * @param account
+     * @param code
      * @return
      */
-    @StatisticsTime("getAdviser")
-    @ApiOperation("根据id获取单个导师信息")
-    @GetMapping("/getAdviser")
-    public BaseRes getInformationById(@RequestParam int id) {
-        return RespUtil.success(adviserService.getAdviser(id));
-    }
-
-    /**
-     * 增加导师信息
-     */
-    @StatisticsTime("insertAdviserInfo")
-    @ApiOperation("增加导师信息")
-    @PostMapping("/insertAdviserInfo")
-    public BaseRes insertAdviserInfo(@RequestParam String  adviserName,
-                                     @RequestParam String  adviserTel,
-                                     @RequestParam String  adviserInfo,
-                                     @RequestParam String  department,
-                                     @RequestParam String  avatar,
-                                     @RequestParam String  email,
-                                     @RequestParam String  office,
-                                     @RequestParam String  education,
-                                     @RequestParam String  position,
-                                     @RequestParam String  teachingCourse,
-                                     @RequestParam String  reasearchDiretion
-    ) {
-        if(adviserName==null){
-            return RespUtil.error(ResultEnum.ADVISERNAME_IS_NULL);
+    @StatisticsTime("modifyInfo")
+    @ApiOperation("更改绑定")
+    @GetMapping("/modifyInfo")
+    public BaseRes modifyStudentInfo(@OpenId String openId, String account, String code) {
+        ApiAssert.checkOpenId(openId);
+        UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
+        if (StringUtils.isEmpty(account)) {
+            account = userInfo.getJwcAccount();
         }
-            AdviserDO adviserDo=new AdviserDO();
-            adviserDo.setName(adviserName);
-            adviserDo.setTel(adviserTel);
-            adviserDo.setInfo(adviserInfo);
-            adviserDo.setDepartment(department);
-            adviserDo.setAvatar(avatar);
-            adviserDo.setEmail(email);
-            adviserDo.setOffice(office);
-            adviserDo.setEducation(education);
-            adviserDo.setPosition(position);
-            adviserDo.setTeachingCourse(teachingCourse);
-            adviserDo.setResearchDirection(reasearchDiretion);
-            adviserService.insertAdviserInfo(adviserDo);
-            return RespUtil.success();
-
-
-    }
-
-    /**
-     * 修改导师信息
-     */
-    @StatisticsTime("updateAdviserInfo")
-    @ApiOperation("修改导师信息")
-    @PostMapping("/updateAdviserInfo")
-    public BaseRes updateAdviserInfo(
-                                     @RequestParam Integer id,
-                                     @RequestParam String adviserName,
-                                     @RequestParam String adviserTel,
-                                     @RequestParam String adviserInfo,
-                                     @RequestParam String  department,
-                                     @RequestParam String  avatar,
-                                     @RequestParam String  email,
-                                     @RequestParam String  office,
-                                     @RequestParam String  education,
-                                     @RequestParam String  position,
-                                     @RequestParam String  teachingCourse,
-                                     @RequestParam(required = false) String  reasearchDiretion
-    ){
-        AdviserDO adviserDO=adviserService.getAdviser(id);
-        adviserDO.setName(adviserName);
-        adviserDO.setTel(adviserTel);
-        adviserDO.setInfo(adviserInfo);
-        adviserDO.setDepartment(department);
-        adviserDO.setAvatar(avatar);
-        adviserDO.setEmail(email);
-        adviserDO.setOffice(office);
-        adviserDO.setEducation(education);
-        adviserDO.setPosition(position);
-        adviserDO.setTeachingCourse(teachingCourse);
-        adviserDO.setResearchDirection(reasearchDiretion);
-        adviserService.updateAdviserInfo(adviserDO);
+        bind(openId, account, code);
         return RespUtil.success();
     }
 
+    /**
+     * 教师给学生授权
+     */
+    @StatisticsTime("authorizeToStudent")
+    @ApiOperation("教师给学生授权")
+    @RequestMapping("/authorizeToStudent")
+    public BaseRes authorizeToStudent(@OpenId String openId,@RequestParam String jwcAccount){
+        ApiAssert.checkOpenId(openId);
+        UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
+        Integer roleId=userInfo.getRoleId();
+        if(roleId.equals(1)){
+            teacherService.authorizeToStudent(jwcAccount);
+            return RespUtil.success();
 
+        }
+        else{
+            return RespUtil.success(ResultEnum.AUTHORIZE_ERROR);
+        }
+    }
 }
