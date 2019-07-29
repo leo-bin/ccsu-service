@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hang.dao.LostPropertyAndRecruitDAO">
+
+    <insert id="insert">
+                insert into lost_property_and_recurit(initiator_jwc_account, initiator_name, initiator_message, initiator_location, occur_time, contact_information, category, datetime)
+        values(#{initiatorJwcAccount}, #{initiatorName}, #{initiatorMessage}, #{initiatorLocation}, #{occurTime}, #{contactInformation}, #{category}, #{datetime})
+    </insert>
+
+    <select id="listByCategory" resultType="com.hang.pojo.data.LostPropertyAndRecruitDO">
+        select * from lost_property_and_recurit where category = #{category} order by datetime desc limit #{start},#{offset};
+    </select>
+
+    <select id="listAll" resultType="com.hang.pojo.data.LostPropertyAndRecruitDO">
+        select * from lost_property_and_recurit order by datetime desc limit #{start},#{offset};
+    </select>
+
+</mapper>

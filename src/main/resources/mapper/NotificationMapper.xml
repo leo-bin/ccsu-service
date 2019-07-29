@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hang.dao.NotificationDAO">
+
+    <resultMap id="BaseResultMap" type="com.hang.pojo.data.NotificationDO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="action" jdbcType="VARCHAR" property="action"/>
+        <result column="in_time" jdbcType="TIMESTAMP" property="inTime"/>
+        <result column="is_read" jdbcType="BIT" property="isRead"/>
+        <result column="target_open_id" jdbcType="INTEGER" property="targetOpenId"/>
+        <result column="notification_id" jdbcType="INTEGER" property="notificationId"/>
+        <result column="open_id" jdbcType="INTEGER" property="openId"/>
+    </resultMap>
+
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hang.pojo.data.NotificationDO">
+        <result column="content" jdbcType="LONGVARCHAR" property="content"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, action, in_time, is_read, target_open_id, notification_id, open_id
+    </sql>
+
+    <sql id="Blob_Column_List">
+        content
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from notification
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE
+        FROM notification
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.hang.pojo.data.NotificationDO">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into notification (action, in_time, is_read,
+        target_open_id, notification_id, open_id,
+        content)
+        values (#{action,jdbcType=VARCHAR}, #{inTime,jdbcType=TIMESTAMP}, #{isRead,jdbcType=BIT},
+        #{targetOpenId,jdbcType=INTEGER}, #{notificationId,jdbcType=INTEGER}, #{openId,jdbcType=INTEGER},
+        #{content,jdbcType=LONGVARCHAR})
+    </insert>
+
+    <insert id="insertSystemNote" parameterType="com.hang.pojo.data.SystemNotificationDO">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into system_notification (system_notify_type, message)
+        values (#{noteType}, #{sendTime})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.hang.pojo.data.NotificationDO">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+
+        insert into notification
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="action != null">
+                action,
+            </if>
+            <if test="inTime != null">
+                in_time,
+            </if>
+            <if test="isRead != null">
+                is_read,
+            </if>
+            <if test="targetOpenId != null">
+                target_open_id,
+            </if>
+            <if test="notificationId != null">
+                notification_id,
+            </if>
+            <if test="openId != null">
+                open_id,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+        </trim>
+
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="action != null">
+                #{action,jdbcType=VARCHAR},
+            </if>
+            <if test="inTime != null">
+                #{inTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isRead != null">
+                #{isRead,jdbcType=BIT},
+            </if>
+            <if test="targetOpenId != null">
+                #{targetOpenId,jdbcType=INTEGER},
+            </if>
+            <if test="notificationId != null">
+                #{notificationId,jdbcType=INTEGER},
+            </if>
+            <if test="openId != null">
+                #{openId,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.hang.pojo.data.NotificationDO">
+        update notification
+        <set>
+        <if test="action != null">
+            action = #{action,jdbcType=VARCHAR},
+        </if>
+        <if test="inTime != null">
+            in_time = #{inTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="isRead != null">
+            is_read = #{isRead,jdbcType=BIT},
+        </if>
+        <if test="targetOpenId != null">
+            target_open_id = #{targetOpenId,jdbcType=INTEGER},
+        </if>
+        <if test="notificationId != null">
+            notification_id = #{notificationId,jdbcType=INTEGER},
+        </if>
+        <if test="openId != null">
+            open_id = #{openId,jdbcType=INTEGER},
+        </if>
+        <if test="content != null">
+            content = #{content,jdbcType=LONGVARCHAR},
+        </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hang.pojo.data.NotificationDO">
+        UPDATE notification
+        SET action          = #{action,jdbcType=VARCHAR},
+            in_time         = #{inTime,jdbcType=TIMESTAMP},
+            is_read         = #{isRead,jdbcType=BIT},
+            target_open_id  = #{targetOpenId,jdbcType=INTEGER},
+            notification_id = #{notificationId,jdbcType=INTEGER},
+            open_id         = #{openId,jdbcType=INTEGER},
+            content         = #{content,jdbcType=LONGVARCHAR}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.hang.pojo.data.NotificationDO">
+        UPDATE notification
+        SET action          = #{action,jdbcType=VARCHAR},
+            in_time         = #{inTime,jdbcType=TIMESTAMP},
+            is_read         = #{isRead,jdbcType=BIT},
+            target_open_id  = #{targetOpenId,jdbcType=INTEGER},
+            notification_id = #{notificationId,jdbcType=INTEGER},
+            open_id         = #{openId,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!--自定义方法-->
+    <select id="findCommentNoteByOpenId" resultType="map">
+        select n.*, u.nick_name, u.avatar_url, t.id as topic_id, t.title as topic_title
+        from notification n left join topic t on n.notification_id = t.id left join t_user_info u on n.open_id = u.id
+        where n.target_open_id = #{targetOpenId}
+        <if test="orderBy != null">
+            order by ${orderBy}
+        </if>
+        <if test="pageNo != null and pageSize != null">
+            limit #{pageNo}, #{pageSize}
+        </if>
+    </select>
+
+    <select id="findSystemNoteByOpenId" resultType="map">
+        select n.*, u.nick_name, u.avatar_url, s.id as system_note_id, s.system_notify_type as note_type
+        from notification n left join system_notification s on n.notification_id = s.id left join t_user_info u on
+        n.open_id = u.id
+        where n.target_open_id = #{targetOpenId}
+        <if test="orderBy != null">
+            order by ${orderBy}
+        </if>
+        <if test="pageNo != null and pageSize != null">
+            limit #{pageNo}, #{pageSize}
+        </if>
+    </select>
+
+
+    <select id="countByTargetOpenId" resultType="java.lang.Integer">
+        select count(1)
+        from notification
+        where target_open_id = #{targetOpenId}
+    </select>
+
+    <update id="updateByIsRead" parameterType="java.lang.Integer">
+        UPDATE notification
+        SET is_read = TRUE
+        WHERE target_open_id = #{targetOpenId}
+    </update>
+
+    <delete id="deleteNotification">
+        delete from notification
+        <where>
+            <if test="targetOpenId != null">
+                and target_open_id = #{targetOpenId}
+            </if>
+            <if test="openId != null">
+                and open_id = #{openId}
+            </if>
+            <if test="notificationId != null">
+                and notification_id = #{notificationId}
+            </if>
+        </where>
+    </delete>
+</mapper>

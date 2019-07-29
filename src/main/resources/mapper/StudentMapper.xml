@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hang.dao.StudentDAO">
+
+    <insert id="insert">
+        insert into
+        student_info(jwc_account, open_id, real_name, title, grade, nick_name, department,code,avatar)
+        values(#{jwcAccount}, #{openId}, #{realName}, #{title}, #{grade}, #{nickName}, #{department},#{code},#{avatar})
+    </insert>
+
+    <update id="update">
+        update student_info
+        <set>
+            <if test="nickName != null">
+                nick_name = #{nickName},
+            </if>
+
+            <if test="grade != null">
+                grade = #{grade},
+            </if>
+
+            <if test="department != null">
+                department = #{department},
+            </if>
+
+            <if test="jwcAccount != null">
+                jwc_account = #{jwcAccount},
+            </if>
+          <if test="code!=null">
+              code=#{code}
+          </if>
+        </set>
+        where open_id = #{openId}
+    </update>
+
+
+    <update id="updateStudentInfo">
+        update student_info
+        <set>
+            <if test="realName != null">
+                real_name = #{realName},
+            </if>
+
+            <if test="title!=null">
+                title=#{title}
+            </if>
+        </set>
+        where jwc_account = #{jwcAccount}
+    </update>
+
+    <select id="selectStudentDOByOpenId" resultType="com.hang.pojo.data.StudentDO">
+        select * from student_info where open_id = #{openId}
+    </select>
+
+    <select id="getStudentInfoByJwcAccount" resultType="com.hang.pojo.data.StudentDO">
+        select * from student_info where jwc_account = #{jwcAccount}
+    </select>
+
+    <select id="list" resultType="com.hang.pojo.data.StudentDO">
+        select * from student_info limit #{start}, #{offset}
+    </select>
+
+</mapper>
