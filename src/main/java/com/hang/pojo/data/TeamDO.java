@@ -25,4 +25,9 @@ public class TeamDO {
 
     private String advisor;
 
+    /**
+     * 团队状态：1-已节课，2-未结课
+     */
+    private Integer state;
+
 }

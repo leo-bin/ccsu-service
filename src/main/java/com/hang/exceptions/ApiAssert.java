@@ -64,4 +64,5 @@ public class ApiAssert extends Assert {
             throw new ApiException(-1, message);
         }
     }
+
 }

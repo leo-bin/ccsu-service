@@ -13,12 +13,18 @@ import java.util.List;
 public interface GradeDAO {
 
     /**
-     * 根据学号的学期查询成绩
+     * 根据学号和学期查询成绩
      *
      * @param jwcAccount
      * @param xnxq
      * @return
      */
     List<GradeDO> selectGradeByJwcAccountAndXnxq(@Param("jwcAccount") String jwcAccount, @Param("xnxq") String xnxq);
+
+
+    /**
+     * 用户第一次查询成绩，做模拟登陆爬取成绩
+     */
+    int addGrade(GradeDO gradeDO);
 
 }

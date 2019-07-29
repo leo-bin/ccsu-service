@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hang.dao.TeacherDAO">
+
+    <insert id="insert">
+        insert into teacher_info(open_id, name, staffNum, code, nick_name, department)
+        VALUES (#{openId}, #{name}, #{staffNum}, #{code}, #{nickName}, #{department})
+    </insert>
+
+    <update id="update">
+        update teacher_info
+        <set>
+            <if test="staffNum != null">
+                staffNum = #{staffNum},
+            </if>
+
+            <if test="code!=null">
+                code=#{code},
+            </if>
+
+            <if test="nickName != null">
+                nick_name = #{nickName},
+            </if>
+
+            <if test="department != null">
+                department = #{department}
+            </if>
+        </set>
+        where open_id = #{openId}
+    </update>
+
+    <update id="authorizeToStudent">
+        update t_user_info
+        <set>
+            <if test="role_id!=null">
+                role_id=2
+            </if>
+        </set>
+        where jwc_account = #{jwcAccount}
+    </update>
+
+    <select id="getTeacherByOpenId" resultType="com.hang.pojo.data.TeacherDO">
+        select *
+        from teacher_info
+        where open_id = #{openId}
+    </select>
+
+</mapper>

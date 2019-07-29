@@ -8,4 +8,9 @@
         select * from grade where jwc_account = #{jwcAccount} and xnxq = #{xnxq}
     </select>
 
+    <insert id="addGrade">
+        insert into grade(jwc_account, course_name, score, category, credit, property, xnxq)
+        values (#{jwcAccount}, #{courseName}, #{score}, #{category}, #{credit}, #{property}, #{xnxq})
+    </insert>
+
 </mapper>

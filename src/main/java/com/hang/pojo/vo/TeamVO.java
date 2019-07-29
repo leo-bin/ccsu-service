@@ -30,6 +30,11 @@ public class TeamVO {
     private String advisor;
 
     /**
+     * 团队状态：1-已节课，2-未结课
+     */
+    private Integer state;
+
+    /**
      * 团队项目
      */
     private List<ProjectVO> projects;
@@ -43,5 +48,7 @@ public class TeamVO {
      * 团队日志
      */
     private List<TeamLogVO> teamLog;
+
+
 
 }

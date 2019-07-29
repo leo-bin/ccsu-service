@@ -19,11 +19,16 @@ public class SchoolServiceTest extends CcsuServiceApplicationTests {
     @Autowired
     private SchoolService schoolService;
 
+    /**
+     *
+
     @Test
     public void getFreeClassroom() {
         Set<String> freeClassroom = schoolService.getFreeClassroom("2018-2019-2", "1-2", "5", "2");
         System.out.println("freeClassroom : " + freeClassroom.size());
     }
+
+    */
 
 
 }

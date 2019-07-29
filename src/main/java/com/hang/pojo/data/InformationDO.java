@@ -45,7 +45,7 @@ public class InformationDO {
     private String authors;
 
     /**
-     * 类别,包括:活动,通知,招聘,公示
+     * 类别包括:活动,通知,招聘,公示
      * activity,notify,recruitment,public
      */
     @JsonView(SimpleInformation.class)
@@ -53,5 +53,11 @@ public class InformationDO {
 
     @JsonView(SimpleInformation.class)
     private String categoryName;
+
+    /**
+     * 备注
+     */
+    @JsonView(SimpleInformation.class)
+    private String notes;
 
 }

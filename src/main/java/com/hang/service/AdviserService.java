@@ -35,5 +35,4 @@ public class AdviserService {
        ApiAssert.nonEqualInteger(i, 1, "更新失败");
    }
 
-
 }

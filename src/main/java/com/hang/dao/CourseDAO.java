@@ -16,6 +16,14 @@ import java.util.Set;
 @Repository
 public interface CourseDAO {
 
+
+    /**
+     * 爬取个人课表
+     * @param course
+     * @return
+     */
+    int addCourse(CourseDO course);
+
     /**
      * 查询对应学号的所有课表
      *
@@ -35,14 +43,13 @@ public interface CourseDAO {
 
 
     /**
-     * 查询课表
+     * 查询空闲教室
      *
-     * @param semester
+     *
      * @return
      */
-    Set<String> selectClassroomNow(@Param("semester") String semester, @Param("section") String section,
-                                   @Param("week") String week, @Param("weekDay") String weekDay);
+    Set<String> selectFreeClassroom(@Param("semester") String semester, @Param("section") String section,
+                                   @Param("week") String week, @Param("weekDay") String weekDay,@Param("building") String building);
 
-    Set<String> selectAllClassroom();
 
 }
