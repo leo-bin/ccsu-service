@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hang.bbs.comment.mapper.CommentMapper">
+
     <resultMap id="BaseResultMap" type="com.hang.bbs.comment.pojo.Comment">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="comment_id" jdbcType="INTEGER" property="commentId"/>
@@ -10,25 +11,34 @@
         <result column="up" jdbcType="INTEGER" property="up"/>
         <result column="open_id" jdbcType="VARCHAR" property="openId"/>
     </resultMap>
+
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hang.bbs.comment.pojo.CommentWithBLOBs">
         <result column="content" jdbcType="LONGVARCHAR" property="content"/>
         <result column="down_ids" jdbcType="LONGVARCHAR" property="downIds"/>
         <result column="up_ids" jdbcType="LONGVARCHAR" property="upIds"/>
     </resultMap>
+
     <sql id="Base_Column_List">
-    id, comment_id, down, in_time, topic_id, up, open_id
-  </sql>
+        id, comment_id, down, in_time, topic_id, up, open_id
+    </sql>
+
     <sql id="Blob_Column_List">
-    content, down_ids, up_ids
-  </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="com.hang.bbs.comment.pojo.CommentWithBLOBs">
-        select * from comment
+        content, down_ids, up_ids
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+            resultType="com.hang.bbs.comment.pojo.CommentWithBLOBs">
+        select *
+        from comment
         where id = #{id}
     </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    DELETE FROM comment
-    WHERE id = #{id,jdbcType=INTEGER}
-  </delete>
+        DELETE
+        FROM comment
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+
     <insert id="insert" parameterType="com.hang.bbs.comment.pojo.CommentWithBLOBs">
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
             SELECT LAST_INSERT_ID()
@@ -42,6 +52,7 @@
         #{content,jdbcType=LONGVARCHAR}, #{downIds,jdbcType=LONGVARCHAR}, #{upIds,jdbcType=LONGVARCHAR}
         )
     </insert>
+
     <insert id="insertSelective" parameterType="com.hang.bbs.comment.pojo.CommentWithBLOBs">
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
             SELECT LAST_INSERT_ID()
@@ -106,6 +117,7 @@
             </if>
         </trim>
     </insert>
+
     <update id="updateByPrimaryKeySelective" parameterType="com.hang.bbs.comment.pojo.CommentWithBLOBs">
         update comment
         <set>
@@ -139,49 +151,58 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+
     <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hang.bbs.comment.pojo.CommentWithBLOBs">
-    UPDATE comment
-    SET comment_id = #{commentId,jdbcType=INTEGER},
-      down         = #{down,jdbcType=INTEGER},
-      in_time      = #{inTime,jdbcType=TIMESTAMP},
-      topic_id     = #{topicId,jdbcType=INTEGER},
-      up           = #{up,jdbcType=INTEGER},
-      open_id      = #{openId,jdbcType=VARCHAR},
-      content      = #{content,jdbcType=LONGVARCHAR},
-      down_ids     = #{downIds,jdbcType=LONGVARCHAR},
-      up_ids       = #{upIds,jdbcType=LONGVARCHAR}
-    WHERE id = #{id,jdbcType=INTEGER}
-  </update>
+        UPDATE comment
+        SET comment_id = #{commentId,jdbcType=INTEGER},
+            down       = #{down,jdbcType=INTEGER},
+            in_time    = #{inTime,jdbcType=TIMESTAMP},
+            topic_id   = #{topicId,jdbcType=INTEGER},
+            up         = #{up,jdbcType=INTEGER},
+            open_id    = #{openId,jdbcType=VARCHAR},
+            content    = #{content,jdbcType=LONGVARCHAR},
+            down_ids   = #{downIds,jdbcType=LONGVARCHAR},
+            up_ids     = #{upIds,jdbcType=LONGVARCHAR}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
     <update id="updateByPrimaryKey" parameterType="com.hang.bbs.comment.pojo.Comment">
-    UPDATE comment
-    SET comment_id = #{commentId,jdbcType=INTEGER},
-      down         = #{down,jdbcType=INTEGER},
-      in_time      = #{inTime,jdbcType=TIMESTAMP},
-      topic_id     = #{topicId,jdbcType=INTEGER},
-      up           = #{up,jdbcType=INTEGER},
-      open_id      = #{openId,jdbcType=INTEGER}
-    WHERE id = #{id,jdbcType=INTEGER}
-  </update>
+        UPDATE comment
+        SET comment_id = #{commentId,jdbcType=INTEGER},
+            down       = #{down,jdbcType=INTEGER},
+            in_time    = #{inTime,jdbcType=TIMESTAMP},
+            topic_id   = #{topicId,jdbcType=INTEGER},
+            up         = #{up,jdbcType=INTEGER},
+            open_id    = #{openId,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
     <!--自定义方法-->
     <select id="findByTopicId" parameterType="java.lang.Integer" resultType="map">
-    SELECT c.*, u.nick_name, u.avatar_url
-    FROM comment c LEFT JOIN topic t ON c.topic_id = t.id
-      LEFT JOIN t_user_info u ON c.open_id = u.open_id
-    WHERE c.topic_id = #{topicId}
-  </select>
+        SELECT c.*, u.nick_name, u.avatar_url
+        FROM comment c
+                 LEFT JOIN topic t ON c.topic_id = t.id
+                 LEFT JOIN t_user_info u ON c.open_id = u.open_id
+        WHERE c.topic_id = #{topicId}
+    </select>
     <select id="countByTopicId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-    SELECT count(1)
-    FROM comment
-    WHERE topic_id = #{topicId}
-  </select>
+        SELECT count(1)
+        FROM comment
+        WHERE topic_id = #{topicId}
+    </select>
+
     <delete id="deleteByTopicId" parameterType="java.lang.Integer">
-    DELETE FROM comment
-    WHERE topic_id = #{topicId}
-  </delete>
+        DELETE
+        FROM comment
+        WHERE topic_id = #{topicId}
+    </delete>
+
     <delete id="deleteByOpenId" parameterType="java.lang.Integer">
-    DELETE FROM comment
-    WHERE open_id = #{openId}
-  </delete>
+        DELETE
+        FROM comment
+        WHERE open_id = #{openId}
+    </delete>
+
     <select id="findAllForAdmin" resultType="map">
         select c.*, t.id as topic_id, t.title as topic_title, u.username
         from comment c left join topic t on c.topic_id = t.id left join user u on c.open_id = u.open_id
@@ -192,15 +213,18 @@
             limit #{pageNo}, #{pageSize}
         </if>
     </select>
+
     <select id="countAllForAdmin" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-    SELECT count(1)
-    FROM comment
-  </select>
+        SELECT count(1)
+        FROM comment
+    </select>
+
     <select id="findCommentByTopicId" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
         select<include refid="Base_Column_List"/>,
         <include refid="Blob_Column_List"/>
         from comment where topic_id = #{topicId}
     </select>
+
     <select id="findByOpenId" resultType="map">
         select c.*, u.username, t.title as topic_title from comment c left join topic t on c.topic_id = t.id left join
         user
@@ -212,11 +236,13 @@
             limit #{pageNo}, #{pageSize}
         </if>
     </select>
+
     <select id="countByOpenId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-    SELECT count(1)
-    FROM comment
-    WHERE open_id = #{openId}
-  </select>
+        SELECT count(1)
+        FROM comment
+        WHERE open_id = #{openId}
+    </select>
+
     <select id="findChildByCommentId" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
         select<include refid="Base_Column_List"/>,
         <include refid="Blob_Column_List"/>

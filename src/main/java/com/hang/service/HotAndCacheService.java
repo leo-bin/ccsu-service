@@ -39,6 +39,10 @@ public class HotAndCacheService {
         return information;
     }
 
+    /**
+     * 将信息存入缓存
+     * @param information
+     */
     public void addInformation2Cache(InformationDO information) {
         if (information != null) {
             redisUtil.set(INFORMATION_PREFIX + information.getId(), information);

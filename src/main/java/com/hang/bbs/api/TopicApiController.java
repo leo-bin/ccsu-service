@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @Api("主题接口")
 @RestController
-@RequestMapping("/api/topic")
+@RequestMapping("/bbs/topic")
 public class TopicApiController {
 
     @Autowired

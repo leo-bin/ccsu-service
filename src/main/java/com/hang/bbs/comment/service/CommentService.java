@@ -6,12 +6,13 @@ import com.hang.bbs.common.Page;
 import com.hang.bbs.comment.mapper.CommentMapper;
 import com.hang.bbs.comment.pojo.CommentWithBLOBs;
 import com.hang.bbs.common.VoteAction;
-import com.hang.bbs.notification.pojo.NotificationEnum;
-import com.hang.bbs.notification.service.NotificationService;
+import com.hang.enums.NotificationEnum;
+import com.hang.service.NotificationService;
 import com.hang.bbs.topic.pojo.TopicWithBLOBs;
 import com.hang.bbs.topic.service.TopicService;
 import com.hang.pojo.data.UserInfoDO;
 import com.hang.service.UserService;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,8 +43,19 @@ public class CommentService {
         return commentMapper.selectByPrimaryKey(id);
     }
 
-    public void save(CommentWithBLOBs comment) {
-        commentMapper.insertSelective(comment);
+    /**
+     * 保存评论
+     * @param comment
+     * @return
+     */
+    public Integer save(CommentWithBLOBs comment) {
+        int i=commentMapper.insertSelective(comment);
+        //获取评论Id
+        int commentId=comment.getId();
+        if (i>=0&&commentId>=0){
+            return commentId;
+        }
+        return null;
     }
 
     public void update(CommentWithBLOBs commentWithBLOBs) {
@@ -92,9 +104,17 @@ public class CommentService {
         commentMapper.deleteByTopicId(topicId);
     }
 
-    public CommentWithBLOBs createComment(String openId, TopicWithBLOBs topic, Integer commentId, String content) {
+    /**
+     * 创建评论
+     *
+     * @param openId
+     * @param topic
+     * @param content
+     * @return
+     */
+    public CommentWithBLOBs createComment(String openId, TopicWithBLOBs topic,String content) {
         CommentWithBLOBs comment = new CommentWithBLOBs();
-        comment.setCommentId(commentId);
+        Integer commentId;
         comment.setOpenId(openId);
         comment.setTopicId(topic.getId());
         comment.setInTime(new Date());
@@ -103,23 +123,25 @@ public class CommentService {
         comment.setUpIds("");
         comment.setDownIds("");
         comment.setContent(content);
-        this.save(comment);
+        commentId=this.save(comment);
 
         //评论+1
         topic.setCommentCount(topic.getCommentCount() + 1);
         topic.setLastCommentTime(new Date());
         topicService.update(topic);
 
-        // 通知
+        //回复
         if (commentId != null) {
             Comment replyComment = this.findById(commentId);
             if (!openId.equals(replyComment.getOpenId())) {
                 notificationService.sendNotification(openId, replyComment.getOpenId(), NotificationEnum.REPLY, topic.getId(), content);
             }
         }
-        // if (!topic.getOpenId().equals(checkOpenId)) {
-            notificationService.sendNotification(openId, topic.getOpenId(), NotificationEnum.COMMENT, topic.getId(), content);
-        // }
+
+        //不能自己给自己发通知
+         if (!topic.getOpenId().equals(openId)) {
+             notificationService.sendNotification(openId, topic.getOpenId(), NotificationEnum.COMMENT, topic.getId(), content);
+         }
         return comment;
     }
 
@@ -139,6 +161,14 @@ public class CommentService {
         return commentMapper.findCommentByTopicId(topicId);
     }
 
+    /**
+     * 递归排序
+     *
+     * @param comments
+     * @param newComments
+     * @param layer
+     * @return
+     */
     private List<Map> sortLayer(List<Map> comments, List<Map> newComments, Integer layer) {
         if (comments == null || comments.size() == 0) {
             return newComments;
@@ -155,7 +185,6 @@ public class CommentService {
         } else {
             for (int index = 0; index < newComments.size(); index++) {
                 Map newComment = newComments.get(index);
-
                 List<Map> findComments = new ArrayList<>();
                 comments.forEach(map -> {
                     if (Objects.equals(map.get("comment_id"), newComment.get("id"))) {
@@ -164,7 +193,6 @@ public class CommentService {
                     }
                 });
                 comments.removeAll(findComments);
-
                 newComments.addAll(newComments.indexOf(newComment) + 1, findComments);
                 index = newComments.indexOf(newComment) + findComments.size();
             }

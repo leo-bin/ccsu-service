@@ -36,6 +36,7 @@ public class FeedController {
 
     /**
      * 最新的10条
+     * @apiNote 这里默认查询最新的消息只有招新和通知两个类别
      *
      * @return
      */
@@ -83,7 +84,6 @@ public class FeedController {
         if (!CATEGORY_MAP.containsKey(category)) {
             throw new ApiException(-1, "category不存在");
         }
-
         List<InformationDO> informations = informationService.getInformationByCategory(category, start, offset);
         Collections.reverse(informations);
         return RespUtil.success(informations);

@@ -3,8 +3,9 @@ package com.hang.pojo.data;
 import lombok.Data;
 
 /**
+ * @author LEO-BIN
+ * @date 2019/6/19
  * 导师实体类
- *
  */
 @Data
 public class AdviserDO {

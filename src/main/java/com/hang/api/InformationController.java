@@ -1,19 +1,12 @@
 package com.hang.api;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.hang.annotation.OpenId;
 import com.hang.aop.StatisticsTime;
-import com.hang.enums.ApplyStatusEnum;
-import com.hang.enums.InformationCategoryEnum;
-import com.hang.enums.ResultEnum;
-import com.hang.exceptions.ApiAssert;
 import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.InformationDO;
 import com.hang.pojo.vo.BaseRes;
-import com.hang.service.ApplyService;
 import com.hang.service.HotAndCacheService;
 import com.hang.service.InformationService;
-import com.hang.service.StudentService;
 import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,9 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 import static com.hang.constant.InformationConstant.CATEGORY_MAP;
 
@@ -43,14 +34,7 @@ public class InformationController {
     private InformationService informationService;
 
     @Autowired
-    private ApplyService applyService;
-
-    @Autowired
-    private StudentService studentService;
-
-    @Autowired
     private HotAndCacheService hotAndCacheService;
-
 
     /**
      * 列表类目list
@@ -59,7 +43,7 @@ public class InformationController {
      */
     @StatisticsTime("categoryList")
     @ApiOperation("请求类别列表")
-    @GetMapping("categoryList")
+    @GetMapping("/categoryList")
     public BaseRes categoryList() {
         return RespUtil.success(CATEGORY_MAP);
     }
@@ -76,7 +60,9 @@ public class InformationController {
     @StatisticsTime("createInformation")
     @ApiOperation("请求一个information")
     @PostMapping("/createInformation")
-    public BaseRes createInformation(String title, String content, String authors, String category,String notes) {
+    public BaseRes createInformation(@RequestParam String title,@RequestParam String content,
+                                     @RequestParam String authors,@RequestParam String category,
+                                     @RequestParam String notes) {
         if (!CATEGORY_MAP.containsKey(category)) {
             throw new ApiException(-1, "category不存在");
         }
@@ -150,93 +136,6 @@ public class InformationController {
         return RespUtil.success(informationService.getInformationById(id));
     }
 
-    /**
-     * activity 活动申请
-     *
-     * @param openId
-     * @param informationId
-     * @return
-     */
-    @StatisticsTime("activityApply")
-    @ApiOperation("申请活动")
-    @PostMapping("/applyActivity")
-    public BaseRes activityApply(@OpenId String openId, int informationId) {
-        ApiAssert.checkOpenId(openId);
-        if (StringUtils.isEmpty(openId)) {
-            return RespUtil.error(ResultEnum.CAN_NOT_GET_OPEN_ID);
-        }
-
-        InformationDO information = informationService.getInformationById(informationId);
-        if (information == null) {
-            return RespUtil.error(-1, "找不到information");
-        }
-        if (!CATEGORY_MAP.containsKey(information.getCategory())) {
-            return RespUtil.error(-1, "不是活动，无法报名");
-        }
-        applyService.apply(information.getId(), openId);
-        return RespUtil.success();
-    }
-
-    /**
-     * 更新申请状态为成功
-     *
-     * @param applyId
-     * @return
-     */
-    @StatisticsTime("modifyStatusSuccess")
-    @ApiOperation("更新activity 申请状态为成功")
-    @GetMapping("/modifyActivityStatusSuccess")
-    public BaseRes modifyStatusSuccess(String openId, int applyId) {
-        ApiAssert.checkOpenId(openId);
-        studentService.addComprehensiveFraction(openId, 1.0);
-        applyService.updateApplyStatus(applyId, ApplyStatusEnum.SUCCESS);
-        return RespUtil.success();
-    }
-
-    /**
-     * 更新申请状态为失败
-     *
-     * @param applyId
-     * @return
-     */
-    @StatisticsTime("modifyStatusFailure")
-    @ApiOperation("更新activity 申请状态为失败")
-    @GetMapping("/modifyActivityStatusFailure")
-    public BaseRes modifyStatusFailure(int applyId) {
-        applyService.updateApplyStatus(applyId, ApplyStatusEnum.FAILURE);
-        return RespUtil.success();
-    }
-
-
-    @StatisticsTime("myActivity")
-    @ApiOperation("我参加的活动")
-    @GetMapping("/myActivity")
-    public BaseRes myActivity(@OpenId String openId) {
-        return RespUtil.success(informationService.getInformationByOpenId(openId));
-    }
-
-    /**
-     * 查询申请列表
-     *
-     * @return
-     */
-    @StatisticsTime("listApply")
-    @GetMapping("/listApply")
-    public BaseRes listApply(@RequestParam(required = false, defaultValue = "0") int start,
-                             @RequestParam(required = false, defaultValue = "100") int offset) {
-        return RespUtil.success(applyService.getAllApply(start, offset));
-    }
-
-    @StatisticsTime("listActivity")
-    @GetMapping("/listActivity")
-    public BaseRes listActivity(@RequestParam(required = false, defaultValue = "0") int start,
-                                @RequestParam(required = false, defaultValue = "100") int offset) {
-        List<InformationDO> informations = informationService.getInformationByCategory(InformationCategoryEnum.ACTIVITY.name(),
-                start, offset);
-
-        Collections.reverse(informations);
-        return RespUtil.success(informations);
-    }
 
     @StatisticsTime("listAll")
     @GetMapping("/listAll")

@@ -11,8 +11,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
@@ -28,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author BIN
+ * @author free-go
  * @date 2019/7/19
  * @function:
  * 成绩爬取服务层
@@ -47,7 +46,7 @@ public class GradeCrawlerService {
      * @return 成功返回true 失败返回false
      */
     public HttpClient login(String USERNAME, String PASSWORD) {
-        HttpClient httpclient = new DefaultHttpClient(new ThreadSafeClientConnManager());
+        HttpClient httpclient = HttpClientBuilder.create().build();
         HttpPost httpost = new HttpPost(LOGIN_URL);
         List<NameValuePair> nvps = new ArrayList<NameValuePair>();
         nvps.add(new BasicNameValuePair("USERNAME", USERNAME));

@@ -5,13 +5,17 @@
 <mapper namespace="com.hang.dao.TeamDAO">
 
     <insert id="insertTeam">
-      insert into team(name, honor, log, members, advisor)
-      values (#{name}, #{honor}, #{log}, #{members}, #{advisor})
+        <!-- LAST_INSERT_ID() 返回插入数据后的最新的主键自增值给id -->
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into team(name, honor, log, members, advisor)
+        values (#{name}, #{honor}, #{log}, #{members}, #{advisor})
     </insert>
 
     <insert id="insert2TeamUser">
-      insert into team_user(user_id, team_id)
-      values(#{userId}, #{teamId})
+        insert into team_user(user_id, team_id)
+        values(#{userId}, #{teamId})
     </insert>
 
     <insert id="insert2TeamProject">

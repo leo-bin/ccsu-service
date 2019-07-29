@@ -23,6 +23,13 @@
         </div>
     </div>
 
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">Feed流内容</label>
+        <div class="layui-input-block">
+            <textarea name="content" placeholder="请输入内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
     <div class="layui-form-item">
         <label class="layui-form-label">作者</label>
         <div class="layui-input-block">
@@ -36,18 +43,19 @@
         <div class="layui-input-block">
             <select name="category" lay-filter="aihao">
                 <option value=""></option>
+                <option value="RECRUITMENT">招新</option>
+                <option value="NOTIFICATION">通知</option>
                 <option value="ACTIVITY">活动</option>
-                <option value="PUBLIC" selected="">公示</option>
-                <option value="RECRUITMENT">招聘</option>
-                <option value="NOTIFY">通知</option>
+                <option value="PUBLIC">公示</option>
+                <option value="TECHNOLOGY">技术</option>
             </select>
         </div>
     </div>
 
     <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">Feed流内容</label>
+        <label class="layui-form-label">注解</label>
         <div class="layui-input-block">
-            <textarea name="content" placeholder="请输入内容" class="layui-textarea"></textarea>
+            <textarea name="notes" placeholder="请输入内容" class="layui-textarea"></textarea>
         </div>
     </div>
 
@@ -134,6 +142,5 @@
 
     });
 </script>
-
 </body>
 </html>

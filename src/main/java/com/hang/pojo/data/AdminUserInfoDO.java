@@ -3,6 +3,8 @@ package com.hang.pojo.data;
 import lombok.Data;
 
 /**
+ * @author LEO-BIN
+ * @date 2019/6/20
  * 管理员信息实体类
  */
 @Data

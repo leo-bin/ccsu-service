@@ -21,6 +21,11 @@ public interface StudentDAO {
     StudentDO selectStudentDOByOpenId(@Param("openId") String openId);
 
     /**
+     * 根据学号查询
+     */
+    StudentDO getStudentInfoByJwcAccount(@Param("jwcAccount") String jwcAccount);
+
+    /**
      * 插入
      *
      * @param studentDO
@@ -36,7 +41,7 @@ public interface StudentDAO {
      */
     int update(StudentDO studentDO);
 
-    int updateComprehensiveFraction(@Param("comprehensiveFraction") Double comprehensiveFraction, @Param("openId") String openId);
+    int updateStudentInfo(StudentDO studentDO);
 
     List<StudentDO> list(@Param("start") int start, @Param("offset") int offset);
 

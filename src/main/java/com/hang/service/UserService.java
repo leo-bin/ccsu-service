@@ -61,6 +61,13 @@ public class UserService {
         return userInfo;
     }
 
+    /**
+     * 根据学号查询用户信息
+     */
+    public UserInfoDO getUserInfoByJwcAccount(String jwcAccount){
+        return userInfoDAO.getUserInfoByJwcAccount(jwcAccount);
+    }
+
 
     /**
      * 更新用户信息

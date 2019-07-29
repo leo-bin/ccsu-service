@@ -21,14 +21,12 @@
                 <li class="layui-nav-item layui-nav-itemed">
                     <a class="" href="javascript:;">主页</a>
                     <dl class="layui-nav-child">
-                        <dd><a id="activityApply" href="#">活动申请审核</a></dd>
-                        <dd><a id="activityList" href="#">活动列表</a></dd>
                         <dd><a id="feedList" href="#">首页feed列表</a></dd>
                         <dd><a id="studentList" href="#">学生列表</a></dd>
                         <dd><a id="getAdvisers" href="#">导师列表</a></dd>
                         <dd><a id="teamList" href="#">团队列表</a></dd>
                         <dd><a id="projectList" href="#">项目列表</a></dd>
-                        <dd><a id="releaseActivity" href="#">发布首页information信息</a></dd>
+                        <dd><a id="releaseInformation" href="#">发布首页feed信息</a></dd>
                         <dd><a id="releaseTeam" href="#">发布团队信息</a></dd>
                         <dd><a id="releaseAdviserInfo" href="#">发布导师信息</a></dd>
                         <dd><a id="releaseTeamMember" href="#">增加团队成员</a></dd>
@@ -57,17 +55,10 @@
     });
     //用于页面加载时候显示
     $(document).ready(function () {
-        $("#iframe").attr('src', '/page/applyList');
+        $("#iframe").attr('src', '/page/feedList');
     });
 
     //根据点击进行跳转
-    $("#activityApply").click(function () {
-        $("#iframe").attr('src', '/page/applyList');
-    });
-
-    $("#activityList").click(function () {
-        $("#iframe").attr('src', '/page/activityList');
-    });
 
     $("#feedList").click(function () {
         $("#iframe").attr('src', '/page/feedList');
@@ -89,8 +80,8 @@
         $("#iframe").attr('src', '/page/adviserList');
     });
 
-    $("#releaseActivity").click(function () {
-        $("#iframe").attr('src', '/page/releaseActivity');
+    $("#releaseInformation").click(function () {
+        $("#iframe").attr('src', '/page/releaseInformation');
     });
 
     $("#releaseTeam").click(function () {

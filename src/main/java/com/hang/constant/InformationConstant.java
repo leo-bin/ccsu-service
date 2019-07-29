@@ -18,15 +18,17 @@ public class InformationConstant {
 
     public static final String INFORMATION_PREFIX = "INFORMATION_PREFIX::";
 
+    public static final String SYSTEM_NOTIFICATION_SUFFIX="邀请你参加团队，请及时完善你的个人信息";
+
     public static final int INFORMATION_EXPIRE = 0;
 
     static {
         CATEGORY_MAP.put("LATEST", "最新");
         CATEGORY_MAP.put("HOT", "最热");
-        CATEGORY_MAP.put("ACTIVITY", "活动");
-        CATEGORY_MAP.put("NOTIFY", "通知");
+        CATEGORY_MAP.put("TECHNOLOGY", "技术");
         CATEGORY_MAP.put("RECRUITMENT", "招聘");
         CATEGORY_MAP.put("PUBLIC", "公示");
+        CATEGORY_MAP.put("NOTIFICATION", "通知");
     }
 
 }

@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * @author LEO-BIN
+ * @date 2019/6/20
+ */
 @Repository
 public interface AdviserDAO {
 

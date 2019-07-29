@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @Api("主题评论接口")
 @RestController
-@RequestMapping("/api/comment")
+@RequestMapping("/bbs/comment")
 public class CommentApiController {
 
     @Autowired
@@ -59,11 +59,9 @@ public class CommentApiController {
         ApiAssert.notEmpty(content, "评论内容不能为空");
         ApiAssert.notNull(topicId, "话题ID不存在");
         ApiAssert.checkOpenId(openId);
-
         TopicWithBLOBs topic = topicService.findById(topicId);
         ApiAssert.notNull(topic, "回复的话题不存在");
-
-        Comment comment = commentService.createComment(openId, topic, null, content);
+        Comment comment = commentService.createComment(openId, topic, content);
         return RespUtil.success(comment);
     }
 

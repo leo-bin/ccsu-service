@@ -1,6 +1,7 @@
 package com.hang.service;
 
 
+import com.hang.constant.SchoolConstant;
 import com.hang.dao.StudentDAO;
 import com.hang.dao.UserInfoDAO;
 import com.hang.enums.ResultEnum;
@@ -54,14 +55,17 @@ public class StudentService {
         }
         else {
             userService.updateJwcAccount(openId, account);
+            SchoolConstant schoolConstant=new SchoolConstant();
             UserInfoDO userInfoDO = userInfoDAO.selectByOpenId(openId);
             StudentDO studentDO = new StudentDO();
             studentDO.setJwcAccount(userInfoDO.getJwcAccount());
             studentDO.setNickName(userInfoDO.getNickName());
             studentDO.setGrade(userInfoDO.getJwcAccount().substring(1, 5));
             studentDO.setOpenId(userInfoDO.getOpenId());
+            studentDO.setDepartment(schoolConstant.getDepartment(account));
+            studentDO.setAvatar(userInfoDO.getAvatarUrl());
             studentDO.setCode(code);
-            StudentDO studentInfo = getStudentInfo(openId);
+            StudentDO studentInfo = getStudentInfoByOpenId(openId);
             if (Objects.isNull(studentInfo)) {
                 saveStudentInfo(studentDO);
             } else {
@@ -70,7 +74,7 @@ public class StudentService {
             userService.updateUserRole(openId,0);
             //redis缓存穿透
             UserInfoDO userInfo=userInfoDAO.selectByOpenId(openId);
-            userCache.updateUserInfo(openId,userInfoDO);
+            userCache.updateUserInfo(openId,userInfo);
         }
     }
 
@@ -82,7 +86,7 @@ public class StudentService {
      * @param openId
      * @return
      */
-    public StudentDO getStudentInfo(String openId) {
+    public StudentDO getStudentInfoByOpenId(String openId) {
         if (StringUtils.isBlank(openId)) {
             throw new ApiException(-1, "openId为空");
         }
@@ -94,6 +98,22 @@ public class StudentService {
         }
         return studentDO;
     }
+
+    /**
+     * 根据学号查
+     */
+    public StudentDO getStudentInfoByJwcAccount(String jwcAccount) {
+        if (StringUtils.isBlank(jwcAccount)) {
+            throw new ApiException(-1, "openId为空");
+        }
+        StudentDO studentDO = studentDAO.getStudentInfoByJwcAccount(jwcAccount);
+        if (studentDO != null) {
+            return studentDO;
+        }
+        return null;
+    }
+
+
 
     public void saveStudentInfo(StudentDO studentDO) {
         int i = studentDAO.insert(studentDO);
@@ -108,14 +128,6 @@ public class StudentService {
         ApiAssert.nonEqualInteger(i, 1, "更新失败");
     }
 
-    public void addComprehensiveFraction(String openId, Double comprehensiveFraction) {
-        StudentDO studentInfo = getStudentInfo(openId);
-        if (studentInfo.getComprehensiveFraction() != null) {
-            comprehensiveFraction += studentInfo.getComprehensiveFraction();
-        }
-        int i = studentDAO.updateComprehensiveFraction(comprehensiveFraction, openId);
-        ApiAssert.nonEqualInteger(i, 1, "修改失败");
-    }
 
     public List<StudentDO> studentList(int start, int offset) {
         List<StudentDO> studentDOS = studentDAO.list(start, offset);

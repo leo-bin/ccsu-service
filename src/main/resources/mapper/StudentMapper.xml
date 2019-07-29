@@ -6,8 +6,8 @@
 
     <insert id="insert">
         insert into
-        student_info(jwc_account, open_id, quality_fraction, comprehensive_fraction, grade, nick_name, department,code)
-        values(#{jwcAccount}, #{openId}, #{qualityFraction}, #{comprehensiveFraction}, #{grade}, #{nickName}, #{department},#{code})
+        student_info(jwc_account, open_id, real_name, title, grade, nick_name, department,code,avatar)
+        values(#{jwcAccount}, #{openId}, #{realName}, #{title}, #{grade}, #{nickName}, #{department},#{code},#{avatar})
     </insert>
 
     <update id="update">
@@ -35,14 +35,27 @@
         where open_id = #{openId}
     </update>
 
-    <update id="updateComprehensiveFraction">
-        update student_info set comprehensive_fraction = #{comprehensiveFraction}
-        where open_id = #{openId}
-    </update>
 
+    <update id="updateStudentInfo">
+        update student_info
+        <set>
+            <if test="realName != null">
+                real_name = #{realName},
+            </if>
+
+            <if test="title!=null">
+                title=#{title}
+            </if>
+        </set>
+        where jwc_account = #{jwcAccount}
+    </update>
 
     <select id="selectStudentDOByOpenId" resultType="com.hang.pojo.data.StudentDO">
         select * from student_info where open_id = #{openId}
+    </select>
+
+    <select id="getStudentInfoByJwcAccount" resultType="com.hang.pojo.data.StudentDO">
+        select * from student_info where jwc_account = #{jwcAccount}
     </select>
 
     <select id="list" resultType="com.hang.pojo.data.StudentDO">

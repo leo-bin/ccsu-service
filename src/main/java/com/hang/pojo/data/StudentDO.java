@@ -17,14 +17,19 @@ public class StudentDO {
     private String jwcAccount;
 
     /**
-     * 素拓
+     * 真实姓名
      */
-    private Double qualityFraction;
+    private String realName;
 
     /**
-     * 综测
+     * 学生头衔，具体班级或者是其他的称呼
      */
-    private Double comprehensiveFraction;
+    private String title;
+
+    /**
+     * 微信头像url
+     */
+    private String avatar;
 
     /**
      * 学生年级

@@ -3,7 +3,7 @@ package com.hang.pojo.data;
 import lombok.Data;
 
 /**
- * @author BIN
+ * @author LEO-BIN
  * @date 2019/7/15
  */
 @Data

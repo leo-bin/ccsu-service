@@ -132,14 +132,6 @@ public class SchoolController {
     }
 
 
-    @ApiOperation("加综测")
-    @GetMapping("/addComprehensiveFraction")
-    public BaseRes addComprehensiveFraction(@OpenId String openId, Double comprehensiveFraction) {
-        studentService.addComprehensiveFraction(openId, comprehensiveFraction);
-        return RespUtil.success();
-    }
-
-
     @ApiOperation("学生列表")
     @GetMapping("/studentList")
     public BaseRes studentList(@RequestParam(required = false, defaultValue = "0") int start,
@@ -160,7 +152,7 @@ public class SchoolController {
         ApiAssert.checkOpenId(openId);
         UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
         jwcAccountCheck(userInfo);
-        StudentDO studentDO=studentService.getStudentInfo(openId);
+        StudentDO studentDO=studentService.getStudentInfoByOpenId(openId);
         return RespUtil.success(schoolService.getGrader(userInfo.getJwcAccount(), semeter,studentDO.getCode()));
     }
 

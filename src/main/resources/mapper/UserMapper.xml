@@ -8,6 +8,10 @@
         select * from t_user_info where open_id = #{openId}
     </select>
 
+    <select id="getUserInfoByJwcAccount" resultType="com.hang.pojo.data.UserInfoDO">
+        select * from t_user_info where jwc_account = #{jwcAccount}
+    </select>
+
     <select id="isExist" resultType="java.lang.Boolean">
         select count(id) from t_user_info where open_id = #{openId}
     </select>

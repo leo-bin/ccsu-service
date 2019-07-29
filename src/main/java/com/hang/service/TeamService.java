@@ -4,9 +4,11 @@ package com.hang.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.google.common.collect.Lists;
+import com.hang.dao.NotificationDAO;
+import com.hang.dao.StudentDAO;
 import com.hang.dao.TeamDAO;
-import com.hang.pojo.data.ProjectDO;
-import com.hang.pojo.data.TeamDO;
+import com.hang.enums.NotificationEnum;
+import com.hang.pojo.data.*;
 import com.hang.pojo.vo.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.hang.constant.InformationConstant.SYSTEM_NOTIFICATION_SUFFIX;
 
 /**
  * @author hangs.zhang
@@ -29,14 +33,36 @@ public class TeamService {
     private TeamDAO teamDAO;
 
     @Autowired
+    private StudentDAO studentDAO;
+
+    @Autowired
+    private NotificationDAO notificationDAO;
+
+    @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private NotificationService notificationService;
+
+
     @Transactional(rollbackFor = Exception.class)
-    public TeamVO createTeam(String name, String advisor) {
+    public TeamVO createTeam(String openId,String name, String advisor) {
         TeamDO teamDO = new TeamDO();
         teamDO.setName(name);
         teamDO.setAdvisor(advisor);
-        teamDAO.insertTeam(teamDO);
+        Integer id=teamDAO.insertTeam(teamDO);
+        //获取插入数据库后的teamId
+        Integer teamId=teamDO.getId();
+        StudentDO studentDO=studentDAO.selectStudentDOByOpenId(openId);
+        //teamId和openId进行绑定
+        if (id>=1&&studentDO!=null){
+            GroupMemberVO groupMemberVO=new GroupMemberVO();
+            groupMemberVO.setAvatar(studentDO.getAvatar());
+            groupMemberVO.setName(studentDO.getRealName());
+            groupMemberVO.setTitle(studentDO.getTitle());
+            groupMemberVO.setRole("组长");
+            addMember2Team(openId,teamId,groupMemberVO,openId);
+        }
         return teamDO2VO(teamDO);
     }
 
@@ -81,9 +107,10 @@ public class TeamService {
      * @param teamId
      * @param groupMemberVO
      */
-    public void addMember2Team(int teamId, GroupMemberVO groupMemberVO) {
+    public void addMember2Team(String openId, int teamId, GroupMemberVO groupMemberVO,String targetOpenId) {
         TeamDO teamDO = teamDAO.selectByTeamId(teamId);
         String members = teamDO.getMembers();
+        SystemNotificationDO systemNotificationDO=new SystemNotificationDO();
         ArrayList<GroupMemberVO> groupMemberVOS = JSON.parseObject(members, new TypeReference<ArrayList<GroupMemberVO>>() {
         });
         if(groupMemberVOS == null) {
@@ -92,16 +119,16 @@ public class TeamService {
         groupMemberVOS.add(groupMemberVO);
         teamDO.setMembers(JSON.toJSONString(groupMemberVOS));
         teamDAO.updateTeam(teamDO);
-    }
-
-    /**
-     * 添加userId到team
-     *
-     * @param teamId
-     * @param openId
-     */
-    public void addUser2Team(int teamId, String openId) {
-        teamDAO.insert2TeamUser(teamId, openId);
+        //将成员和团队进行绑定
+        teamDAO.insert2TeamUser(teamId, targetOpenId);
+        //自己不能给自己发通知
+        if (!openId.equals(targetOpenId)){
+            systemNotificationDO.setNoteType(NotificationEnum.SYSTEM_NOTE_INVITATION.name());
+            systemNotificationDO.setMessage(teamDO.getName()+SYSTEM_NOTIFICATION_SUFFIX);
+            notificationDAO.insertSystemNote(systemNotificationDO);
+            Integer notificationId=systemNotificationDO.getId();
+            notificationService.sendNotification(openId,targetOpenId, NotificationEnum.SYSTEM_NOTE_INVITATION,notificationId,teamDO.getName()+SYSTEM_NOTIFICATION_SUFFIX);
+        }
     }
 
     /**
@@ -116,6 +143,11 @@ public class TeamService {
     }
 
 
+    /**
+     * 添加荣誉到team
+     * @param teamId
+     * @param honor
+     */
     public void addHonor2Team(int teamId, String honor) {
         TeamDO teamDO = teamDAO.selectByTeamId(teamId);
         String honors = teamDO.getHonor();
@@ -128,6 +160,12 @@ public class TeamService {
         teamDAO.updateTeam(teamDO);
     }
 
+    /**
+     * 添加团队日志到team
+     * @param teamId
+     * @param time
+     * @param log
+     */
     public void addLog2Team(int teamId, Date time, String log) {
         TeamDO teamDO = teamDAO.selectByTeamId(teamId);
         ArrayList<TeamLogVO> teamLogVOS;
@@ -136,7 +174,6 @@ public class TeamService {
         } else {
             teamLogVOS = JSON.parseObject(teamDO.getLog(), new TypeReference<ArrayList<TeamLogVO>>() {});
         }
-
         teamLogVOS.add(new TeamLogVO(time, log));
         teamDO.setLog(JSON.toJSONString(teamLogVOS));
         teamDAO.updateTeam(teamDO);
@@ -149,6 +186,7 @@ public class TeamService {
      */
     private TeamVO teamDO2VO(TeamDO teamDO) {
         TeamVO teamVO = new TeamVO();
+        //反序列化
         ArrayList<GroupMemberVO> groupMemberVOS = JSON.parseObject(teamDO.getMembers(), new TypeReference<ArrayList<GroupMemberVO>>() {
         });
         teamVO.setGroupMemberVOS(groupMemberVOS);
@@ -211,6 +249,16 @@ public class TeamService {
      */
     public Boolean updateTeamInfo(TeamDO teamDO){
         return teamDAO.updateTeam(teamDO);
+    }
+
+    /**
+     * 完善团队成员信息
+     */
+    public void updateTeamMemberInfo(String realName, String title, String jwcAccount) {
+        StudentDO studentDO = studentDAO.getStudentInfoByJwcAccount(jwcAccount);
+        studentDO.setRealName(realName);
+        studentDO.setTitle(title);
+        studentDAO.updateStudentInfo(studentDO);
     }
 
 }

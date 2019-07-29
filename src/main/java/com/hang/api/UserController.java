@@ -138,7 +138,7 @@ public class UserController {
         TeacherDO teacherDO=null;
         Integer roleId=userService.getUserInfoByOpenId(openId).getRoleId();
         if (roleId.equals(0)||roleId.equals(2)){
-           studentInfo = studentService.getStudentInfo(openId);
+           studentInfo = studentService.getStudentInfoByOpenId(openId);
             if (studentInfo == null) {
                 return RespUtil.error(ResultEnum.ACCOUNT_NOT_BIND);
             }
@@ -153,26 +153,6 @@ public class UserController {
         return RespUtil.success(teacherDO);
     }
 
-
-    /**
-     * 更改绑定
-     * @param openId
-     * @param account
-     * @param code
-     * @return
-     */
-    @StatisticsTime("modifyInfo")
-    @ApiOperation("更改绑定")
-    @GetMapping("/modifyInfo")
-    public BaseRes modifyStudentInfo(@OpenId String openId, String account, String code) {
-        ApiAssert.checkOpenId(openId);
-        UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
-        if (StringUtils.isEmpty(account)) {
-            account = userInfo.getJwcAccount();
-        }
-        bind(openId, account, code);
-        return RespUtil.success();
-    }
 
     /**
      * 教师给学生授权

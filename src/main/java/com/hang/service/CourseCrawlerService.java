@@ -9,8 +9,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
@@ -23,10 +22,9 @@ import static com.hang.constant.SchoolConstant.LOGIN_URL;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
- * @author BIN
+ * @author free-go
  * @date 2019/7/19
  * @function:
  * 网络爬虫服务层
@@ -45,7 +43,7 @@ public class CourseCrawlerService {
      * @return 成功返回true 失败返回false
      */
     public HttpClient login(String USERNAME, String PASSWORD) {
-        HttpClient httpclient = new DefaultHttpClient(new ThreadSafeClientConnManager());
+        HttpClient httpclient = HttpClientBuilder.create().build();
         HttpPost httpost = new HttpPost(LOGIN_URL);
 
         List<NameValuePair> nvps = new ArrayList<NameValuePair>();

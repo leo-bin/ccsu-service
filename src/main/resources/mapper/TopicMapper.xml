@@ -267,6 +267,7 @@
       weight            = #{weight,jdbcType=DOUBLE}
     WHERE id = #{id,jdbcType=INTEGER}
   </update>
+
   <!--自定义方法-->
   <select id="findTopic" resultType="map">
     select t.*, u.nick_name, u.avatar_url from topic t left join t_user_info u on t.open_id = u.open_id

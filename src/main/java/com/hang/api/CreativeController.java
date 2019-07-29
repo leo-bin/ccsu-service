@@ -15,7 +15,7 @@ import java.util.List;
 
 
 /**
- * @author  BIN
+ * @author  LEO-BIN
  * @date 20197/15
  * 创新创业控制器层
  */
@@ -124,5 +124,4 @@ public class CreativeController {
         adviserService.updateAdviserInfo(adviserDO);
         return RespUtil.success();
     }
-
 }

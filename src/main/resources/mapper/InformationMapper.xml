@@ -17,7 +17,7 @@
           content = #{content},
           release_time = #{releaseTime},
           category = #{category},
-          category_name = #{categoryName},
+          category_name = #{categoryName}
         where id = #{id}
     </update>
 
@@ -46,4 +46,7 @@
       select * from information where category = #{category} limit #{start}, #{offset}
     </select>
 
+    <select id="listNoteAndRecruitment" resultType="com.hang.pojo.data.InformationDO">
+        select * from information where category ='RECRUITMENT' or category ='NOTIFICATION' limit #{start}, #{offset}
+    </select>
 </mapper>

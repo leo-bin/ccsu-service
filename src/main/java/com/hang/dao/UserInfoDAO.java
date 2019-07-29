@@ -17,6 +17,8 @@ public interface UserInfoDAO {
 
     UserInfoDO selectByOpenId(@Param("openId") String openId);
 
+    UserInfoDO getUserInfoByJwcAccount(String jwcAccount);
+
     int updateJwcAccount(@Param("openId") String openId, @Param("jwcAccount") String jwcAccount);
 
     int insert(UserInfoDO userInfo);

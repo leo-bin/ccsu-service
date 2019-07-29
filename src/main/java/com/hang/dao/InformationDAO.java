@@ -27,6 +27,14 @@ public interface InformationDAO {
 
     ArrayList<InformationDO> list(@Param("start") int start, @Param("offset") int offset);
 
+    /**
+     * 只查询通知和招新
+     * @param start
+     * @param offset
+     * @return
+     */
+    ArrayList<InformationDO> listNoteAndRecruitment(@Param("start") int start, @Param("offset") int offset);
+
     ArrayList<InformationDO> listByCategory(@Param("category") String category, @Param("start") int start,
                                             @Param("offset") int offset);
 

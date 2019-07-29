@@ -7,14 +7,12 @@ import com.hang.annotation.OpenId;
 import com.hang.aop.StatisticsTime;
 import com.hang.enums.ResultEnum;
 import com.hang.exceptions.ApiAssert;
-import com.hang.pojo.data.ProjectDO;
-import com.hang.pojo.data.TeacherDO;
-import com.hang.pojo.data.TeamDO;
-import com.hang.pojo.data.UserInfoDO;
+import com.hang.pojo.data.*;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.pojo.vo.GroupMemberVO;
 import com.hang.pojo.vo.ProjectVO;
 import com.hang.pojo.vo.TeamVO;
+import com.hang.service.StudentService;
 import com.hang.service.TeacherService;
 import com.hang.service.TeamService;
 import com.hang.service.UserService;
@@ -43,6 +41,9 @@ public class TeamController {
     private TeamService teamService;
 
     @Autowired
+    private StudentService studentService;
+
+    @Autowired
     private TeacherService teacherService;
 
     @Autowired
@@ -51,10 +52,14 @@ public class TeamController {
     @ApiOperation("创建团队")
     @StatisticsTime("createTeam")
     @PostMapping("/createTeam")
-    public BaseRes createTeam(@RequestParam String name, @RequestParam String advisor) {
-        log.info("advisor:{}", advisor);
-        teamService.createTeam(name, advisor);
-        return RespUtil.success();
+    public BaseRes createTeam(@OpenId String openId,@RequestParam String name, @RequestParam String advisor) {
+        ApiAssert.checkOpenId(openId);
+        UserInfoDO userInfoDO=userService.getUserInfoByOpenId(openId);
+        if (userInfoDO.getRoleId().equals(2)){
+            teamService.createTeam(openId,name, advisor);
+            return RespUtil.success();
+        }
+        return RespUtil.error(ResultEnum.AUTHORIZE_ERROR);
     }
 
     /**
@@ -76,16 +81,16 @@ public class TeamController {
      * @param openId
      * @return
      */
-    @StatisticsTime("getTeamHomePage")
+    @StatisticsTime("getMyTeam")
     @ApiOperation("获取用户自己的团队以及项目信息")
-    @GetMapping("/getTeamHomePage")
-    public BaseRes getTeamHomePage(@OpenId String openId) {
+    @GetMapping("/getMyTeam")
+    public BaseRes getMyTeam(@OpenId String openId) {
         log.info("checkOpenId : {}", openId);
         ApiAssert.checkOpenId(openId);
         UserInfoDO userInfoDO=userService.getUserInfoByOpenId(openId);
         Integer roleId=userInfoDO.getRoleId();
         HashMap<String, Object> result = Maps.newHashMap();
-        if (roleId.equals(2)){
+        if (roleId.equals(1)){
             TeacherDO teacherDO=teacherService.getTeacherInfo(openId);
             List<TeamVO> teams=teamService.getTeamsByAdvisor(teacherDO.getName());
             result.put("teams", teams);
@@ -103,20 +108,6 @@ public class TeamController {
         return RespUtil.success(result);
     }
 
-    /**
-     * 根据openId查询团队数据
-     *
-     * @param openId
-     * @return
-     */
-    @StatisticsTime("getTeamByUserId")
-    @ApiOperation("查询用户所属的团队")
-    @GetMapping("/getTeamByUserId")
-    public BaseRes getTeamByUserId(@OpenId String openId) {
-        ApiAssert.checkOpenId(openId);
-        List<TeamVO> teamVOS = teamService.getTeamByUserId(openId);
-        return RespUtil.success(teamVOS);
-    }
 
     /**
      * 根据teamId查询团队数据
@@ -150,32 +141,24 @@ public class TeamController {
      * 增加成员
      *
      * @param teamId
-     * @param groupMemberVO
+     * @param jwcAccount
      * @return
+     * @apiNote @ModelAttribute: 数据绑定，将url对应的请求参数和对象进行一一对应的绑定
      */
     @StatisticsTime("addMember2Team")
     @ApiOperation("team添加成员")
     @GetMapping("/addMember2Team")
-    public BaseRes addMember2Team(@RequestParam int teamId, @ModelAttribute GroupMemberVO groupMemberVO) {
-        teamService.addMember2Team(teamId, groupMemberVO);
+    public BaseRes addMember2Team(@OpenId String openId,@RequestParam int teamId, @RequestParam String jwcAccount) {
+        StudentDO studentDO=studentService.getStudentInfoByJwcAccount(jwcAccount);
+        GroupMemberVO groupMemberVO=new GroupMemberVO();
+        groupMemberVO.setAvatar(studentDO.getAvatar());
+        groupMemberVO.setName(studentDO.getRealName());
+        groupMemberVO.setTitle(studentDO.getTitle());
+        groupMemberVO.setRole("组员");
+        teamService.addMember2Team(openId,teamId, groupMemberVO,studentDO.getOpenId());
         return RespUtil.success();
     }
 
-    /**
-     * 增加wxUser到team
-     *
-     * @param teamId
-     * @param openId
-     * @return
-     */
-    @StatisticsTime("addWxUser2Team")
-    @ApiOperation("项目添加微信成员")
-    @GetMapping("/addUser2Team")
-    public BaseRes addUser2Team(@RequestParam int teamId, @OpenId String openId) {
-        ApiAssert.checkOpenId(openId);
-        teamService.addUser2Team(teamId, openId);
-        return RespUtil.success();
-    }
 
     /**
      * 创建project，然后添加到team
@@ -254,5 +237,13 @@ public class TeamController {
         }
     }
 
-
+    /**
+     * 根据学号查询学生信息
+     */
+    @StatisticsTime("getStudentInfoByJwcAccount")
+    @ApiOperation("根据学号查询")
+    @PostMapping("/getStudentInfoByJwcAccount")
+    public BaseRes getStudentInfoByJwcAccount(@RequestParam String jwcAccount){
+        return RespUtil.success(studentService.getStudentInfoByJwcAccount(jwcAccount));
+    }
 }

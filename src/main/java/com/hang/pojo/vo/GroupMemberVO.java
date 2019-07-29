@@ -18,7 +18,7 @@ public class GroupMemberVO {
     private String title;
 
     /**
-     * 角色
+     * 角色：组长，组员
      */
     private String role;
 
