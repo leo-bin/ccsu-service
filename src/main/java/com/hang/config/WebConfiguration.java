@@ -72,10 +72,9 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .excludePathPatterns("/information/listAll")
                 .excludePathPatterns("/information/createInformation")
                 .excludePathPatterns("/information/removeInformation")
-//                .excludePathPatterns("/information/modifyActivityStatusSuccess")
-//                .excludePathPatterns("/information/modifyActivityStatusFailure")
                 .excludePathPatterns("/school/studentList")
-                .excludePathPatterns("/user/login");
+                .excludePathPatterns("/user/login")
+                .excludePathPatterns("/notification/**");
     }
 
     @Override

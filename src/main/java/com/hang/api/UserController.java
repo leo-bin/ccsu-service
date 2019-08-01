@@ -9,7 +9,7 @@ import com.hang.annotation.OpenId;
 import com.hang.aop.StatisticsTime;
 import com.hang.enums.ResultEnum;
 import com.hang.exceptions.ApiAssert;
-import com.hang.pojo.data.AdviserDO;
+import com.hang.manage.UserCache;
 import com.hang.pojo.data.StudentDO;
 import com.hang.pojo.data.TeacherDO;
 import com.hang.pojo.data.UserInfoDO;
@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @author test
@@ -52,6 +51,9 @@ public class UserController {
 
     @Autowired
     private TeacherService teacherService;
+
+    @Autowired
+    private UserCache userCache;
 
 
     /**
@@ -102,6 +104,7 @@ public class UserController {
         return userService.login(code, rawData);
     }
 
+
     @StatisticsTime("getUserInfo")
     @ApiOperation("获取用户信息")
     @GetMapping("/getUserInfo")
@@ -118,7 +121,7 @@ public class UserController {
 
     @StatisticsTime("getUserInfoByOpenId")
     @GetMapping("/getUserInfoByOpenId")
-    public BaseRes getUserInfoByOpenId(String openId) {
+    public BaseRes getUserInfoByOpenId(@OpenId String openId) {
         return RespUtil.success(userService.getUserInfoByOpenId(openId));
     }
 
@@ -162,12 +165,18 @@ public class UserController {
     @RequestMapping("/authorizeToStudent")
     public BaseRes authorizeToStudent(@OpenId String openId,@RequestParam String jwcAccount){
         ApiAssert.checkOpenId(openId);
-        UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
-        Integer roleId=userInfo.getRoleId();
-        if(roleId.equals(1)){
+        UserInfoDO teacherInfo = userService.getUserInfoByOpenId(openId);
+        UserInfoDO studentInfo=userService.getUserInfoByJwcAccount(jwcAccount);
+        Integer roleId=teacherInfo.getRoleId();
+        if(roleId.equals(1)&&studentInfo!=null){
             teacherService.authorizeToStudent(jwcAccount);
+            //更新缓存
+            UserInfoDO userInfoDO=userService.getUserInfoByJwcAccount(jwcAccount);
+            userCache.updateUserInfo(studentInfo.getOpenId(),userInfoDO);
             return RespUtil.success();
-
+        }
+        else if (StringUtils.isEmpty(studentInfo.getOpenId())){
+            return RespUtil.success(ResultEnum.CAN_NOT_GET_USER_INFO);
         }
         else{
             return RespUtil.success(ResultEnum.AUTHORIZE_ERROR);

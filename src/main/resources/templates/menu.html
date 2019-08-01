@@ -21,14 +21,33 @@
                 <li class="layui-nav-item layui-nav-itemed">
                     <a class="" href="javascript:;">主页</a>
                     <dl class="layui-nav-child">
+
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">信息列表</a>
+                    <dl class="layui-nav-child">
                         <dd><a id="feedList" href="#">首页feed列表</a></dd>
                         <dd><a id="studentList" href="#">学生列表</a></dd>
                         <dd><a id="getAdvisers" href="#">导师列表</a></dd>
                         <dd><a id="teamList" href="#">团队列表</a></dd>
                         <dd><a id="projectList" href="#">项目列表</a></dd>
-                        <dd><a id="releaseInformation" href="#">发布首页feed信息</a></dd>
+                        <dd><a id="lostAndRecruitList" href="#">失物招领列表</a></dd>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">信息发布</a>
+                    <dl class="layui-nav-child">
+                        <dd><a id="releaseInformation" href="#">发布首页information信息</a></dd>
                         <dd><a id="releaseTeam" href="#">发布团队信息</a></dd>
                         <dd><a id="releaseAdviserInfo" href="#">发布导师信息</a></dd>
+                        <dd><a id="releaseLostProperty" href="#">发布失物信息</a></dd>
+                        <dd><a id="releaseRecruit" href="#">发布招领信息</a></dd>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">信息修改</a>
+                    <dl class="layui-nav-child">
                         <dd><a id="releaseTeamMember" href="#">增加团队成员</a></dd>
                         <dd><a id="releaseTeamLog" href="#">增加团队日志</a></dd>
                         <dd><a id="releaseTeamHonor" href="#">增加团队荣誉</a></dd>
@@ -37,6 +56,10 @@
                         <dd><a id="releaseTeamProjectSchedule" href="#">增加团队项目进度</a></dd>
                     </dl>
                 </li>
+
+                    </dl>
+                </li>
+
             </ul>
         </div>
     </div>
@@ -78,6 +101,10 @@
 
     $("#getAdvisers").click(function () {
         $("#iframe").attr('src', '/page/adviserList');
+    });
+
+    $("#lostAndRecruitList").click(function () {
+        $("#iframe").attr('src', '/page/lostAndRecruitList');
     });
 
     $("#releaseInformation").click(function () {

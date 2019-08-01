@@ -56,7 +56,7 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into system_notification (system_notify_type, message)
-        values (#{noteType}, #{sendTime})
+        values (#{noteType}, #{message})
     </insert>
 
     <insert id="insertSelective" parameterType="com.hang.pojo.data.NotificationDO">

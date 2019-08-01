@@ -5,6 +5,9 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hang.annotation.OpenId;
 import com.hang.aop.StatisticsTime;
+import com.hang.dao.NotificationDAO;
+import com.hang.dao.TeamDAO;
+import com.hang.enums.NotificationEnum;
 import com.hang.enums.ResultEnum;
 import com.hang.exceptions.ApiAssert;
 import com.hang.pojo.data.*;
@@ -12,10 +15,7 @@ import com.hang.pojo.vo.BaseRes;
 import com.hang.pojo.vo.GroupMemberVO;
 import com.hang.pojo.vo.ProjectVO;
 import com.hang.pojo.vo.TeamVO;
-import com.hang.service.StudentService;
-import com.hang.service.TeacherService;
-import com.hang.service.TeamService;
-import com.hang.service.UserService;
+import com.hang.service.*;
 import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +24,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+
+import static com.hang.constant.InformationConstant.INVITATION_SUCCESS_SUFFIX;
+import static com.hang.constant.InformationConstant.SYSTEM_NOTIFICATION_SUFFIX;
 
 /**
  * @author hangs.zhang
@@ -38,6 +41,12 @@ import java.util.*;
 public class TeamController {
 
     @Autowired
+    private TeamDAO teamDAO;
+
+    @Autowired
+    private NotificationDAO notificationDAO;
+
+    @Autowired
     private TeamService teamService;
 
     @Autowired
@@ -48,6 +57,9 @@ public class TeamController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @ApiOperation("创建团队")
     @StatisticsTime("createTeam")
@@ -151,11 +163,18 @@ public class TeamController {
     public BaseRes addMember2Team(@OpenId String openId,@RequestParam int teamId, @RequestParam String jwcAccount) {
         StudentDO studentDO=studentService.getStudentInfoByJwcAccount(jwcAccount);
         GroupMemberVO groupMemberVO=new GroupMemberVO();
+        SystemNotificationDO systemNotificationDO=new SystemNotificationDO();
         groupMemberVO.setAvatar(studentDO.getAvatar());
         groupMemberVO.setName(studentDO.getRealName());
         groupMemberVO.setTitle(studentDO.getTitle());
         groupMemberVO.setRole("组员");
         teamService.addMember2Team(openId,teamId, groupMemberVO,studentDO.getOpenId());
+        //邀请成功之后给邀请人发通知
+        systemNotificationDO.setNoteType(NotificationEnum.SYSTEM_NOTE_INVITATION.name());
+        systemNotificationDO.setMessage(INVITATION_SUCCESS_SUFFIX);
+        notificationDAO.insertSystemNote(systemNotificationDO);
+        Integer notificationId=systemNotificationDO.getId();
+        notificationService.sendNotification(studentDO.getOpenId(),openId, NotificationEnum.SYSTEM_NOTE_INVITATION,notificationId,INVITATION_SUCCESS_SUFFIX);
         return RespUtil.success();
     }
 
@@ -235,6 +254,20 @@ public class TeamController {
         else{
             return RespUtil.error(ResultEnum.TEAM_NOT_EXIT);
         }
+    }
+
+    /**
+     * 修改团队成员的信息
+     */
+    @StatisticsTime("updateTeamInfo")
+    @ApiOperation("修改团队信息")
+    @PostMapping("/updateTeamMemberInfo")
+    public BaseRes updateTeamMemberInfo(@OpenId String openId, @RequestParam Integer teamId,
+                                        @RequestParam String realName, @RequestParam String title) {
+        ApiAssert.checkOpenId(openId);
+        TeamDO teamDO = teamDAO.selectByTeamId(teamId);
+        teamService.updateTeamMemberInfo(realName, title, teamDO, openId);
+        return RespUtil.success();
     }
 
     /**

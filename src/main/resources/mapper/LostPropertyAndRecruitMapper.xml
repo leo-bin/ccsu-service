@@ -17,4 +17,36 @@
         select * from lost_property_and_recurit order by datetime desc limit #{start},#{offset};
     </select>
 
+    <delete id="delete">
+        delete from lost_property_and_recurit
+        where id=#{id}
+    </delete>
+
+    <select id="selectLostPropertyAndRecruit" resultType="com.hang.pojo.data.LostPropertyAndRecruitDO">
+        select * from lost_property_and_recurit where id = #{id}
+    </select>
+
+    <update id="update">
+        update lost_property_and_recurit
+        <set>
+            <if test="initiatorMessage!= null">
+                initiator_message=#{initiatorMessage},
+            </if>
+            <if test="initiatorLocation!= null">
+                initiator_location=#{initiatorLocation},
+            </if>
+            <if test="occurTime!=null">
+                occur_time=#{occurTime},
+            </if>
+            <if test="contactInformation!= null">
+                contact_information=#{contactInformation},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="listByJwcAccount" resultType="com.hang.pojo.data.LostPropertyAndRecruitDO">
+        select * from lost_property_and_recurit where initiator_jwc_account=#{jwcAccount} order by datetime desc;
+    </select>
+
 </mapper>

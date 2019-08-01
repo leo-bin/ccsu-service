@@ -35,7 +35,7 @@ public class NotificationController {
     @ApiOperation("查看消息列表")
     @GetMapping("/getNotifications")
     public BaseRes getNotifications(@OpenId String openId,
-                                    @RequestParam(required = false, defaultValue = "0") Integer pageNo,
+                                    @RequestParam(required = false, defaultValue = "1") Integer pageNo,
                                     @RequestParam(required = false, defaultValue = "10") Integer pageSize, Integer type) {
         ApiAssert.checkOpenId(openId);
         if (type.equals(1)) {

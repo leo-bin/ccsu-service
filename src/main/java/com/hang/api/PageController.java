@@ -37,8 +37,6 @@ public class PageController {
 
     private static final String AdminPwd="admin1204";
 
-    @Autowired
-    private TeacherService teacherService;
 
     @GetMapping("/{page}")
     public String page1(@PathVariable String page) {

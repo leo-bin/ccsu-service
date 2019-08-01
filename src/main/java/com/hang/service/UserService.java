@@ -103,8 +103,8 @@ public class UserService {
         // 根据openId 查询用户信息
         String openId = openIdAndSessionKey.getString("openId");
         log.debug("openid: {}", openId);
-
         UserInfoDO userInfo = new UserInfoDO();
+        UserInfoDO userInfoDO=null;
         userInfo.setOpenId(openId);
         if (!Strings.isEmpty(rawData)) {
             try {
@@ -116,13 +116,14 @@ public class UserService {
                 userInfo.setCountry(json.getString("country"));
                 userInfo.setGender(json.getInteger("gender"));
                 userInfo.setProvince(json.getString("province"));
-                userInfo.setRoleId(0);
                 userInfo.setStuNumber("");
                 userInfo.setRealName("");
                 userInfo.setCreateTime(new Date(System.currentTimeMillis()));
                 userInfo.setLastLoginTime(new Date(System.currentTimeMillis()));
                 if (userInfoDAO.isExist(openId)) {
                     userInfoDAO.updateLastLoginTime(openId);
+                    //从缓存中获取最新的用户信息并写入会话
+                    userInfoDO=getUserInfoByOpenId(openId);
                 } else {
                     userInfoDAO.insert(userInfo);
                 }
@@ -133,7 +134,7 @@ public class UserService {
             }
         }
         // 将用户信息写入会话缓存
-        JSONObject sessionJson = sessionService.newSession(JSONObject.toJSONString(userInfo));
+        JSONObject sessionJson = sessionService.newSession(JSONObject.toJSONString(userInfoDO));
         errcode = sessionJson.getIntValue("code");
         if (0 != errcode) {
             returnJson.put("code", errcode);
@@ -142,7 +143,7 @@ public class UserService {
         }
         returnJson.put("code", 0);
         returnJson.put("msg", "success");
-        returnJson.put("userInfo", userInfo);
+        returnJson.put("userInfo", userInfoDO);
         returnJson.put("sessionId", sessionJson.getString("sessionId"));
         return returnJson.toString();
     }

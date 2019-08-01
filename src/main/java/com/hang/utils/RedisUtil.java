@@ -5,6 +5,7 @@ package com.hang.utils;
  * @date 2018/11/20
  * *****************
  * function:
+ * redis工具类
  */
 
 import org.springframework.beans.factory.annotation.Autowired;

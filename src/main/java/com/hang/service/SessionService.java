@@ -4,12 +4,10 @@
  */
 package com.hang.service;
 
-import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hang.pojo.data.UserInfoDO;
 import com.hang.pojo.vo.BaseRes;
-import com.hang.utils.RedisUtil;
 import com.hang.utils.RespUtil;
 import com.hang.utils.TokenUtils;
 import org.slf4j.Logger;

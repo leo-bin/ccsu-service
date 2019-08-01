@@ -33,11 +33,7 @@
 
     <update id="authorizeToStudent">
         update t_user_info
-        <set>
-            <if test="role_id!=null">
-                role_id=2
-            </if>
-        </set>
+        set role_id=2
         where jwc_account = #{jwcAccount}
     </update>
 

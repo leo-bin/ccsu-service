@@ -184,7 +184,7 @@ public class TeamService {
      * @param teamDO
      * @return
      */
-    private TeamVO teamDO2VO(TeamDO teamDO) {
+    public TeamVO teamDO2VO(TeamDO teamDO) {
         TeamVO teamVO = new TeamVO();
         //反序列化
         ArrayList<GroupMemberVO> groupMemberVOS = JSON.parseObject(teamDO.getMembers(), new TypeReference<ArrayList<GroupMemberVO>>() {
@@ -254,11 +254,25 @@ public class TeamService {
     /**
      * 完善团队成员信息
      */
-    public void updateTeamMemberInfo(String realName, String title, String jwcAccount) {
-        StudentDO studentDO = studentDAO.getStudentInfoByJwcAccount(jwcAccount);
+    public void updateTeamMemberInfo(String realName, String title,TeamDO teamDO, String openId) {
+        StudentDO studentDO = studentDAO.selectStudentDOByOpenId(openId);
         studentDO.setRealName(realName);
         studentDO.setTitle(title);
+        String members = teamDO.getMembers();
+        GroupMemberVO groupMemberVO=new GroupMemberVO();
+        groupMemberVO.setAvatar(studentDO.getAvatar());
+        groupMemberVO.setName(realName);
+        groupMemberVO.setTitle(title);
+        groupMemberVO.setRole("组员");
+        ArrayList<GroupMemberVO> groupMemberVOS = JSON.parseObject(members, new TypeReference<ArrayList<GroupMemberVO>>() {
+        });
+        if(groupMemberVOS == null) {
+            groupMemberVOS = Lists.newArrayList();
+        }
+        groupMemberVOS.add(groupMemberVO);
+        teamDO.setMembers(JSON.toJSONString(groupMemberVOS));
         studentDAO.updateStudentInfo(studentDO);
+        teamDAO.updateTeam(teamDO);
     }
 
 }

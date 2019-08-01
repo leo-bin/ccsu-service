@@ -52,7 +52,7 @@ public class SchoolService {
      * @param semester
      * @return
      */
-    public List<GradeDO> getGrader(String jwcAccount, String semester,String code) {
+    public List<GradeDO> getGrade(String jwcAccount, String semester,String code) {
         List<GradeDO> gradeDOS=gradeDAO.selectGradeByJwcAccountAndXnxq(jwcAccount, semester);
         if (gradeDOS.size()!=0){
             return gradeDOS;
@@ -63,7 +63,6 @@ public class SchoolService {
             return gradeDOS;
         }
     }
-
 
     public List<CourseVO> getCourseByWeek(String jwcAccount, Integer week, String semester) {
         List<CourseVO> result = Lists.newArrayList();
@@ -109,18 +108,40 @@ public class SchoolService {
         }
     }
 
-    /**
-     * 失物招领
-     *
-     * @param lostPropertyAndRecruitEnum
-     * @param start
-     * @param offset
-     * @return
-     */
     public List<LostPropertyAndRecruitVO> listLostPropertyAndRecruit(LostPropertyAndRecruitEnum lostPropertyAndRecruitEnum, int start, int offset) {
         List<LostPropertyAndRecruitDO> lostPropertyAndRecruitDOS = lostPropertyAndRecruitDAO.listByCategory(lostPropertyAndRecruitEnum.name(), start, offset);
         ArrayList<LostPropertyAndRecruitVO> result = Lists.newArrayList();
         lostPropertyAndRecruitDOS.forEach(e -> {
+            LostPropertyAndRecruitVO lostPropertyAndRecruitVO = new LostPropertyAndRecruitVO();
+            BeanUtils.copyProperties(e, lostPropertyAndRecruitVO);
+            lostPropertyAndRecruitVO.setOccurTime(e.getOccurTime().getTime());
+            result.add(lostPropertyAndRecruitVO);
+        });
+        return result;
+    }
+
+    public LostPropertyAndRecruitDO getLostAndRecruit(int id){
+        return lostPropertyAndRecruitDAO.selectLostPropertyAndRecruit(id);
+    }
+
+    public void removeLostAndRecruit(int id){
+        int i=lostPropertyAndRecruitDAO.delete(id);
+        if (i != 1) {
+            throw new ApiException(-1, "删除失败");
+        }
+    }
+
+    public void modifyLostAndRecruit(LostPropertyAndRecruitDO lostPropertyAndRecruit){
+        int i = lostPropertyAndRecruitDAO.update(lostPropertyAndRecruit);
+        if(i!=1){
+            throw new ApiException(-1, "修改失败");
+        }
+    }
+
+    public List<LostPropertyAndRecruitVO> listLostPropertyAndRecruitSelf(String jwcAccount){
+        List<LostPropertyAndRecruitDO> lostPropertyAndRecruitDOS=lostPropertyAndRecruitDAO.listByJwcAccount(jwcAccount);
+        ArrayList<LostPropertyAndRecruitVO>  result = Lists.newArrayList();
+        lostPropertyAndRecruitDOS.forEach(e->{
             LostPropertyAndRecruitVO lostPropertyAndRecruitVO = new LostPropertyAndRecruitVO();
             BeanUtils.copyProperties(e, lostPropertyAndRecruitVO);
             lostPropertyAndRecruitVO.setOccurTime(e.getOccurTime().getTime());
