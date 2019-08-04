@@ -71,19 +71,4 @@ public class SessionController {
         }
         return sessionService.getSessionInfo(sessionId);
     }
-
-    /**
-     * 更新会话信息
-     */
-    @StatisticsTime("updateSessionInfo")
-    @ApiOperation("更新会话信息")
-    @RequestMapping("/updateSessionInfo")
-    public BaseRes updateSessionInfo(@OpenId String openId, String sessionId){
-        ApiAssert.checkOpenId(openId);
-        if (Strings.isEmpty(sessionId)) {
-            sessionId = request.getHeader("sessionId");
-        }
-        sessionService.updateSessionInfo(sessionId,userService.getUserInfoByOpenId(openId));
-        return RespUtil.success();
-    }
 }
