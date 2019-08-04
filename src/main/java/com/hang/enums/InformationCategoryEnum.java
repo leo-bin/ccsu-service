@@ -8,6 +8,6 @@ package com.hang.enums;
  */
 public enum InformationCategoryEnum {
 
-    LATEST, HOT, ACTIVITY, NOTIFY, RECRUITMENT, PUBLIC,
+    LATEST, HOT, TECHNOLOGY, NOTIFICATION, RECRUITMENT, PUBLIC,
 
 }

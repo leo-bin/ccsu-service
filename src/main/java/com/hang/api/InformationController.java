@@ -231,7 +231,7 @@ public class InformationController {
     @GetMapping("/listActivity")
     public BaseRes listActivity(@RequestParam(required = false, defaultValue = "0") int start,
                                 @RequestParam(required = false, defaultValue = "100") int offset) {
-        List<InformationDO> informations = informationService.getInformationByCategory(InformationCategoryEnum.ACTIVITY.name(),
+        List<InformationDO> informations = informationService.getInformationByCategory(InformationCategoryEnum.TECHNOLOGY.name(),
                 start, offset);
 
         Collections.reverse(informations);

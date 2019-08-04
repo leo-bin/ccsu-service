@@ -5,8 +5,8 @@
 <mapper namespace="com.hang.dao.ArticleDAO">
 
     <insert id="addArticle">
-        insert into (title, text)
-        values (#{title}, #{text})
+        insert into information(title, authors,content,release_time,category,category_name)
+        values (#{title}, #{authors} , #{content} , #{release_time} , #{category} , #{category_name} )
     </insert>
 
 </mapper>

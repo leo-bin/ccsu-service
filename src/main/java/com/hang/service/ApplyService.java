@@ -45,7 +45,7 @@ public class ApplyService {
         if (information == null) {
             throw new ApiException(-1, "information不存在");
         }
-        if (!InformationCategoryEnum.ACTIVITY.name().equals(information.getCategory())) {
+        if (!InformationCategoryEnum.TECHNOLOGY.name().equals(information.getCategory())) {
             throw new ApiException(-1, "information类型错误");
         }
         InformationApplyDO apply = new InformationApplyDO();
