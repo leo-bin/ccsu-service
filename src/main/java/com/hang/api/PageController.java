@@ -2,10 +2,7 @@ package com.hang.api;
 
 import com.hang.pojo.data.AdminUserInfoDO;
 import com.hang.pojo.data.GradeDO;
-import com.hang.service.CourseCrawlerService;
-import com.hang.service.GradeCrawlerService;
-import com.hang.service.SchoolService;
-import com.hang.service.TeacherService;
+import com.hang.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Timer;
 
 
 /**
@@ -29,7 +27,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/page")
 public class PageController {
-
     /**
      * 将管理员的账号和密码写死，后续在做修改
      */
@@ -46,11 +43,8 @@ public class PageController {
     /**
      * test
      */
-    @ResponseBody
-    @RequestMapping("/test")
-    public String test(){
-        return "test";
-    }
+
+
 
 
     /**
