@@ -27,11 +27,13 @@ import java.util.Date;
  * @Date Created in 9:26 2019/7/24
  * @function:文章爬虫服务层
  **/
-
 @Component
 public class ArticleCrawlerService {
 
-    private static final String URL = "https://www.csdn.net/nav/career";    //CSDN程序人生URL
+    /**
+     * CSDN程序人生URL
+     */
+    private static final String URL = "https://www.csdn.net/nav/career";
 
     @Autowired
     private ArticleDAO articleDAO;

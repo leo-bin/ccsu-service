@@ -27,7 +27,10 @@ import java.util.Date;
 @Component
 public class LatestCrawlerService extends java.util.TimerTask {
 
-    private static final String URL = "http://www.ccsu.cn/zdxw/zdyw/232.htm";    //长大要闻URL
+    /**
+     * 长大要闻URL
+     */
+    private static final String URL = "http://www.ccsu.cn/zdxw/zdyw/232.htm";
 
     @Autowired
     private ArticleDAO articleDAO;
@@ -93,11 +96,15 @@ public class LatestCrawlerService extends java.util.TimerTask {
                     if (response != null) {
                         response.close();
                     }
-
                 }
             }
         }
     }
+
+    /**
+     * 启动定时任务
+     */
+    @Override
     @Scheduled(cron = "0 0 2 ? * 1" )       //每周日凌晨两点启动
     public void run() {
         try {

@@ -27,8 +27,6 @@ public class CreativeController {
     @Autowired
     private AdviserService adviserService;
 
-    @Autowired
-    private InformationService informationService;
 
     @StatisticsTime("getAdvisers")
     @ApiOperation("查看所有导师的信息")
