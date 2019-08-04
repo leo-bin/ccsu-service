@@ -279,4 +279,5 @@ public class TeamController {
     public BaseRes getStudentInfoByJwcAccount(@RequestParam String jwcAccount){
         return RespUtil.success(studentService.getStudentInfoByJwcAccount(jwcAccount));
     }
+
 }

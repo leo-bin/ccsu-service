@@ -28,7 +28,7 @@ public class InformationConstant {
         CATEGORY_MAP.put("LATEST", "最新");
         CATEGORY_MAP.put("HOT", "最热");
         CATEGORY_MAP.put("TECHNOLOGY", "技术");
-        CATEGORY_MAP.put("RECRUITMENT", "招聘");
+        CATEGORY_MAP.put("RECRUITMENT", "招新");
         CATEGORY_MAP.put("PUBLIC", "公示");
         CATEGORY_MAP.put("NOTIFICATION", "通知");
     }

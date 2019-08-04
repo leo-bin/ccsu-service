@@ -106,12 +106,11 @@ public class UserController {
 
 
     @StatisticsTime("getUserInfo")
-    @ApiOperation("获取用户信息")
+    @ApiOperation("根据sessionId获取用户信息")
     @GetMapping("/getUserInfo")
     public BaseRes getUserInfo(String sessionId) throws IOException {
         log.info("sessionId: " + request.getHeader("sessionId"));
         log.info("appPlatform: " + request.getHeader("appPlatform"));
-        log.info("appVersion: " + request.getHeader("appVersion"));
         if (Strings.isEmpty(sessionId)) {
             sessionId = request.getHeader("sessionId");
         }
@@ -120,6 +119,7 @@ public class UserController {
 
 
     @StatisticsTime("getUserInfoByOpenId")
+    @ApiOperation("根据openId获取用户信息")
     @GetMapping("/getUserInfoByOpenId")
     public BaseRes getUserInfoByOpenId(@OpenId String openId) {
         return RespUtil.success(userService.getUserInfoByOpenId(openId));

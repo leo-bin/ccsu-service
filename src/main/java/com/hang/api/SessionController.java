@@ -4,9 +4,13 @@
  */
 package com.hang.api;
 
+import com.hang.annotation.OpenId;
 import com.hang.aop.StatisticsTime;
+import com.hang.exceptions.ApiAssert;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.service.SessionService;
+import com.hang.service.UserService;
+import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
@@ -28,6 +32,9 @@ public class SessionController {
 
     @Autowired
     private SessionService sessionService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private HttpServletRequest request;
@@ -63,5 +70,20 @@ public class SessionController {
             sessionId = request.getHeader("sessionId");
         }
         return sessionService.getSessionInfo(sessionId);
+    }
+
+    /**
+     * 更新会话信息
+     */
+    @StatisticsTime("updateSessionInfo")
+    @ApiOperation("更新会话信息")
+    @RequestMapping("/updateSessionInfo")
+    public BaseRes updateSessionInfo(@OpenId String openId, String sessionId){
+        ApiAssert.checkOpenId(openId);
+        if (Strings.isEmpty(sessionId)) {
+            sessionId = request.getHeader("sessionId");
+        }
+        sessionService.updateSessionInfo(sessionId,userService.getUserInfoByOpenId(openId));
+        return RespUtil.success();
     }
 }

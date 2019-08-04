@@ -38,7 +38,7 @@ public class SessionService {
     RedisTemplate<String, String> redisTemplate;
 
     public JSONObject newSession(String data) {
-        JSONObject returnJson = new JSONObject();
+     JSONObject returnJson = new JSONObject();
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         String sessionId = TokenUtils.getToken();
         log.info("redis set {} = {}", sessionId, data);
@@ -69,5 +69,10 @@ public class SessionService {
         /// returnJson.put("userInfo", sessionInfo);
         /// return returnJson;
         return RespUtil.success(userInfoDO);
+    }
+
+    public void updateSessionInfo(String sessionId,UserInfoDO userInfoDO){
+       // TODO: BY leo-bin 2019/8/4
+       // TODO-LIST: 暂时不需要写更新会话缓存的接口
     }
 }

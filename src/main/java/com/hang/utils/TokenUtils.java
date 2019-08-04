@@ -6,6 +6,9 @@ package com.hang.utils;
 
 import java.util.UUID;
 
+/**
+ * @apiNote 随机令牌生成工具类
+ */
 public final class TokenUtils {
 
     private final static String PREFIX = "CCSU.MICRO.PLATFORM.SESSION.";

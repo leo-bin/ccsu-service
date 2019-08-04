@@ -48,7 +48,7 @@ public class UserService {
 
     /**
      * 获取用户信息
-     *
+     * @apiNote 根据openId来查询
      * @param openId
      * @return
      */
@@ -70,7 +70,7 @@ public class UserService {
 
 
     /**
-     * 更新用户信息
+     * 更新用户信息并将用户信息写入缓存
      *
      * @param openId
      * @param jwcAccount
@@ -91,6 +91,7 @@ public class UserService {
      */
     public String login(String code, String rawData) {
         JSONObject returnJson = new JSONObject();
+        JSONObject sessionJson =null;
         // 用code 去微信服务器拿 openId 和 session_key
         JSONObject openIdAndSessionKey = code2session(code);
         int errcode = openIdAndSessionKey.getIntValue("code");
@@ -134,16 +135,23 @@ public class UserService {
             }
         }
         // 将用户信息写入会话缓存
-        JSONObject sessionJson = sessionService.newSession(JSONObject.toJSONString(userInfoDO));
+        if (!Objects.isNull(userInfoDO)){
+             sessionJson = sessionService.newSession(JSONObject.toJSONString(userInfoDO));
+             returnJson.put("userInfo", userInfoDO);
+        }
+        else{
+             sessionJson = sessionService.newSession(JSONObject.toJSONString(userInfo));
+             returnJson.put("userInfo", userInfo);
+        }
         errcode = sessionJson.getIntValue("code");
         if (0 != errcode) {
             returnJson.put("code", errcode);
             returnJson.put("msg", sessionJson.getString("msg"));
             return returnJson.toString();
         }
+        //成功
         returnJson.put("code", 0);
         returnJson.put("msg", "success");
-        returnJson.put("userInfo", userInfoDO);
         returnJson.put("sessionId", sessionJson.getString("sessionId"));
         return returnJson.toString();
     }
@@ -189,6 +197,5 @@ public class UserService {
         int i = userInfoDAO.updateUserRole(openId, role);
         ApiAssert.nonEqualInteger(i, 1, "修改失败");
     }
-
 
 }

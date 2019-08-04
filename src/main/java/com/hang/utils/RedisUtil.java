@@ -109,7 +109,6 @@ public final class RedisUtil {
      */
     public boolean set(String key, Object value) {
         try {
-
             redisTemplate.opsForValue().set(key, value);
             return true;
         } catch (Exception e) {

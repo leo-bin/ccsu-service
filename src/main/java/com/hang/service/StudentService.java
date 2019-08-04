@@ -71,10 +71,6 @@ public class StudentService {
             } else {
                 modifyStudentInfo(studentDO);
             }
-            userService.updateUserRole(openId,0);
-            //redis缓存穿透
-            UserInfoDO userInfo=userInfoDAO.selectByOpenId(openId);
-            userCache.updateUserInfo(openId,userInfo);
         }
     }
 
