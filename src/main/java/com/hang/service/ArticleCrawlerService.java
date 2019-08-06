@@ -97,11 +97,10 @@ public class ArticleCrawlerService {
                 if (response != null) {
                     response.close();
                 }
-
             }
-
         }
     }
+
     @Scheduled(cron = "0 0 2 ? * 1")        ////每周日凌晨两点启动
     public  void run() {
         try {

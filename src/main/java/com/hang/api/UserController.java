@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @author test
@@ -168,14 +169,14 @@ public class UserController {
         UserInfoDO teacherInfo = userService.getUserInfoByOpenId(openId);
         UserInfoDO studentInfo=userService.getUserInfoByJwcAccount(jwcAccount);
         Integer roleId=teacherInfo.getRoleId();
-        if(roleId.equals(1)&&studentInfo!=null){
+        if(roleId.equals(1)&&!Objects.isNull(studentInfo)){
             teacherService.authorizeToStudent(jwcAccount);
             //更新缓存
             UserInfoDO userInfoDO=userService.getUserInfoByJwcAccount(jwcAccount);
             userCache.updateUserInfo(studentInfo.getOpenId(),userInfoDO);
             return RespUtil.success();
         }
-        else if (StringUtils.isEmpty(studentInfo.getOpenId())){
+        else if (Objects.isNull(studentInfo)){
             return RespUtil.success(ResultEnum.CAN_NOT_GET_USER_INFO);
         }
         else{

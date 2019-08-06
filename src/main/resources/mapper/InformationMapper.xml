@@ -5,48 +5,62 @@
 <mapper namespace="com.hang.dao.InformationDAO">
 
     <insert id="insert">
-        insert into information(title, content, authors, release_time, category, category_name,notes)
-        values(#{title}, #{content}, #{authors}, #{releaseTime}, #{category}, #{categoryName},#{notes})
+        insert into information(title, content, authors, release_time, category, category_name, notes)
+        values (#{title}, #{content}, #{authors}, #{releaseTime}, #{category}, #{categoryName}, #{notes})
     </insert>
 
     <update id="update">
         update information
-        set
-          title = #{title},
-          authors = #{authors},
-          content = #{content},
-          release_time = #{releaseTime},
-          category = #{category},
-          category_name = #{categoryName}
+        set title         = #{title},
+            authors       = #{authors},
+            content       = #{content},
+            release_time  = #{releaseTime},
+            category      = #{category},
+            category_name = #{categoryName}
         where id = #{id}
     </update>
 
     <delete id="delete">
-        delete from information
+        delete
+        from information
         where id = #{id}
     </delete>
 
     <select id="selectById" resultType="com.hang.pojo.data.InformationDO">
-        select * from information where id = #{id}
+        select *
+        from information
+        where id = #{id}
     </select>
 
     <select id="list" resultType="com.hang.pojo.data.InformationDO">
-        select * from information where id between #{start} and #{offset}
+        select *
+        from information
+        where id between #{start} and #{offset}
     </select>
 
     <select id="count" resultType="java.lang.Integer">
-        select count(*) from information;
+        select count(*)
+        from information;
     </select>
 
     <select id="maxId" resultType="java.lang.Integer">
-        select max(id) from information;
+        select max(id)
+        from information;
     </select>
 
     <select id="listByCategory" resultType="com.hang.pojo.data.InformationDO">
-      select * from information where category = #{category} limit #{start}, #{offset}
+        select *
+        from information
+        where category = #{category}
+        limit #{start}, #{offset}
     </select>
 
     <select id="listNoteAndRecruitment" resultType="com.hang.pojo.data.InformationDO">
-        select * from information where category ='RECRUITMENT' or category ='NOTIFICATION' limit #{start}, #{offset}
+        select *
+        from information
+        where category = 'RECRUITMENT'
+           or category = 'NOTIFICATION'
+        order by release_time desc
+        limit #{start}, #{offset}
     </select>
 </mapper>

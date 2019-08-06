@@ -71,6 +71,11 @@ public class StudentService {
             } else {
                 modifyStudentInfo(studentDO);
             }
+            //重新绑定之后所有权限角色都变为0
+            userService.updateUserRole(openId,0);
+            UserInfoDO userInfo=userInfoDAO.selectByOpenId(openId);
+            //redis缓存穿透
+            userCache.updateUserInfo(openId,userInfo);
         }
     }
 

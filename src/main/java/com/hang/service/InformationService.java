@@ -108,17 +108,9 @@ public class InformationService {
      *
      * @return
      */
-    public List<InformationDO> getLatestInformation() {
-        List<InformationDO> informations = Lists.newArrayList();
-        int maxId = informationDAO.maxId();
-        ArrayList<InformationDO> list = informationDAO.listNoteAndRecruitment(maxId - 20, maxId);
-        if (list.size() > 10) {
-            informations.addAll(list.subList(list.size() - 10, list.size()));
-        } else {
-            informations.addAll(list);
-        }
-        Collections.reverse(informations);
-        return informations;
+    public List<InformationDO> getLatestInformation(Integer start,Integer offset) {
+        ArrayList<InformationDO> list = informationDAO.listNoteAndRecruitment(start,offset);
+        return list;
     }
 
     /**

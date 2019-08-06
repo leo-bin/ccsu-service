@@ -78,7 +78,7 @@
         select * from team limit #{start}, #{offset}
     </select>
 
-    <select id="getTeamsByAdvisor" resultType="com.hang.pojo.data.TeamDO">
+    <select id="selectTeamsByAdvisor" resultType="com.hang.pojo.data.TeamDO">
         select *
         from team
         where advisor = #{advisor}

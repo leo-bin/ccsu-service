@@ -44,8 +44,9 @@ public class FeedController {
     @ApiOperation("请求最新得十条feed流数据")
     @JsonView(InformationDO.SimpleInformation.class)
     @GetMapping("/latest")
-    public BaseRes latest() {
-        List<InformationDO> latestInformation = informationService.getLatestInformation();
+    public BaseRes latest(@RequestParam(required = false,defaultValue = "0") Integer start,
+                          @RequestParam(required = false,defaultValue = "10") Integer offset) {
+        List<InformationDO> latestInformation = informationService.getLatestInformation(start, offset);
         return RespUtil.success(latestInformation);
     }
 
@@ -58,10 +59,11 @@ public class FeedController {
     @ApiOperation("请求点击最多的feed流数据")
     @JsonView(InformationDO.SimpleInformation.class)
     @GetMapping("/hot")
-    public BaseRes hot() {
+    public BaseRes hot(@RequestParam(required = false,defaultValue = "0") Integer start,
+                       @RequestParam(required = false,defaultValue = "10") Integer offset) {
         List<InformationDO> hotInformation = informationService.getHotInformation();
         if (hotInformation == null || hotInformation.size() == 0) {
-            return RespUtil.success(informationService.getLatestInformation());
+            return RespUtil.success(informationService.getLatestInformation(start, offset));
         }
         return RespUtil.success(hotInformation);
     }
