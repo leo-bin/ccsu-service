@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -46,5 +45,7 @@ public interface InformationDAO {
      * 导师发布消息
      */
     int releaseInfo(InformationDO informationDO);
+
+    int addArticle(InformationDO informationDO);
 
 }

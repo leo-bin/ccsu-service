@@ -1,7 +1,7 @@
 package com.hang.service;
 
-import com.hang.dao.ArticleDAO;
-import com.hang.pojo.data.ArticleDO;
+import com.hang.dao.InformationDAO;
+import com.hang.pojo.data.InformationDO;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -13,10 +13,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -36,7 +34,7 @@ public class ArticleCrawlerService {
     private static final String URL = "https://www.csdn.net/nav/career";
 
     @Autowired
-    private ArticleDAO articleDAO;
+    private InformationDAO informationDAO;
 
     public Elements UrlGet()throws Exception{
         CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -66,7 +64,7 @@ public class ArticleCrawlerService {
      * @throws Exception
      */
     public  void saveUrlParse(Elements elements) throws Exception{
-        ArticleDO articleDO = new ArticleDO();
+        InformationDO informationDO=new InformationDO();
         for (int i = 0; i <elements.size() ; i++) {
             Element element = elements.get(i);
             CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -83,14 +81,13 @@ public class ArticleCrawlerService {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date time = formatter.parse(doc.select("span.time").text().replaceAll("年","-")
                         .replaceAll("月","-").replaceAll("日", ""));
-                System.out.println(time);
-                articleDO.setTitle(title);
-                articleDO.setContent(text);
-                articleDO.setRelease_time(time);
-                articleDO.setAuthors("CSDN");
-                articleDO.setCategory("TECHNOLOGY");
-                articleDO.setCategory_name("技术");
-                articleDAO.addArticle(articleDO);
+                informationDO.setTitle(title);
+                informationDO.setContent(text);
+                informationDO.setReleaseTime(time);
+                informationDO.setAuthors("CSDN");
+                informationDO.setCategory("TECHNOLOGY");
+                informationDO.setCategoryName("技术");
+                informationDAO.addArticle(informationDO);
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {

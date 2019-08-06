@@ -48,9 +48,7 @@ public class OpenIdResolver implements HandlerMethodArgumentResolver {
             // 测试
             return WxConstant.TEST_OPEN_ID;
         }
-
-        BaseRes sessionInfo = sessionService.getSessionInfo(sessionId);
-        UserInfoDO userInfo = (UserInfoDO) sessionInfo.getData();
+        UserInfoDO userInfo = sessionService.getSessionInfo(sessionId);
         if (userInfo != null) {
             log.info("body: " + userInfo.toString());
             result = userInfo.getOpenId();

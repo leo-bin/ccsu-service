@@ -115,7 +115,12 @@ public class UserController {
         if (Strings.isEmpty(sessionId)) {
             sessionId = request.getHeader("sessionId");
         }
-        return sessionService.getSessionInfo(sessionId);
+        UserInfoDO userInfoOld=sessionService.getSessionInfo(sessionId);
+        if (Objects.isNull(userInfoOld)){
+            return RespUtil.error(-10008, "your sessionId was not exist or expired.");
+        }
+        UserInfoDO userInfoNew=userService.getUserInfoByOpenId(userInfoOld.getOpenId());
+        return RespUtil.success(userInfoNew);
     }
 
 

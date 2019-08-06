@@ -50,25 +50,18 @@ public class SessionService {
         return returnJson;
     }
 
-    public BaseRes getSessionInfo(String sessionId) {
+    public UserInfoDO getSessionInfo(String sessionId) {
         /// JSONObject returnJson = new JSONObject();
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         String sessionInfo = ops.get(sessionId);
         UserInfoDO userInfoDO = JSON.parseObject(sessionInfo, UserInfoDO.class);
         log.info("redis sessionId : {}, sessionInfo : {}", sessionId, sessionInfo);
-        if (sessionInfo == null) {
-            // 两种情况：sessionId 不存在，sessionId 已过期。这里统一当作过期处理
-            /// returnJson.put("code", -10008);
-            /// returnJson.put("msg", "your sessionId was not exist or expired.");
-            /// return returnJson;
-            return RespUtil.error(-10008, "your sessionId was not exist or expired.");
-        }
         redisTemplate.expire(sessionId, expiredIn, TimeUnit.SECONDS);
         /// returnJson.put("code", 0);
         /// returnJson.put("msg", "success");
         /// returnJson.put("userInfo", sessionInfo);
         /// return returnJson;
-        return RespUtil.success(userInfoDO);
+        return userInfoDO;
     }
 
     public void updateSessionInfo(String sessionId,UserInfoDO userInfoDO){

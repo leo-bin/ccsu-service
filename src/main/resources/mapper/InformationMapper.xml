@@ -9,6 +9,11 @@
         values (#{title}, #{content}, #{authors}, #{releaseTime}, #{category}, #{categoryName}, #{notes})
     </insert>
 
+    <insert id="addArticle">
+        insert into information(title, authors, content, release_time, category, category_name)
+        values (#{title}, #{authors}, #{content}, #{release_time}, #{category}, #{category_name})
+    </insert>
+
     <update id="update">
         update information
         set title         = #{title},
@@ -63,4 +68,6 @@
         order by release_time desc
         limit #{start}, #{offset}
     </select>
+
+
 </mapper>

@@ -133,5 +133,4 @@ public class InformationService {
     public List<InformationDO> getHotInformation() {
         return cacheService.getHotInformation();
     }
-
 }

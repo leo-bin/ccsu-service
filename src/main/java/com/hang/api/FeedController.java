@@ -90,5 +90,4 @@ public class FeedController {
         Collections.reverse(informations);
         return RespUtil.success(informations);
     }
-
 }

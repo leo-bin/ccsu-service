@@ -44,7 +44,6 @@ public class TeamService {
     @Autowired
     private NotificationService notificationService;
 
-
     @Transactional(rollbackFor = Exception.class)
     public TeamVO createTeam(String openId,String name, String advisor) {
         TeamDO teamDO = new TeamDO();

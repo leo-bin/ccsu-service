@@ -69,6 +69,6 @@ public class SessionController {
         if (Strings.isEmpty(sessionId)) {
             sessionId = request.getHeader("sessionId");
         }
-        return sessionService.getSessionInfo(sessionId);
+        return RespUtil.success(sessionService.getSessionInfo(sessionId));
     }
 }

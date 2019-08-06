@@ -152,5 +152,4 @@ public class InformationController {
         hotAndCacheService.updateInformation(id);
         return RespUtil.success();
     }
-
 }

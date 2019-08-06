@@ -1,7 +1,7 @@
 package com.hang.service;
 
-import com.hang.dao.ArticleDAO;
-import com.hang.pojo.data.ArticleDO;
+import com.hang.dao.InformationDAO;
+import com.hang.pojo.data.InformationDO;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -33,7 +33,7 @@ public class LatestCrawlerService extends java.util.TimerTask {
     private static final String URL = "http://www.ccsu.cn/zdxw/zdyw/232.htm";
 
     @Autowired
-    private ArticleDAO articleDAO;
+    private InformationDAO informationDAO;
 
 
     public Elements UrlGet() throws Exception {
@@ -58,7 +58,7 @@ public class LatestCrawlerService extends java.util.TimerTask {
     }
 
     public void saveUrlParse(Elements elements) throws Exception {
-        ArticleDO articleDO = new ArticleDO();
+        InformationDO informationDO=new InformationDO();
         for (int i = 0; i < elements.size(); i++) {
             Element element = elements.get(i);
             String arr[] = {"数学", "互联网", "程序设计"};
@@ -83,13 +83,13 @@ public class LatestCrawlerService extends java.util.TimerTask {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                     Date release_time = formatter.parse(array[0].replaceAll("发布时间：", ""));
                     String authors = array[1].replaceAll("作者：", "");
-                    articleDO.setTitle(title);
-                    articleDO.setContent(text);
-                    articleDO.setAuthors(authors);
-                    articleDO.setRelease_time(release_time);
-                    articleDO.setCategory("NOTIFICATION");
-                    articleDO.setCategory_name("通知");
-                    articleDAO.addArticle(articleDO);
+                    informationDO.setTitle(title);
+                    informationDO.setContent(text);
+                    informationDO.setReleaseTime(release_time);
+                    informationDO.setAuthors(authors);
+                    informationDO.setCategory("NOTIFICATION");
+                    informationDO.setCategoryName("通知");
+                    informationDAO.addArticle(informationDO);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
