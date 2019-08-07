@@ -41,9 +41,6 @@ import static com.hang.constant.InformationConstant.SYSTEM_NOTIFICATION_SUFFIX;
 public class TeamController {
 
     @Autowired
-    private TeamDAO teamDAO;
-
-    @Autowired
     private NotificationDAO notificationDAO;
 
     @Autowired
@@ -76,8 +73,6 @@ public class TeamController {
 
     /**
      * 无差别获取team
-     *
-     * @return
      */
     @StatisticsTime("getAllTeam")
     @ApiOperation("无差别获取团队信息")
@@ -89,9 +84,6 @@ public class TeamController {
 
     /**
      * 根据openId返回teamList，projectList
-     *
-     * @param openId
-     * @return
      */
     @StatisticsTime("getMyTeam")
     @ApiOperation("获取用户自己的团队以及项目信息")
@@ -123,9 +115,6 @@ public class TeamController {
 
     /**
      * 根据teamId查询团队数据
-     *
-     * @param teamId
-     * @return
      */
     @StatisticsTime("getTeamByTeamId")
     @ApiOperation("根据teamId查询team")
@@ -143,7 +132,7 @@ public class TeamController {
      */
     @StatisticsTime("addAvatar2Team")
     @ApiOperation("为team添加头像")
-    @GetMapping("/addAvatar2Team")
+    @PostMapping("/addAvatar2Team")
     public BaseRes addAvatar2Team(@RequestParam Integer teamId, @RequestParam String avatar) {
         teamService.addAvatar2Team(teamId, avatar);
         return RespUtil.success();
@@ -151,15 +140,11 @@ public class TeamController {
 
     /**
      * 增加成员
-     *
-     * @param teamId
-     * @param jwcAccount
-     * @return
-     * @apiNote @ModelAttribute: 数据绑定，将url对应的请求参数和对象进行一一对应的绑定
+     * @apiNote @ModelAttribute Objects objects: 数据绑定，将url对应的请求参数和对象进行一一对应的绑定
      */
     @StatisticsTime("addMember2Team")
     @ApiOperation("team添加成员")
-    @GetMapping("/addMember2Team")
+    @PostMapping("/addMember2Team")
     public BaseRes addMember2Team(@OpenId String openId,@RequestParam int teamId, @RequestParam String jwcAccount) {
         StudentDO studentDO=studentService.getStudentInfoByJwcAccount(jwcAccount);
         GroupMemberVO groupMemberVO=new GroupMemberVO();
@@ -168,13 +153,13 @@ public class TeamController {
         groupMemberVO.setName(studentDO.getRealName());
         groupMemberVO.setTitle(studentDO.getTitle());
         groupMemberVO.setRole("组员");
-        teamService.addMember2Team(openId,teamId, groupMemberVO,studentDO.getOpenId());
+        teamService.addMember2Team(teamId, groupMemberVO,studentDO.getOpenId());
         //邀请成功之后给邀请人发通知
         systemNotificationDO.setNoteType(NotificationEnum.SYSTEM_NOTE_INVITATION.name());
         systemNotificationDO.setMessage(INVITATION_SUCCESS_SUFFIX);
         notificationDAO.insertSystemNote(systemNotificationDO);
         Integer notificationId=systemNotificationDO.getId();
-        notificationService.sendNotification(studentDO.getOpenId(),openId, NotificationEnum.SYSTEM_NOTE_INVITATION,notificationId,INVITATION_SUCCESS_SUFFIX);
+        notificationService.sendNotification(studentDO.getOpenId(),openId, NotificationEnum.SYSTEM_NOTE_INVITATION,notificationId,INVITATION_SUCCESS_SUFFIX,"");
         return RespUtil.success();
     }
 
@@ -189,7 +174,7 @@ public class TeamController {
      */
     @StatisticsTime("addProject2Team")
     @ApiOperation("为team添加项目")
-    @GetMapping("/addProject2Team")
+    @PostMapping("/addProject2Team")
     public BaseRes addProject2Team(@RequestParam int teamId, @RequestParam String projectName,
                                    @RequestParam String projectDescription, @RequestParam String properties) {
         ProjectDO projectDO = new ProjectDO();
@@ -210,7 +195,7 @@ public class TeamController {
      */
     @StatisticsTime("addHonor2Team")
     @ApiOperation("team添加荣耀")
-    @GetMapping("/addHonor2Team")
+    @PostMapping("/addHonor2Team")
     public BaseRes addHonor2Team(@RequestParam int teamId, @RequestParam String honor) {
         teamService.addHonor2Team(teamId, honor);
         return RespUtil.success();
@@ -225,7 +210,7 @@ public class TeamController {
      */
     @StatisticsTime("addLog2Team")
     @ApiOperation("team添加日志")
-    @GetMapping("/addLog2Team")
+    @PostMapping("/addLog2Team")
     public BaseRes addLog2Team(@RequestParam int teamId, @RequestParam Long time, @RequestParam String log) {
         Date date = new Date(time);
         teamService.addLog2Team(teamId, date, log);
@@ -260,13 +245,12 @@ public class TeamController {
      * 修改团队成员的信息
      */
     @StatisticsTime("updateTeamInfo")
-    @ApiOperation("修改团队信息")
+    @ApiOperation("修改团队成员信息")
     @PostMapping("/updateTeamMemberInfo")
-    public BaseRes updateTeamMemberInfo(@OpenId String openId, @RequestParam Integer teamId,
+    public BaseRes updateTeamMemberInfo(@OpenId String openId,
                                         @RequestParam String realName, @RequestParam String title) {
         ApiAssert.checkOpenId(openId);
-        TeamDO teamDO = teamDAO.selectByTeamId(teamId);
-        teamService.updateTeamMemberInfo(realName, title, teamDO, openId);
+        teamService.updateTeamMemberInfo(realName, title, openId);
         return RespUtil.success();
     }
 
@@ -275,9 +259,8 @@ public class TeamController {
      */
     @StatisticsTime("getStudentInfoByJwcAccount")
     @ApiOperation("根据学号查询")
-    @PostMapping("/getStudentInfoByJwcAccount")
+    @GetMapping("/getStudentInfoByJwcAccount")
     public BaseRes getStudentInfoByJwcAccount(@RequestParam String jwcAccount){
         return RespUtil.success(studentService.getStudentInfoByJwcAccount(jwcAccount));
     }
-
 }

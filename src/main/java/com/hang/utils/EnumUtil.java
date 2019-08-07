@@ -5,13 +5,13 @@ package com.hang.utils;
  */
 public class EnumUtil {
 
-  public static boolean isDefined(Enum[] enums, String value) {
-    for (Enum e : enums) {
-      if (e.name().equals(value)) {
-        return true;
-      }
+    public static boolean isDefined(Enum[] enums, String value) {
+        for (Enum e : enums) {
+            if (e.name().equals(value)) {
+                return true;
+            }
+        }
+        return false;
     }
-    return false;
-  }
 
 }

@@ -17,9 +17,8 @@ import java.util.Timer;
 
 
 /**
- * @author hangs.zhang
- * @date 19-5-11
- * *****************
+ * @author leo-bin
+ * @date 2019/6/20
  * function:
  * 后台管理界面跳转控制器
  */
@@ -27,6 +26,7 @@ import java.util.Timer;
 @Controller
 @RequestMapping("/page")
 public class PageController {
+
     /**
      * 将管理员的账号和密码写死，后续在做修改
      */
@@ -39,12 +39,6 @@ public class PageController {
     public String page1(@PathVariable String page) {
         return page;
     }
-
-    /**
-     * test
-     */
-
-
 
 
     /**

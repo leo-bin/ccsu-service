@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @MapperScan(basePackages = "com.hang")
 @EnableScheduling
-public class CcsuServiceApplication   {
+public class CcsuServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(CcsuServiceApplication.class, args);

@@ -31,18 +31,11 @@ public interface NotificationDAO {
 
     /**
      * 插入系统通知
-     * @param notificationDO
-     * @return
      */
     int insertSystemNote(SystemNotificationDO systemNotificationDO);
 
     /**
      * 查评论等消息
-     * @param targetOpenId
-     * @param pageNo
-     * @param pageSize
-     * @param orderBy
-     * @return
      */
     List<Map> findCommentNoteByOpenId(
             @Param("targetOpenId") String targetOpenId,
@@ -53,11 +46,6 @@ public interface NotificationDAO {
 
     /**
      * 查系统通知消息
-     * @param targetOpenId
-     * @param pageNo
-     * @param pageSize
-     * @param orderBy
-     * @return
      */
     List<Map> findSystemNoteByOpenId(
             @Param("targetOpenId") String targetOpenId,

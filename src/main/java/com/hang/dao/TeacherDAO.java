@@ -4,7 +4,7 @@ import com.hang.pojo.data.TeacherDO;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author LEO-BIN
+ * @author leo-bin
  * @date 2019/7/15
  */
 @Repository
@@ -12,7 +12,6 @@ public interface TeacherDAO {
 
     /**
      * 授权给学生
-     * @param jwcAccount
      */
     int authorizeToStudent(String jwcAccount);
 

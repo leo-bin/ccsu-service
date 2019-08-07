@@ -40,4 +40,9 @@ public class NotificationDO {
      * 消息内容
      */
     private String content;
+
+    /**
+     * 额外注释
+     */
+    private String notes;
 }

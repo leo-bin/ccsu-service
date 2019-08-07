@@ -10,7 +10,7 @@ server:
 spring:
   redis:
     host: 47.100.170.169
-   #host: 127.0.0.1
+    #host: 127.0.0.1
     password:
     port: 6379
     database: 0
@@ -32,7 +32,7 @@ spring:
     username: root
     password: 115118
     url: jdbc:mysql://47.100.170.169:3306/micro_platform?characterEncoding=UTF-8&serverTimezone=GMT
-   #url: jdbc:mysql://127.0.0.1:3306/micro-platform?characterEncoding=UTF-8&serverTimezone=GMT
+    #url: jdbc:mysql://127.0.0.1:3306/micro-platform?characterEncoding=UTF-8&serverTimezone=GMT
     dbcp2:
       pool-prepared-statements: true
       max-open-prepared-statements: 20

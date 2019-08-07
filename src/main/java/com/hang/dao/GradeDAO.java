@@ -14,10 +14,6 @@ public interface GradeDAO {
 
     /**
      * 根据学号和学期查询成绩
-     *
-     * @param jwcAccount
-     * @param xnxq
-     * @return
      */
     List<GradeDO> selectGradeByJwcAccountAndXnxq(@Param("jwcAccount") String jwcAccount, @Param("xnxq") String xnxq);
 

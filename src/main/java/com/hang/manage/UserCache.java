@@ -9,8 +9,7 @@ import static com.hang.constant.CacheConstant.USER_OPEN_ID_PREFIX;
 
 /**
  * @author zhanghang
- * @function:
- * 用户redis缓存接口
+ * @apiNote  用户redis缓存接口
  */
 @Service
 public class UserCache {
@@ -20,8 +19,6 @@ public class UserCache {
 
     /**
      * 保存用户信息
-     * @param openId
-     * @param userInfoDO
      */
     public void saveUserInfo(String openId, UserInfoDO userInfoDO) {
         redisUtil.set(USER_OPEN_ID_PREFIX + openId, userInfoDO);
@@ -29,8 +26,6 @@ public class UserCache {
 
     /**
      * 查询用户信息
-     * @param openId
-     * @return
      */
     public UserInfoDO getUserInfo(String openId) {
         return (UserInfoDO) redisUtil.get(USER_OPEN_ID_PREFIX + openId);
@@ -38,13 +33,14 @@ public class UserCache {
 
     /**
      * 更新用户信息
+     *
      * @apiNote 由于redis中没有直接的更新的接口，这里采用先找到，在删除，然后在重新写入的方法
      */
-    public void updateUserInfo(String openId,UserInfoDO userInfo){
-        UserInfoDO userInfoDO=(UserInfoDO) redisUtil.get(USER_OPEN_ID_PREFIX + openId);
-        if (userInfoDO!=null){
+    public void updateUserInfo(String openId, UserInfoDO userInfo) {
+        UserInfoDO userInfoDO = (UserInfoDO) redisUtil.get(USER_OPEN_ID_PREFIX + openId);
+        if (userInfoDO != null) {
             redisUtil.del(USER_OPEN_ID_PREFIX + openId);
-            redisUtil.set(USER_OPEN_ID_PREFIX + openId,userInfo);
+            redisUtil.set(USER_OPEN_ID_PREFIX + openId, userInfo);
         }
     }
 }

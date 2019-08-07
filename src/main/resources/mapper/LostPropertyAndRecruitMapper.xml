@@ -5,25 +5,37 @@
 <mapper namespace="com.hang.dao.LostPropertyAndRecruitDAO">
 
     <insert id="insert">
-                insert into lost_property_and_recurit(initiator_jwc_account, initiator_name, initiator_message, initiator_location, occur_time, contact_information, category, datetime)
-        values(#{initiatorJwcAccount}, #{initiatorName}, #{initiatorMessage}, #{initiatorLocation}, #{occurTime}, #{contactInformation}, #{category}, #{datetime})
+        insert into lost_property_and_recurit(initiator_jwc_account, initiator_name, initiator_message,
+                                              initiator_location, occur_time, contact_information, category, datetime)
+        values (#{initiatorJwcAccount}, #{initiatorName}, #{initiatorMessage}, #{initiatorLocation}, #{occurTime},
+                #{contactInformation}, #{category}, #{datetime})
     </insert>
 
     <select id="listByCategory" resultType="com.hang.pojo.data.LostPropertyAndRecruitDO">
-        select * from lost_property_and_recurit where category = #{category} order by datetime desc limit #{start},#{offset};
+        select *
+        from lost_property_and_recurit
+        where category = #{category}
+        order by datetime desc
+        limit #{start},#{offset};
     </select>
 
     <select id="listAll" resultType="com.hang.pojo.data.LostPropertyAndRecruitDO">
-        select * from lost_property_and_recurit order by datetime desc limit #{start},#{offset};
+        select *
+        from lost_property_and_recurit
+        order by datetime desc
+        limit #{start},#{offset};
     </select>
 
     <delete id="delete">
-        delete from lost_property_and_recurit
-        where id=#{id}
+        delete
+        from lost_property_and_recurit
+        where id = #{id}
     </delete>
 
     <select id="selectLostPropertyAndRecruit" resultType="com.hang.pojo.data.LostPropertyAndRecruitDO">
-        select * from lost_property_and_recurit where id = #{id}
+        select *
+        from lost_property_and_recurit
+        where id = #{id}
     </select>
 
     <update id="update">
@@ -46,7 +58,10 @@
     </update>
 
     <select id="listByJwcAccount" resultType="com.hang.pojo.data.LostPropertyAndRecruitDO">
-        select * from lost_property_and_recurit where initiator_jwc_account=#{jwcAccount} order by datetime desc;
+        select *
+        from lost_property_and_recurit
+        where initiator_jwc_account = #{jwcAccount}
+        order by datetime desc;
     </select>
 
 </mapper>

@@ -23,6 +23,7 @@ import java.util.Date;
 /**
  * @Author free-go
  * @Date Created in 21:42 2019/7/29
+ * @apiNote Spring定时任务，用来完成自动爬取并识别长大官网上的比赛信息
  **/
 @Component
 public class LatestCrawlerService extends java.util.TimerTask {
@@ -34,6 +35,9 @@ public class LatestCrawlerService extends java.util.TimerTask {
 
     @Autowired
     private InformationDAO informationDAO;
+
+    @Autowired
+    private HotAndCacheService cacheService;
 
 
     public Elements UrlGet() throws Exception {
@@ -58,7 +62,7 @@ public class LatestCrawlerService extends java.util.TimerTask {
     }
 
     public void saveUrlParse(Elements elements) throws Exception {
-        InformationDO informationDO=new InformationDO();
+        InformationDO informationDO = new InformationDO();
         for (int i = 0; i < elements.size(); i++) {
             Element element = elements.get(i);
             String arr[] = {"数学", "互联网", "程序设计"};
@@ -83,6 +87,7 @@ public class LatestCrawlerService extends java.util.TimerTask {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                     Date release_time = formatter.parse(array[0].replaceAll("发布时间：", ""));
                     String authors = array[1].replaceAll("作者：", "");
+
                     informationDO.setTitle(title);
                     informationDO.setContent(text);
                     informationDO.setReleaseTime(release_time);
@@ -90,6 +95,8 @@ public class LatestCrawlerService extends java.util.TimerTask {
                     informationDO.setCategory("NOTIFICATION");
                     informationDO.setCategoryName("通知");
                     informationDAO.addArticle(informationDO);
+                    //写入缓存
+                    cacheService.addInformation2Cache(informationDO);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
@@ -105,7 +112,7 @@ public class LatestCrawlerService extends java.util.TimerTask {
      * 启动定时任务
      */
     @Override
-    @Scheduled(cron = "0 0 2 ? * 1" )       //每周日凌晨两点启动
+    @Scheduled(cron = "0 0 2 ? * 1")       //每周日凌晨两点启动
     public void run() {
         try {
             saveUrlParse(UrlGet());

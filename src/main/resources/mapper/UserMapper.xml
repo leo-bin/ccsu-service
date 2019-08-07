@@ -5,31 +5,44 @@
 <mapper namespace="com.hang.dao.UserInfoDAO">
 
     <select id="selectByOpenId" resultType="com.hang.pojo.data.UserInfoDO">
-        select * from t_user_info where open_id = #{openId}
+        select *
+        from t_user_info
+        where open_id = #{openId}
     </select>
 
     <select id="getUserInfoByJwcAccount" resultType="com.hang.pojo.data.UserInfoDO">
-        select * from t_user_info where jwc_account = #{jwcAccount}
+        select *
+        from t_user_info
+        where jwc_account = #{jwcAccount}
     </select>
 
     <select id="isExist" resultType="java.lang.Boolean">
-        select count(id) from t_user_info where open_id = #{openId}
+        select count(id)
+        from t_user_info
+        where open_id = #{openId}
     </select>
 
     <update id="updateLastLoginTime">
-        update t_user_info set last_login_time = NOW() where open_id = #{openId}
+        update t_user_info
+        set last_login_time = NOW()
+        where open_id = #{openId}
     </update>
 
     <update id="updateJwcAccount">
-        update t_user_info set jwc_account = #{jwcAccount} where open_id = #{openId}
+        update t_user_info
+        set jwc_account = #{jwcAccount}
+        where open_id = #{openId}
     </update>
 
     <update id="updateUserRole">
-        update t_user_info set role_id=#{role} where open_id=#{openId}
+        update t_user_info
+        set role_id=#{role}
+        where open_id = #{openId}
     </update>
 
     <insert id="insert">
-        insert into t_user_info(open_id,create_time,last_login_time,nick_name,avatar_url,gender,city,province,country)
-        values(#{openId}, NOW(), NOW(),#{nickName},#{avatarUrl},#{gender},#{city},#{province},#{country});
+        insert into t_user_info(open_id, create_time, last_login_time, nick_name, avatar_url, gender, city, province,
+                                country)
+        values (#{openId}, NOW(), NOW(), #{nickName}, #{avatarUrl}, #{gender}, #{city}, #{province}, #{country});
     </insert>
 </mapper>

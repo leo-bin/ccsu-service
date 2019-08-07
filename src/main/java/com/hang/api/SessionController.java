@@ -4,9 +4,7 @@
  */
 package com.hang.api;
 
-import com.hang.annotation.OpenId;
 import com.hang.aop.StatisticsTime;
-import com.hang.exceptions.ApiAssert;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.service.SessionService;
 import com.hang.service.UserService;
@@ -32,9 +30,6 @@ public class SessionController {
 
     @Autowired
     private SessionService sessionService;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private HttpServletRequest request;

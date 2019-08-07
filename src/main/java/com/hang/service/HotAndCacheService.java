@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 import static com.hang.constant.InformationConstant.*;
 
-
 /**
  * @author hangs.zhang
  * @date 2019/1/29
@@ -41,7 +40,6 @@ public class HotAndCacheService {
 
     /**
      * 将信息存入缓存
-     * @param information
      */
     public void addInformation2Cache(InformationDO information) {
         if (information != null) {
@@ -70,15 +68,14 @@ public class HotAndCacheService {
 
     /**
      * 更新redis缓存
-     * 采用手动穿透的方法
-     * @param id
+     * @apiNote 采用手动穿透的方法
      */
-    public void updateInformation(int id){
+    public void updateInformation(int id) {
         InformationDO information = (InformationDO) redisUtil.get(INFORMATION_PREFIX + id);
-        if(information!=null){
+        if (information != null) {
             redisUtil.del(INFORMATION_PREFIX + id);
-            information=informationDAO.selectById(id);
-            if (information!=null){
+            information = informationDAO.selectById(id);
+            if (information != null) {
                 redisUtil.set(INFORMATION_PREFIX + information.getId(), information);
             }
         }

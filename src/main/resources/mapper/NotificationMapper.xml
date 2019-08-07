@@ -10,6 +10,7 @@
         <result column="target_open_id" jdbcType="INTEGER" property="targetOpenId"/>
         <result column="notification_id" jdbcType="INTEGER" property="notificationId"/>
         <result column="open_id" jdbcType="INTEGER" property="openId"/>
+        <result column="notes" jdbcType="VARCHAR" property="notes"/>
     </resultMap>
 
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hang.pojo.data.NotificationDO">
@@ -45,10 +46,10 @@
         </selectKey>
         insert into notification (action, in_time, is_read,
         target_open_id, notification_id, open_id,
-        content)
+        content,notes)
         values (#{action,jdbcType=VARCHAR}, #{inTime,jdbcType=TIMESTAMP}, #{isRead,jdbcType=BIT},
         #{targetOpenId,jdbcType=INTEGER}, #{notificationId,jdbcType=INTEGER}, #{openId,jdbcType=INTEGER},
-        #{content,jdbcType=LONGVARCHAR})
+        #{content,jdbcType=LONGVARCHAR},#{notes,jdbcType=VARCHAR})
     </insert>
 
     <insert id="insertSystemNote" parameterType="com.hang.pojo.data.SystemNotificationDO">
@@ -87,6 +88,9 @@
             <if test="content != null">
                 content,
             </if>
+            <if test="notes!=null">
+                notes,
+            </if>
         </trim>
 
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -111,33 +115,36 @@
             <if test="content != null">
                 #{content,jdbcType=LONGVARCHAR},
             </if>
+            <if test="notes!=null">
+                #{notes,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
 
     <update id="updateByPrimaryKeySelective" parameterType="com.hang.pojo.data.NotificationDO">
         update notification
         <set>
-        <if test="action != null">
-            action = #{action,jdbcType=VARCHAR},
-        </if>
-        <if test="inTime != null">
-            in_time = #{inTime,jdbcType=TIMESTAMP},
-        </if>
-        <if test="isRead != null">
-            is_read = #{isRead,jdbcType=BIT},
-        </if>
-        <if test="targetOpenId != null">
-            target_open_id = #{targetOpenId,jdbcType=INTEGER},
-        </if>
-        <if test="notificationId != null">
-            notification_id = #{notificationId,jdbcType=INTEGER},
-        </if>
-        <if test="openId != null">
-            open_id = #{openId,jdbcType=INTEGER},
-        </if>
-        <if test="content != null">
-            content = #{content,jdbcType=LONGVARCHAR},
-        </if>
+            <if test="action != null">
+                action = #{action,jdbcType=VARCHAR},
+            </if>
+            <if test="inTime != null">
+                in_time = #{inTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isRead != null">
+                is_read = #{isRead,jdbcType=BIT},
+            </if>
+            <if test="targetOpenId != null">
+                target_open_id = #{targetOpenId,jdbcType=INTEGER},
+            </if>
+            <if test="notificationId != null">
+                notification_id = #{notificationId,jdbcType=INTEGER},
+            </if>
+            <if test="openId != null">
+                open_id = #{openId,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>

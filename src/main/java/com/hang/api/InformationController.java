@@ -18,7 +18,6 @@ import java.util.Date;
 
 import static com.hang.constant.InformationConstant.CATEGORY_MAP;
 
-
 /**
  * @author hangs.zhang
  * @date 2019/1/28
@@ -38,8 +37,6 @@ public class InformationController {
 
     /**
      * 列表类目list
-     *
-     * @return
      */
     @StatisticsTime("categoryList")
     @ApiOperation("请求类别列表")
@@ -50,18 +47,12 @@ public class InformationController {
 
     /**
      * 创建
-     *
-     * @param title
-     * @param content
-     * @param authors
-     * @param category
-     * @return
      */
     @StatisticsTime("createInformation")
     @ApiOperation("请求一个information")
     @PostMapping("/createInformation")
-    public BaseRes createInformation(@RequestParam String title,@RequestParam String content,
-                                     @RequestParam String authors,@RequestParam String category,
+    public BaseRes createInformation(@RequestParam String title, @RequestParam String content,
+                                     @RequestParam String authors, @RequestParam String category,
                                      @RequestParam String notes) {
         if (!CATEGORY_MAP.containsKey(category)) {
             throw new ApiException(-1, "category不存在");
@@ -80,9 +71,6 @@ public class InformationController {
 
     /**
      * 删除
-     *
-     * @param id
-     * @return
      */
     @StatisticsTime("removeInformation")
     @ApiOperation("删除information")
@@ -94,12 +82,6 @@ public class InformationController {
 
     /**
      * 修改
-     *
-     * @param id
-     * @param title
-     * @param content
-     * @param authors
-     * @return
      */
     @StatisticsTime("modifyInformation")
     @ApiOperation("修改information")
@@ -124,9 +106,6 @@ public class InformationController {
 
     /**
      * 查询information
-     *
-     * @param id
-     * @return
      */
     @StatisticsTime("getInformationById")
     @ApiOperation("根据id获取information")
@@ -148,7 +127,7 @@ public class InformationController {
      * 更新redis缓存信息
      */
     @PostMapping("/updateCacheInfo")
-    public BaseRes updateCacheInfo(int id){
+    public BaseRes updateCacheInfo(int id) {
         hotAndCacheService.updateInformation(id);
         return RespUtil.success();
     }

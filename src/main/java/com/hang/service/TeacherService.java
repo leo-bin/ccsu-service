@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 
 /**
- * @author LEO-BIN
+ * @author leo-bin
  * @date 2019/7/16
  */
 @Service
@@ -36,39 +36,36 @@ public class TeacherService {
 
     /**
      * 教师绑定教工号
+     *
      * @apiNote 在官网做模拟登陆，进行信息的校验
      */
     @Transactional(rollbackFor = Exception.class)
-    public void bindForTeacher(String openId,String account,String code){
-        String name=account;
-        userService.updateJwcAccount(openId,code);
-        UserInfoDO userInfoDO=userInfoDAO.selectByOpenId(openId);
-        TeacherDO teacherDO=new TeacherDO();
+    public void bindForTeacher(String openId, String account, String code) {
+        String name = account;
+        userService.updateJwcAccount(openId, code);
+        UserInfoDO userInfoDO = userInfoDAO.selectByOpenId(openId);
+        TeacherDO teacherDO = new TeacherDO();
         teacherDO.setStaffNum(userInfoDO.getJwcAccount());
         teacherDO.setCode(code);
         teacherDO.setNickName(userInfoDO.getNickName());
         teacherDO.setOpenId(userInfoDO.getOpenId());
         teacherDO.setName(name);
-        TeacherDO teacherInfo=getTeacherInfo(openId);
-        if (Objects.isNull(teacherInfo)){
+        TeacherDO teacherInfo = getTeacherInfo(openId);
+        if (Objects.isNull(teacherInfo)) {
             saveTeacherInfo(teacherDO);
-        }
-        else{
+        } else {
             modifyTeacherInfo(teacherDO);
         }
-        userService.updateUserRole(openId,1);
-        UserInfoDO userInfo=userInfoDAO.selectByOpenId(openId);
+        userService.updateUserRole(openId, 1);
+        UserInfoDO userInfo = userInfoDAO.selectByOpenId(openId);
         //redis缓存穿透
-        userCache.updateUserInfo(openId,userInfo);
+        userCache.updateUserInfo(openId, userInfo);
     }
 
 
     /**
      * 获取老师信息
      * 为了防止信息没有给全，没有输入教工号
-     *
-     * @param openId
-     * @return
      */
     public TeacherDO getTeacherInfo(String openId) {
         if (StringUtils.isBlank(openId)) {

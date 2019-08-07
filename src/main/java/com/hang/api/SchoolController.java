@@ -32,7 +32,6 @@ import java.util.Objects;
  * @author test
  * @date 19-4-28
  * *****************
- * function:
  */
 @Api("校园服务")
 @RestController
@@ -121,6 +120,7 @@ public class SchoolController {
         return RespUtil.success();
     }
 
+
     @StatisticsTime("modifyLostandRecruitMessage")
     @ApiOperation("修改LostandRecruitMessage")
     @GetMapping("/modifyLostandRecruitMessage")
@@ -197,7 +197,6 @@ public class SchoolController {
 
     /**
      * 学号确认,判断是否绑定了学号
-     * @param userInfo
      */
     private void jwcAccountCheck(UserInfoDO userInfo) {
         if (Objects.isNull(userInfo)) {

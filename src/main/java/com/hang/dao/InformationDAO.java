@@ -28,9 +28,6 @@ public interface InformationDAO {
 
     /**
      * 只查询通知和招新
-     * @param start
-     * @param offset
-     * @return
      */
     ArrayList<InformationDO> listNoteAndRecruitment(@Param("start") int start, @Param("offset") int offset);
 

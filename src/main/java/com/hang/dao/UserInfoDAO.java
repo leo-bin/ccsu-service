@@ -27,5 +27,5 @@ public interface UserInfoDAO {
 
     boolean updateLastLoginTime(String openId);
 
-    int updateUserRole(String openId,Integer role);
+    int updateUserRole(String openId, Integer role);
 }

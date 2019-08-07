@@ -5,10 +5,11 @@
 <mapper namespace="com.hang.dao.AdviserDAO">
 
     <insert id="insertAdviser">
-    insert into
-        adviser_info(id, name, tel, info, department, avatar, email, office, education, position, teachingCourse, researchDirection)
-    values(#{id}, #{name},#{tel},#{info},#{department},#{avatar},#{email},#{office},#{education},#{position},#{teachingCourse},#{researchDirection})
-</insert>
+        insert into adviser_info(id, name, tel, info, department, avatar, email, office, education, position,
+                                 teachingCourse, researchDirection)
+        values (#{id}, #{name}, #{tel}, #{info}, #{department}, #{avatar}, #{email}, #{office}, #{education},
+                #{position}, #{teachingCourse}, #{researchDirection})
+    </insert>
 
     <update id="updateAdviserInfo">
         update adviser_info
@@ -32,7 +33,7 @@
                 avatar = #{avatar},
             </if>
             <if test="email!=null">
-            email = #{email},
+                email = #{email},
             </if>
             <if test="office!=null">
                 office = #{office},
@@ -54,11 +55,15 @@
     </update>
 
     <select id="selectAdviserInfo" resultType="com.hang.pojo.data.AdviserDO">
-        select * from adviser_info where id = #{id}
+        select *
+        from adviser_info
+        where id = #{id}
     </select>
 
     <select id="listAdviser" resultType="com.hang.pojo.data.AdviserDO">
-        select * from adviser_info limit #{start}, #{offset}
+        select *
+        from adviser_info
+        limit #{start}, #{offset}
     </select>
 
 </mapper>

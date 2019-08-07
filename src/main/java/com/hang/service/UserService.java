@@ -48,9 +48,6 @@ public class UserService {
 
     /**
      * 获取用户信息
-     * @apiNote 根据openId来查询
-     * @param openId
-     * @return
      */
     public UserInfoDO getUserInfoByOpenId(String openId) {
         UserInfoDO userInfo = userCache.getUserInfo(openId);
@@ -64,7 +61,7 @@ public class UserService {
     /**
      * 根据学号查询用户信息
      */
-    public UserInfoDO getUserInfoByJwcAccount(String jwcAccount){
+    public UserInfoDO getUserInfoByJwcAccount(String jwcAccount) {
         return userInfoDAO.getUserInfoByJwcAccount(jwcAccount);
     }
 
@@ -84,14 +81,10 @@ public class UserService {
 
     /**
      * 用户登陆
-     *
-     * @param code
-     * @param rawData
-     * @return
      */
     public String login(String code, String rawData) {
         JSONObject returnJson = new JSONObject();
-        JSONObject sessionJson =null;
+        JSONObject sessionJson = null;
         // 用code 去微信服务器拿 openId 和 session_key
         JSONObject openIdAndSessionKey = code2session(code);
         int errcode = openIdAndSessionKey.getIntValue("code");
@@ -105,7 +98,7 @@ public class UserService {
         String openId = openIdAndSessionKey.getString("openId");
         log.debug("openid: {}", openId);
         UserInfoDO userInfo = new UserInfoDO();
-        UserInfoDO userInfoDO=null;
+        UserInfoDO userInfoDO = null;
         userInfo.setOpenId(openId);
         if (!Strings.isEmpty(rawData)) {
             try {
@@ -124,7 +117,7 @@ public class UserService {
                 if (userInfoDAO.isExist(openId)) {
                     userInfoDAO.updateLastLoginTime(openId);
                     //从缓存中获取最新的用户信息并写入会话
-                    userInfoDO=getUserInfoByOpenId(openId);
+                    userInfoDO = getUserInfoByOpenId(openId);
                 } else {
                     userInfoDAO.insert(userInfo);
                 }
@@ -135,13 +128,12 @@ public class UserService {
             }
         }
         // 将用户信息写入会话缓存
-        if (!Objects.isNull(userInfoDO)){
-             sessionJson = sessionService.newSession(JSONObject.toJSONString(userInfoDO));
-             returnJson.put("userInfo", userInfoDO);
-        }
-        else{
-             sessionJson = sessionService.newSession(JSONObject.toJSONString(userInfo));
-             returnJson.put("userInfo", userInfo);
+        if (!Objects.isNull(userInfoDO)) {
+            sessionJson = sessionService.newSession(JSONObject.toJSONString(userInfoDO));
+            returnJson.put("userInfo", userInfoDO);
+        } else {
+            sessionJson = sessionService.newSession(JSONObject.toJSONString(userInfo));
+            returnJson.put("userInfo", userInfo);
         }
         errcode = sessionJson.getIntValue("code");
         if (0 != errcode) {
@@ -158,9 +150,6 @@ public class UserService {
 
     /**
      * 微信code解码
-     *
-     * @param code
-     * @return
      */
     private JSONObject code2session(String code) {
         JSONObject returnJson = new JSONObject();

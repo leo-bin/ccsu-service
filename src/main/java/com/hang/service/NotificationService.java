@@ -24,8 +24,6 @@ public class NotificationService {
 
     /**
      * 保存通知
-     *
-     * @param notificationDO
      */
     public void save(NotificationDO notificationDO) {
         notificationDAO.insertSelective(notificationDO);
@@ -33,12 +31,8 @@ public class NotificationService {
 
     /**
      * 发送通知
-     *
-     * @param action
-     * @param notificationId
-     * @param content
      */
-    public void sendNotification(String openId, String targetOpenId, NotificationEnum action, Integer notificationId, String content) {
+    public void sendNotification(String openId, String targetOpenId, NotificationEnum action, Integer notificationId, String content, String notes) {
         NotificationDO notificationDO = new NotificationDO();
         notificationDO.setOpenId(openId);
         notificationDO.setTargetOpenId(targetOpenId);
@@ -47,13 +41,12 @@ public class NotificationService {
         notificationDO.setAction(action.name());
         notificationDO.setContent(content);
         notificationDO.setIsRead(false);
+        notificationDO.setNotes(notes);
         save(notificationDO);
     }
 
     /**
      * 根据用户查询评论等通知
-     *
-     * @return
      */
     public Page<Map> findCommentNoteByOpenId(Integer pageNo, Integer pageSize, String targetOpenId) {
         List<Map> list = notificationDAO.findCommentNoteByOpenId(targetOpenId, (pageNo - 1) * pageSize, pageSize,
@@ -71,7 +64,6 @@ public class NotificationService {
         int count = notificationDAO.countByTargetOpenId(targetOpenId);
         return new Page<>(pageNo, pageSize, count, list);
     }
-
 
 
     /**
@@ -99,8 +91,6 @@ public class NotificationService {
 
     /**
      * 话题被删除了，删除由话题引起的通知信息
-     *
-     * @param topicId
      */
     public void deleteByTopic(Integer topicId) {
         notificationDAO.deleteNotification(null, null, topicId);

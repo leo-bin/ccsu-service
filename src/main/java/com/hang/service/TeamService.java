@@ -36,13 +36,8 @@ public class TeamService {
     private StudentDAO studentDAO;
 
     @Autowired
-    private NotificationDAO notificationDAO;
-
-    @Autowired
     private ProjectService projectService;
 
-    @Autowired
-    private NotificationService notificationService;
 
     @Transactional(rollbackFor = Exception.class)
     public TeamVO createTeam(String openId,String name, String advisor) {
@@ -60,7 +55,7 @@ public class TeamService {
             groupMemberVO.setName(studentDO.getRealName());
             groupMemberVO.setTitle(studentDO.getTitle());
             groupMemberVO.setRole("组长");
-            addMember2Team(openId,teamId,groupMemberVO,openId);
+            addMember2Team(teamId,groupMemberVO,openId);
         }
         return teamDO2VO(teamDO);
     }
@@ -106,10 +101,9 @@ public class TeamService {
      * @param teamId
      * @param groupMemberVO
      */
-    public void addMember2Team(String openId, int teamId, GroupMemberVO groupMemberVO,String targetOpenId) {
+    public void addMember2Team(int teamId, GroupMemberVO groupMemberVO,String targetOpenId) {
         TeamDO teamDO = teamDAO.selectByTeamId(teamId);
         String members = teamDO.getMembers();
-        SystemNotificationDO systemNotificationDO=new SystemNotificationDO();
         ArrayList<GroupMemberVO> groupMemberVOS = JSON.parseObject(members, new TypeReference<ArrayList<GroupMemberVO>>() {
         });
         if(groupMemberVOS == null) {
@@ -120,14 +114,6 @@ public class TeamService {
         teamDAO.updateTeam(teamDO);
         //将成员和团队进行绑定
         teamDAO.insert2TeamUser(teamId, targetOpenId);
-        //自己不能给自己发通知
-        if (!openId.equals(targetOpenId)){
-            systemNotificationDO.setNoteType(NotificationEnum.SYSTEM_NOTE_INVITATION.name());
-            systemNotificationDO.setMessage(teamDO.getName()+SYSTEM_NOTIFICATION_SUFFIX);
-            notificationDAO.insertSystemNote(systemNotificationDO);
-            Integer notificationId=systemNotificationDO.getId();
-            notificationService.sendNotification(openId,targetOpenId, NotificationEnum.SYSTEM_NOTE_INVITATION,notificationId,teamDO.getName()+SYSTEM_NOTIFICATION_SUFFIX);
-        }
     }
 
     /**
@@ -253,25 +239,10 @@ public class TeamService {
     /**
      * 完善团队成员信息
      */
-    public void updateTeamMemberInfo(String realName, String title,TeamDO teamDO, String openId) {
+    public void updateTeamMemberInfo(String realName, String title, String openId) {
         StudentDO studentDO = studentDAO.selectStudentDOByOpenId(openId);
         studentDO.setRealName(realName);
         studentDO.setTitle(title);
-        String members = teamDO.getMembers();
-        GroupMemberVO groupMemberVO=new GroupMemberVO();
-        groupMemberVO.setAvatar(studentDO.getAvatar());
-        groupMemberVO.setName(realName);
-        groupMemberVO.setTitle(title);
-        groupMemberVO.setRole("组员");
-        ArrayList<GroupMemberVO> groupMemberVOS = JSON.parseObject(members, new TypeReference<ArrayList<GroupMemberVO>>() {
-        });
-        if(groupMemberVOS == null) {
-            groupMemberVOS = Lists.newArrayList();
-        }
-        groupMemberVOS.add(groupMemberVO);
-        teamDO.setMembers(JSON.toJSONString(groupMemberVOS));
         studentDAO.updateStudentInfo(studentDO);
-        teamDAO.updateTeam(teamDO);
     }
-
 }

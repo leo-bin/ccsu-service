@@ -134,13 +134,13 @@ public class CommentService {
         if (commentId != null) {
             Comment replyComment = this.findById(commentId);
             if (!openId.equals(replyComment.getOpenId())) {
-                notificationService.sendNotification(openId, replyComment.getOpenId(), NotificationEnum.REPLY, topic.getId(), content);
+                notificationService.sendNotification(openId, replyComment.getOpenId(), NotificationEnum.REPLY, topic.getId(), content,"");
             }
         }
 
         //不能自己给自己发通知
          if (!topic.getOpenId().equals(openId)) {
-             notificationService.sendNotification(openId, topic.getOpenId(), NotificationEnum.COMMENT, topic.getId(), content);
+             notificationService.sendNotification(openId, topic.getOpenId(), NotificationEnum.COMMENT, topic.getId(), content,"");
          }
         return comment;
     }
@@ -288,7 +288,7 @@ public class CommentService {
         update(comment);
 
         // 通知
-        notificationService.sendNotification(openId, commentUser.getOpenId(), NotificationEnum.UP, comment.getTopicId(), null);
+        notificationService.sendNotification(openId, commentUser.getOpenId(), NotificationEnum.UP, comment.getTopicId(), null,"");
         return map;
     }
 }

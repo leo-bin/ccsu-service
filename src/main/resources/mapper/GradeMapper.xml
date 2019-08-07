@@ -5,7 +5,10 @@
 <mapper namespace="com.hang.dao.GradeDAO">
 
     <select id="selectGradeByJwcAccountAndXnxq" resultType="com.hang.pojo.data.GradeDO">
-        select * from grade where jwc_account = #{jwcAccount} and xnxq = #{xnxq}
+        select *
+        from grade
+        where jwc_account = #{jwcAccount}
+          and xnxq = #{xnxq}
     </select>
 
     <insert id="addGrade">

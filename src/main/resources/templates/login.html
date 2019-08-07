@@ -10,9 +10,9 @@
 </head>
 
 <style type="text/css">
-    body{
+    body {
         background-repeat: no-repeat;
-        background-size:100% 100%;
+        background-size: 100% 100%;
         background-attachment: fixed;
     }
 </style>
@@ -24,38 +24,39 @@
 </fieldset>
 
 
-
 <div style="position:relative; left:35%;">
-<form id="userLogin"  class="form-horizontal" th:action="@{/page/login}"   method="post">
+    <form id="userLogin" class="form-horizontal" th:action="@{/page/login}" method="post">
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">用户名</label>
-        <div class="layui-input-inline">
-            <input id="userName" name="userName" lay-verify="required" autocomplete="off" class="layui-input" type="tel"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-inline">
+                <input id="userName" name="userName" lay-verify="required" autocomplete="off" class="layui-input"
+                       type="tel"/>
+            </div>
         </div>
-    </div>
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">密&nbsp;&nbsp;码</label>
-        <div class="layui-input-inline">
-            <input id="password" name="userPwd" lay-verify="required" autocomplete="off" class="layui-input" type="password"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密&nbsp;&nbsp;码</label>
+            <div class="layui-input-inline">
+                <input id="password" name="userPwd" lay-verify="required" autocomplete="off" class="layui-input"
+                       type="password"/>
+            </div>
         </div>
-    </div>
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">验证码</label>
-        <div class="layui-input-inline">
-            <input type="text" name="verifyCode" placeholder="验证码" autocomplete="off" class="layui-input">
+        <div class="layui-form-item">
+            <label class="layui-form-label">验证码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="verifyCode" placeholder="验证码" autocomplete="off" class="layui-input">
+            </div>
         </div>
-    </div>
 
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <button class="layui-btn" type="reset">重置</button>
-            <button id="loginBtn" class="layui-btn layui-btn-primary" lay-submit="" lay-filter="login">登录</button>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" type="reset">重置</button>
+                <button id="loginBtn" class="layui-btn layui-btn-primary" lay-submit="" lay-filter="login">登录</button>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
 </div>
 
 <script src="/static/layui/layui.js" charset="utf-8"></script>

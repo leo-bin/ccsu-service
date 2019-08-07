@@ -19,6 +19,7 @@ public interface CourseDAO {
 
     /**
      * 爬取个人课表
+     *
      * @param course
      * @return
      */
@@ -45,11 +46,9 @@ public interface CourseDAO {
     /**
      * 查询空闲教室
      *
-     *
      * @return
      */
     Set<String> selectFreeClassroom(@Param("semester") String semester, @Param("section") String section,
-                                   @Param("week") String week, @Param("weekDay") String weekDay,@Param("building") String building);
-
-
+                                    @Param("week") String week, @Param("weekDay") String weekDay,
+                                    @Param("building") String building);
 }

@@ -4,7 +4,6 @@
  */
 package com.hang.utils;
 
-
 import com.hang.pojo.dto.RequestHeaderDTO;
 
 import javax.servlet.http.HttpServletRequest;

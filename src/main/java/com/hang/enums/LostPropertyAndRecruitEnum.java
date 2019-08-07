@@ -11,9 +11,9 @@ public enum LostPropertyAndRecruitEnum {
      * 失物
      */
     LOSTPROPERTY,
+
     /**
      * 招领
      */
-    RECRUIT;
-
+    RECRUIT
 }

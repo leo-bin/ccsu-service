@@ -24,7 +24,6 @@ import static com.hang.constant.InformationConstant.CATEGORY_MAP;
  * @author hangs.zhang
  * @date 2019/1/28
  * *****************
- * function:
  */
 @Api("首页feed流")
 @RequestMapping("/feed")
@@ -37,8 +36,6 @@ public class FeedController {
     /**
      * 最新的10条
      * @apiNote 这里默认查询最新的消息只有招新和通知两个类别
-     *
-     * @return
      */
     @StatisticsTime("latest")
     @ApiOperation("请求最新得十条feed流数据")
@@ -52,8 +49,6 @@ public class FeedController {
 
     /**
      * 最热
-     *
-     * @return
      */
     @StatisticsTime("hot")
     @ApiOperation("请求点击最多的feed流数据")
@@ -70,11 +65,6 @@ public class FeedController {
 
     /**
      * 根据类别查询
-     *
-     * @param category
-     * @param start
-     * @param offset
-     * @return
      */
     @StatisticsTime("listByCategory")
     @ApiOperation("根据类别查询feed流数据")

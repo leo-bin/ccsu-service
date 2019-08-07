@@ -49,7 +49,7 @@ public class TeamServiceTest extends CcsuServiceApplicationTests {
             groupMemberVO.setName("李斌");
             groupMemberVO.setTitle("17计科3班李斌");
             groupMemberVO.setRole("组长");
-            teamService.addMember2Team(openId,teamId,groupMemberVO,openId);
+            teamService.addMember2Team(teamId,groupMemberVO,openId);
         }
         else{
             System.out.println("插入失败！");
@@ -96,7 +96,7 @@ public class TeamServiceTest extends CcsuServiceApplicationTests {
             systemNotificationDO.setMessage(teamDO.getName()+SYSTEM_NOTIFICATION_SUFFIX);
             notificationDAO.insertSystemNote(systemNotificationDO);
             Integer notificationId=systemNotificationDO.getId();
-            notificationService.sendNotification(openId,targetOpenId, NotificationEnum.SYSTEM_NOTE_INVITATION,notificationId,teamDO.getName()+SYSTEM_NOTIFICATION_SUFFIX);
+            notificationService.sendNotification(openId,targetOpenId, NotificationEnum.SYSTEM_NOTE_INVITATION,notificationId,teamDO.getName()+SYSTEM_NOTIFICATION_SUFFIX,"");
         }
     }
 

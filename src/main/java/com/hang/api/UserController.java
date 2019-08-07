@@ -134,7 +134,7 @@ public class UserController {
 
     /**
      * 用户个人中心
-     * 根据角色Id判断返回对象
+     * @apiNote  根据角色Id判断返回对象
      * @param openId
      * @return
      */

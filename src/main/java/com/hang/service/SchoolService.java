@@ -52,14 +52,13 @@ public class SchoolService {
      * @param semester
      * @return
      */
-    public List<GradeDO> getGrade(String jwcAccount, String semester,String code) {
-        List<GradeDO> gradeDOS=gradeDAO.selectGradeByJwcAccountAndXnxq(jwcAccount, semester);
-        if (gradeDOS.size()!=0){
+    public List<GradeDO> getGrade(String jwcAccount, String semester, String code) {
+        List<GradeDO> gradeDOS = gradeDAO.selectGradeByJwcAccountAndXnxq(jwcAccount, semester);
+        if (gradeDOS.size() != 0) {
             return gradeDOS;
-        }
-        else{
-            gradeCrawlerService.turnTOGrade(jwcAccount,code);
-            gradeDOS=gradeDAO.selectGradeByJwcAccountAndXnxq(jwcAccount, semester);
+        } else {
+            gradeCrawlerService.turnTOGrade(jwcAccount, code);
+            gradeDOS = gradeDAO.selectGradeByJwcAccountAndXnxq(jwcAccount, semester);
             return gradeDOS;
         }
     }
@@ -120,28 +119,28 @@ public class SchoolService {
         return result;
     }
 
-    public LostPropertyAndRecruitDO getLostAndRecruit(int id){
+    public LostPropertyAndRecruitDO getLostAndRecruit(int id) {
         return lostPropertyAndRecruitDAO.selectLostPropertyAndRecruit(id);
     }
 
-    public void removeLostAndRecruit(int id){
-        int i=lostPropertyAndRecruitDAO.delete(id);
+    public void removeLostAndRecruit(int id) {
+        int i = lostPropertyAndRecruitDAO.delete(id);
         if (i != 1) {
             throw new ApiException(-1, "删除失败");
         }
     }
 
-    public void modifyLostAndRecruit(LostPropertyAndRecruitDO lostPropertyAndRecruit){
+    public void modifyLostAndRecruit(LostPropertyAndRecruitDO lostPropertyAndRecruit) {
         int i = lostPropertyAndRecruitDAO.update(lostPropertyAndRecruit);
-        if(i!=1){
+        if (i != 1) {
             throw new ApiException(-1, "修改失败");
         }
     }
 
-    public List<LostPropertyAndRecruitVO> listLostPropertyAndRecruitSelf(String jwcAccount){
-        List<LostPropertyAndRecruitDO> lostPropertyAndRecruitDOS=lostPropertyAndRecruitDAO.listByJwcAccount(jwcAccount);
-        ArrayList<LostPropertyAndRecruitVO>  result = Lists.newArrayList();
-        lostPropertyAndRecruitDOS.forEach(e->{
+    public List<LostPropertyAndRecruitVO> listLostPropertyAndRecruitSelf(String jwcAccount) {
+        List<LostPropertyAndRecruitDO> lostPropertyAndRecruitDOS = lostPropertyAndRecruitDAO.listByJwcAccount(jwcAccount);
+        ArrayList<LostPropertyAndRecruitVO> result = Lists.newArrayList();
+        lostPropertyAndRecruitDOS.forEach(e -> {
             LostPropertyAndRecruitVO lostPropertyAndRecruitVO = new LostPropertyAndRecruitVO();
             BeanUtils.copyProperties(e, lostPropertyAndRecruitVO);
             lostPropertyAndRecruitVO.setOccurTime(e.getOccurTime().getTime());
@@ -153,19 +152,13 @@ public class SchoolService {
 
     /**
      * 获取空闲教室
-     * 想法：
-     * 通过前端筛选的参数进行模拟登陆学校教务处
+     *
+     * @apiNote 通过前端筛选的参数进行模拟登陆学校教务处
      * 将结果也就是具体的正在上课的教室写入数据库
      * 对结果进行筛选传给前端
-     *
-     * @param semester
-     * @param section
-     * @param week
-     * @param weekDay
-     * @return
      */
     public Set<String> getFreeClassroom(String semester, String section, String week, String weekDay, String building) {
-        Set<String> classRoom=courseDAO.selectFreeClassroom(semester, section, week, weekDay, building);
+        Set<String> classRoom = courseDAO.selectFreeClassroom(semester, section, week, weekDay, building);
         return classRoom;
     }
 }

@@ -38,7 +38,7 @@ public class SessionService {
     RedisTemplate<String, String> redisTemplate;
 
     public JSONObject newSession(String data) {
-     JSONObject returnJson = new JSONObject();
+        JSONObject returnJson = new JSONObject();
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         String sessionId = TokenUtils.getToken();
         log.info("redis set {} = {}", sessionId, data);
@@ -57,15 +57,6 @@ public class SessionService {
         UserInfoDO userInfoDO = JSON.parseObject(sessionInfo, UserInfoDO.class);
         log.info("redis sessionId : {}, sessionInfo : {}", sessionId, sessionInfo);
         redisTemplate.expire(sessionId, expiredIn, TimeUnit.SECONDS);
-        /// returnJson.put("code", 0);
-        /// returnJson.put("msg", "success");
-        /// returnJson.put("userInfo", sessionInfo);
-        /// return returnJson;
         return userInfoDO;
-    }
-
-    public void updateSessionInfo(String sessionId,UserInfoDO userInfoDO){
-       // TODO: BY leo-bin 2019/8/4
-       // TODO-LIST: 暂时不需要写更新会话缓存的接口
     }
 }

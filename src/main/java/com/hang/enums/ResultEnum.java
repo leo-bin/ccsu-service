@@ -47,40 +47,40 @@ public enum ResultEnum {
     /**
      * 导师姓名为空
      */
-    ADVISERNAME_IS_NULL(-10011,"adviser name is null"),
+    ADVISERNAME_IS_NULL(-10011, "adviser name is null"),
 
 
     /**
      * 导师不存在
      */
-    ADVISER_NOT_EXIT(-10012,"adviser is not exit"),
+    ADVISER_NOT_EXIT(-10012, "adviser is not exit"),
 
 
     /**
      * 话题已经存在
      */
-    TOPIC_IS_EXIT(-10013,"topic is exit"),
+    TOPIC_IS_EXIT(-10013, "topic is exit"),
 
 
     /**
      * 团队不存在
      */
-    TEAM_NOT_EXIT(-10014,"team is not exit"),
+    TEAM_NOT_EXIT(-10014, "team is not exit"),
 
     /**
      * 权限错误
      */
-    AUTHORIZE_ERROR(-10015,"you have no authorize"),
+    AUTHORIZE_ERROR(-10015, "you have no authorize"),
 
     /**
      * 学号密码错误
      */
-    JWC_ACCOUNT_OR_CODE_ERROR(-10016,"student number or code is wrong"),
+    JWC_ACCOUNT_OR_CODE_ERROR(-10016, "student number or code is wrong"),
 
     /**
      * 教工号格式错误
      */
-    STAFF_NUMBER_ERROR(-10017,"teacher number is wrong");
+    STAFF_NUMBER_ERROR(-10017, "teacher number is wrong");
 
 
     /**

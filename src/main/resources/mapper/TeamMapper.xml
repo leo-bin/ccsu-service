@@ -15,7 +15,7 @@
 
     <insert id="insert2TeamUser">
         insert into team_user(user_id, team_id)
-        values(#{userId}, #{teamId})
+        values (#{userId}, #{teamId})
     </insert>
 
     <insert id="insert2TeamProject">
@@ -24,7 +24,7 @@
     </insert>
 
     <update id="updateTeam">
-      update team
+        update team
         <set>
             <if test="name != null">
                 name = #{name},
@@ -45,37 +45,46 @@
                 state = #{state},
             </if>
         </set>
-      where id = #{id}
+        where id = #{id}
     </update>
 
     <delete id="deleteTeamByTeamId">
-      delete from team where id = #{teamId}
+        delete
+        from team
+        where id = #{teamId}
     </delete>
 
     <select id="selectByTeamId" resultType="com.hang.pojo.data.TeamDO">
-      select * from team where id = #{teamId}
+        select *
+        from team
+        where id = #{teamId}
     </select>
 
     <select id="selectProjectByTeamId" resultType="com.hang.pojo.data.ProjectDO">
-      select * from project
-      where id in
-      (select project_id from project_team where team_id = #{teamId})
+        select *
+        from project
+        where id in
+              (select project_id from project_team where team_id = #{teamId})
     </select>
 
     <select id="selectTeamByUserId" resultType="com.hang.pojo.data.TeamDO">
-      select * from team
-      where id in
-      (select team_id from team_user where user_id = #{userId})
+        select *
+        from team
+        where id in
+              (select team_id from team_user where user_id = #{userId})
     </select>
 
     <select id="selectTeamByProjectId" resultType="com.hang.pojo.data.TeamDO">
-      select * from team
-      where id in
-      (select team_id from project_team where project_id = #{projectId})
+        select *
+        from team
+        where id in
+              (select team_id from project_team where project_id = #{projectId})
     </select>
 
     <select id="selectTeams" resultType="com.hang.pojo.data.TeamDO">
-        select * from team limit #{start}, #{offset}
+        select *
+        from team
+        limit #{start}, #{offset}
     </select>
 
     <select id="selectTeamsByAdvisor" resultType="com.hang.pojo.data.TeamDO">

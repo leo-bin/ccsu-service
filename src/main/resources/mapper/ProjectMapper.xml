@@ -38,10 +38,13 @@
     </update>
 
     <select id="selectByProjectId" resultType="com.hang.pojo.data.ProjectDO">
-        select * from project where id = #{id}
+        select *
+        from project
+        where id = #{id}
     </select>
     <select id="list" resultType="com.hang.pojo.data.ProjectDO">
-        select * from project
+        select *
+        from project
     </select>
 
 </mapper>

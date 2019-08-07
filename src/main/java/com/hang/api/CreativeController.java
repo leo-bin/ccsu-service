@@ -13,12 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+import java.util.Objects;
 
 /**
- * @author LEO-BIN
- * @date 20197/15
- * 创新创业控制器层
+ * @author leo-bin
+ * @date 2019/7/15
+ * @apiNote 创新创业控制器层
  */
 @Api("双创相关接口")
 @RestController
@@ -40,9 +40,6 @@ public class CreativeController {
 
     /**
      * 查询导师信息
-     *
-     * @param id
-     * @return
      */
     @StatisticsTime("getAdviser")
     @ApiOperation("根据id获取单个导师信息")
@@ -57,34 +54,12 @@ public class CreativeController {
     @StatisticsTime("insertAdviserInfo")
     @ApiOperation("增加导师信息")
     @PostMapping("/insertAdviserInfo")
-    public BaseRes insertAdviserInfo(@RequestParam String adviserName,
-                                     @RequestParam String adviserTel,
-                                     @RequestParam String adviserInfo,
-                                     @RequestParam String department,
-                                     @RequestParam String avatar,
-                                     @RequestParam String email,
-                                     @RequestParam String office,
-                                     @RequestParam String education,
-                                     @RequestParam String position,
-                                     @RequestParam String teachingCourse,
-                                     @RequestParam String researchDirection
+    public BaseRes insertAdviserInfo(@ModelAttribute AdviserDO adviser
     ) {
-        if (adviserName == null) {
+        if (Objects.isNull(adviser)) {
             return RespUtil.error(ResultEnum.ADVISERNAME_IS_NULL);
         }
-        AdviserDO adviserDo = new AdviserDO();
-        adviserDo.setName(adviserName);
-        adviserDo.setTel(adviserTel);
-        adviserDo.setInfo(adviserInfo);
-        adviserDo.setDepartment(department);
-        adviserDo.setAvatar(avatar);
-        adviserDo.setEmail(email);
-        adviserDo.setOffice(office);
-        adviserDo.setEducation(education);
-        adviserDo.setPosition(position);
-        adviserDo.setTeachingCourse(teachingCourse);
-        adviserDo.setResearchDirection(researchDirection);
-        adviserService.insertAdviserInfo(adviserDo);
+        adviserService.insertAdviserInfo(adviser);
         return RespUtil.success();
     }
 

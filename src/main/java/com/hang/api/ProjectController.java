@@ -19,7 +19,6 @@ import java.util.Date;
  * @author hangs.zhang
  * @date 2019/1/25
  * *****************
- * function:
  */
 @Api("项目相关接口")
 @RequestMapping("/project")
@@ -37,9 +36,6 @@ public class ProjectController {
 
     /**
      * 根据projectId查询项目
-     *
-     * @param projectId
-     * @return
      */
     @StatisticsTime("getProjectByProjectId")
     @ApiOperation("根据projectId获取项目信息")
@@ -51,12 +47,6 @@ public class ProjectController {
 
     /**
      * 基本信息管理，即修改基本信息
-     *
-     * @param projectId
-     * @param name
-     * @param description
-     * @param properties
-     * @return
      */
     @StatisticsTime("updateProject")
     @ApiOperation("更新项目基本信息")
@@ -68,10 +58,6 @@ public class ProjectController {
 
     /**
      * 增加honor
-     *
-     * @param projectId
-     * @param honor
-     * @return
      */
     @StatisticsTime("addHonor2Project")
     @ApiOperation("为项目添加荣誉")
@@ -83,10 +69,6 @@ public class ProjectController {
 
     /**
      * 追加最新进展
-     *
-     * @param projectId
-     * @param schedule
-     * @return
      */
     @StatisticsTime("addSchedule2Project")
     @ApiOperation("为项目追加进度")

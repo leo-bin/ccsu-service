@@ -49,13 +49,12 @@ public class StudentService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void bindForStudent(String openId, String account, String code) {
-        Integer flag=courseCrawlerService.turnToCourse(account,code);
-        if (flag==0){
+        Integer flag = courseCrawlerService.turnToCourse(account, code);
+        if (flag == 0) {
             throw new ApiException(ResultEnum.JWC_ACCOUNT_OR_CODE_ERROR);
-        }
-        else {
+        } else {
             userService.updateJwcAccount(openId, account);
-            SchoolConstant schoolConstant=new SchoolConstant();
+            SchoolConstant schoolConstant = new SchoolConstant();
             UserInfoDO userInfoDO = userInfoDAO.selectByOpenId(openId);
             StudentDO studentDO = new StudentDO();
             studentDO.setJwcAccount(userInfoDO.getJwcAccount());
@@ -72,10 +71,10 @@ public class StudentService {
                 modifyStudentInfo(studentDO);
             }
             //重新绑定之后所有权限角色都变为0
-            userService.updateUserRole(openId,0);
-            UserInfoDO userInfo=userInfoDAO.selectByOpenId(openId);
+            userService.updateUserRole(openId, 0);
+            UserInfoDO userInfo = userInfoDAO.selectByOpenId(openId);
             //redis缓存穿透
-            userCache.updateUserInfo(openId,userInfo);
+            userCache.updateUserInfo(openId, userInfo);
         }
     }
 
@@ -83,9 +82,6 @@ public class StudentService {
     /**
      * 获取学生信息
      * 为了防止信息没有给全，没有输入学号
-     *
-     * @param openId
-     * @return
      */
     public StudentDO getStudentInfoByOpenId(String openId) {
         if (StringUtils.isBlank(openId)) {
@@ -113,7 +109,6 @@ public class StudentService {
         }
         return null;
     }
-
 
 
     public void saveStudentInfo(StudentDO studentDO) {

@@ -28,7 +28,7 @@
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
 <script>
-    layui.use(['table', 'laypage', 'layer','jquery', 'form', 'laydate'], function () {
+    layui.use(['table', 'laypage', 'layer', 'jquery', 'form', 'laydate'], function () {
         var table = layui.table;
         var $ = layui.$;
         var form = layui.form;
@@ -115,7 +115,7 @@
 
 
         //工具栏事件
-        table.on('toolbar(test)', function(obj) {
+        table.on('toolbar(test)', function (obj) {
             var checkStatus = table.checkStatus(obj.config.id);
 
             switch (obj.event) {
@@ -135,7 +135,8 @@
                 case 'isAll':
                     layer.msg(checkStatus.isAll ? '全选' : '未全选')
                     break;
-            };
+            }
+            ;
         });
 
         //监听行工具事件
@@ -210,19 +211,21 @@
 
 <div class="layui-row" id="popUpdateTest" style="display:none;">
     <div class="layui-col-md10">
-        <form   class="layui-form layui-from-pane"  lay-filter="team" action="" style="margin-top:20px" >
+        <form class="layui-form layui-from-pane" lay-filter="team" action="" style="margin-top:20px">
 
             <div class="layui-form-item">
                 <label class="layui-form-label">团队名字 </label>
                 <div class="layui-input-block">
-                    <input type="text" name="name"   lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
+                    <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder=""
+                           class="layui-input">
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label">导师</label>
                 <div class="layui-input-block">
-                    <input type="text" name="advisor" lay-verify="required"  autocomplete="off" placeholder="" class="layui-input">
+                    <input type="text" name="advisor" lay-verify="required" autocomplete="off" placeholder=""
+                           class="layui-input">
                 </div>
             </div>
 

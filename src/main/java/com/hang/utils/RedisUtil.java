@@ -1,13 +1,5 @@
 package com.hang.utils;
 
-/**
- * @author hangs.zhang
- * @date 2018/11/20
- * *****************
- * function:
- * redis工具类
- */
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -18,6 +10,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author hangs.zhang
+ * @date 2018/11/20
+ * *****************
+ * function:
+ * redis工具类
+ */
 @Component
 public final class RedisUtil {
 

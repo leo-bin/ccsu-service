@@ -3,14 +3,14 @@ package com.hang.pojo.data;
 import lombok.Data;
 
 /**
- * @author LEO-BIN
+ * @author leo-bin
  * @date 2019/6/20
- * 管理员信息实体类
+ * @apiNote 管理员信息实体类
  */
 @Data
 public class AdminUserInfoDO {
 
-    private long id;
+    private Integer id;
 
     /**
      * 管理员账号

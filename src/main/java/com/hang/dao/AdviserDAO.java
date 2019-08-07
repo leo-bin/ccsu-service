@@ -17,7 +17,7 @@ public interface AdviserDAO {
     /**
      * 查询导师信息
      */
-   AdviserDO selectAdviserInfo(int id);
+    AdviserDO selectAdviserInfo(int id);
 
     /**
      * 查询所有导师信息

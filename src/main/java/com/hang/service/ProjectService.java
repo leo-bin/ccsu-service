@@ -75,7 +75,8 @@ public class ProjectService {
         ProjectDO projectDO = projectDAO.selectByProjectId(projectId);
         List<ProjectScheduleVO> projectScheduleVOS;
         if (StringUtils.isNotBlank(projectDO.getSchedule())) {
-            projectScheduleVOS = JSON.parseObject(projectDO.getSchedule(), new TypeReference<ArrayList<ProjectScheduleVO>>() {});
+            projectScheduleVOS = JSON.parseObject(projectDO.getSchedule(), new TypeReference<ArrayList<ProjectScheduleVO>>() {
+            });
         } else {
             projectScheduleVOS = Lists.newArrayList();
         }

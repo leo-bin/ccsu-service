@@ -14,7 +14,7 @@
 <div class="layui-tab">
     <ul class="layui-tab-title">
         <li class="layui-this" id="lost">失物</li>
-        <li id="recruit" >招领</li>
+        <li id="recruit">招领</li>
     </ul>
 </div>
 
@@ -61,7 +61,7 @@
                 type: 'datetime',
             });
 
-            var codetest='0';
+            var codetest = '0';
 
             $("#lost").click(function () {
                 table.reload('mytable', {
@@ -75,7 +75,7 @@
             })
 
 
-           $("#recruit").click(function () {
+            $("#recruit").click(function () {
                 table.reload('mytable', {
                     page: {
                         curr: 1
@@ -97,7 +97,7 @@
                         curr: 1
                     }
                     , method: 'GET',
-                    url: '/school/listLostAndRecruitMessage?code='+codetest+'&offset='+value,
+                    url: '/school/listLostAndRecruitMessage?code=' + codetest + '&offset=' + value,
                 });
             })
 
