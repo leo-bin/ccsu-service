@@ -83,6 +83,16 @@ public class NotificationService {
     }
 
     /**
+     * 更新邀请的状态
+     */
+    public void updateByIsSuccess(Integer id){
+        notificationDAO.updateByIsSuccess(id);
+    }
+
+
+
+
+    /**
      * 删除目标用户的通知
      */
     public void deleteByTargetUser(String targetOpenId) {

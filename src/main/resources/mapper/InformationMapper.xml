@@ -40,7 +40,8 @@
     <select id="list" resultType="com.hang.pojo.data.InformationDO">
         select *
         from information
-        where id between #{start} and #{offset}
+        order by release_time desc
+        limit #{start},#{offset}
     </select>
 
     <select id="count" resultType="java.lang.Integer">

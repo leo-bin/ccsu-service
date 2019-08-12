@@ -9,7 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-
+import java.util.List;
+import java.util.Objects;
 
 
 public class InformationServiceTest extends CcsuServiceApplicationTests {
@@ -23,5 +24,20 @@ public class InformationServiceTest extends CcsuServiceApplicationTests {
     public void getLatestInformation() {
         ArrayList<InformationDO> list = informationDAO.listNoteAndRecruitment(0,10);
         System.out.println(list);
+    }
+
+    @Test
+    public void listAll(){
+        List<InformationDO> informationDOS=informationDAO.list(0,100);
+        if (Objects.isNull(informationDOS)){
+            System.out.println("查询失败！！数据为空");
+        }
+        else {
+            for (InformationDO informationDO:informationDOS){
+                System.out.println(informationDO);
+            }
+            System.out.println(informationDOS);
+            System.out.println("查询成功！！");
+        }
     }
 }

@@ -141,6 +141,7 @@ public class TeamController {
     /**
      * 增加成员
      * @apiNote @ModelAttribute Objects objects: 数据绑定，将url对应的请求参数和对象进行一一对应的绑定
+     * 前端一旦调用这个接口代表被邀请人已同意，这里直接开始添加
      */
     @StatisticsTime("addMember2Team")
     @ApiOperation("team添加成员")
@@ -157,9 +158,12 @@ public class TeamController {
         //邀请成功之后给邀请人发通知
         systemNotificationDO.setNoteType(NotificationEnum.SYSTEM_NOTE_INVITATION.name());
         systemNotificationDO.setMessage(INVITATION_SUCCESS_SUFFIX);
+        systemNotificationDO.setState(1);
         notificationDAO.insertSystemNote(systemNotificationDO);
         Integer notificationId=systemNotificationDO.getId();
         notificationService.sendNotification(studentDO.getOpenId(),openId, NotificationEnum.SYSTEM_NOTE_INVITATION,notificationId,INVITATION_SUCCESS_SUFFIX,"");
+        //将对方的通知状态更新为成功
+        notificationService.updateByIsSuccess(notificationId);
         return RespUtil.success();
     }
 

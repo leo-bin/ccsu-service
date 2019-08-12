@@ -136,7 +136,7 @@ public class TeamService {
     public void addHonor2Team(int teamId, String honor) {
         TeamDO teamDO = teamDAO.selectByTeamId(teamId);
         String honors = teamDO.getHonor();
-        if (honors != null && honors.contains(",")) {
+        if (StringUtils.isBlank(honors)) {
             honors = honor;
         } else {
             honors += "," + honor;

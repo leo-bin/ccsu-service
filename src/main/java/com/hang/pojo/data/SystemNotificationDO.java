@@ -28,4 +28,9 @@ public class SystemNotificationDO {
      * 通知发送时间
      */
     private Date sendTime;
+
+    /**
+     * 邀请状态
+     */
+    private Integer state;
 }

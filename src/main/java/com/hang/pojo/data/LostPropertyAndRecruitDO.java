@@ -26,12 +26,12 @@ public class LostPropertyAndRecruitDO {
     private String initiatorJwcAccount;
 
     /**
-     * 信息
+     * 具体信息
      */
     private String initiatorMessage;
 
     /**
-     * 地点
+     * 发生地点
      */
     private String initiatorLocation;
 

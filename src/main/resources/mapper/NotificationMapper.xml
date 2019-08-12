@@ -186,7 +186,7 @@
     </select>
 
     <select id="findSystemNoteByOpenId" resultType="map">
-        select n.*, u.nick_name, u.avatar_url, s.id as system_note_id, s.system_notify_type as note_type
+        select n.*, u.nick_name, u.avatar_url, s.id as system_note_id, s.system_notify_type as note_type,s.state as note_state
         from notification n left join system_notification s on n.notification_id = s.id left join t_user_info u on
         n.open_id = u.id
         where n.target_open_id = #{targetOpenId}
@@ -209,6 +209,12 @@
         UPDATE notification
         SET is_read = TRUE
         WHERE target_open_id = #{targetOpenId}
+    </update>
+
+    <update id="updateByIsSuccess" parameterType="java.lang.Integer">
+        update system_notification
+        set state=1
+        where id = #{id}
     </update>
 
     <delete id="deleteNotification">

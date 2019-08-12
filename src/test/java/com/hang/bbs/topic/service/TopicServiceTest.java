@@ -39,6 +39,7 @@ public class TopicServiceTest extends CcsuServiceApplicationTests {
     @Test
     public void page() {
         Page<Map> page = topicService.page(1, 10);
+        System.out.println(page);
     }
 
     /**

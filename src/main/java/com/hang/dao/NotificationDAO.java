@@ -58,6 +58,8 @@ public interface NotificationDAO {
 
     void updateByIsRead(String targetOpenId);
 
+    void updateByIsSuccess(Integer id);
+
     void deleteNotification(
             @Param("targetOpenId") String targetOpenId,
             @Param("userId") Integer userId,
