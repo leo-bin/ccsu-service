@@ -30,4 +30,10 @@ public class NotificationServiceTest extends CcsuServiceApplicationTests {
     @Test
     public void findSystemNoteByOpenId() {
     }
+
+    @Test
+    public void updateByIsRead(){
+        String openId="opuds5cN0B--vYAWqL4a-MU2nG4E";
+        notificationDAO.updateByIsRead(openId);
+    }
 }

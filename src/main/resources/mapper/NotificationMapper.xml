@@ -6,10 +6,10 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="action" jdbcType="VARCHAR" property="action"/>
         <result column="in_time" jdbcType="TIMESTAMP" property="inTime"/>
-        <result column="is_read" jdbcType="BIT" property="isRead"/>
-        <result column="target_open_id" jdbcType="INTEGER" property="targetOpenId"/>
+        <result column="is_read" jdbcType="TINYINT" property="isRead"/>
+        <result column="target_open_id" jdbcType="VARCHAR" property="targetOpenId"/>
         <result column="notification_id" jdbcType="INTEGER" property="notificationId"/>
-        <result column="open_id" jdbcType="INTEGER" property="openId"/>
+        <result column="open_id" jdbcType="VARCHAR" property="openId"/>
         <result column="notes" jdbcType="VARCHAR" property="notes"/>
     </resultMap>
 
@@ -47,8 +47,8 @@
         insert into notification (action, in_time, is_read,
         target_open_id, notification_id, open_id,
         content,notes)
-        values (#{action,jdbcType=VARCHAR}, #{inTime,jdbcType=TIMESTAMP}, #{isRead,jdbcType=BIT},
-        #{targetOpenId,jdbcType=INTEGER}, #{notificationId,jdbcType=INTEGER}, #{openId,jdbcType=INTEGER},
+        values (#{action,jdbcType=VARCHAR}, #{inTime,jdbcType=TIMESTAMP}, #{isRead,jdbcType=TINYINT},
+        #{targetOpenId,jdbcType=VARCHAR}, #{notificationId,jdbcType=INTEGER}, #{openId,jdbcType=VARCHAR},
         #{content,jdbcType=LONGVARCHAR},#{notes,jdbcType=VARCHAR})
     </insert>
 
@@ -101,16 +101,16 @@
                 #{inTime,jdbcType=TIMESTAMP},
             </if>
             <if test="isRead != null">
-                #{isRead,jdbcType=BIT},
+                #{isRead,jdbcType=TINYINT},
             </if>
             <if test="targetOpenId != null">
-                #{targetOpenId,jdbcType=INTEGER},
+                #{targetOpenId,jdbcType=VARCHAR},
             </if>
             <if test="notificationId != null">
                 #{notificationId,jdbcType=INTEGER},
             </if>
             <if test="openId != null">
-                #{openId,jdbcType=INTEGER},
+                #{openId,jdbcType=VARCHAR},
             </if>
             <if test="content != null">
                 #{content,jdbcType=LONGVARCHAR},
@@ -131,16 +131,16 @@
                 in_time = #{inTime,jdbcType=TIMESTAMP},
             </if>
             <if test="isRead != null">
-                is_read = #{isRead,jdbcType=BIT},
+                is_read = #{isRead,jdbcType=TINYINT},
             </if>
             <if test="targetOpenId != null">
-                target_open_id = #{targetOpenId,jdbcType=INTEGER},
+                target_open_id = #{targetOpenId,jdbcType=VARCHAR},
             </if>
             <if test="notificationId != null">
                 notification_id = #{notificationId,jdbcType=INTEGER},
             </if>
             <if test="openId != null">
-                open_id = #{openId,jdbcType=INTEGER},
+                open_id = #{openId,jdbcType=VARCHAR},
             </if>
             <if test="content != null">
                 content = #{content,jdbcType=LONGVARCHAR},
@@ -153,10 +153,10 @@
         UPDATE notification
         SET action          = #{action,jdbcType=VARCHAR},
             in_time         = #{inTime,jdbcType=TIMESTAMP},
-            is_read         = #{isRead,jdbcType=BIT},
-            target_open_id  = #{targetOpenId,jdbcType=INTEGER},
+            is_read         = #{isRead,jdbcType=TINYINT},
+            target_open_id  = #{targetOpenId,jdbcType=VARCHAR},
             notification_id = #{notificationId,jdbcType=INTEGER},
-            open_id         = #{openId,jdbcType=INTEGER},
+            open_id         = #{openId,jdbcType=VARCHAR},
             content         = #{content,jdbcType=LONGVARCHAR}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
@@ -165,10 +165,10 @@
         UPDATE notification
         SET action          = #{action,jdbcType=VARCHAR},
             in_time         = #{inTime,jdbcType=TIMESTAMP},
-            is_read         = #{isRead,jdbcType=BIT},
-            target_open_id  = #{targetOpenId,jdbcType=INTEGER},
+            is_read         = #{isRead,jdbcType=TINYINT},
+            target_open_id  = #{targetOpenId,jdbcType=VARCHAR},
             notification_id = #{notificationId,jdbcType=INTEGER},
-            open_id         = #{openId,jdbcType=INTEGER}
+            open_id         = #{openId,jdbcType=VARCHAR}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -205,9 +205,9 @@
         where target_open_id = #{targetOpenId}
     </select>
 
-    <update id="updateByIsRead" parameterType="java.lang.Integer">
+    <update id="updateByIsRead" parameterType="java.lang.String">
         UPDATE notification
-        SET is_read = TRUE
+        SET is_read = 1
         WHERE target_open_id = #{targetOpenId}
     </update>
 

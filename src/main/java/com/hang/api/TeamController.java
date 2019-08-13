@@ -19,6 +19,7 @@ import com.hang.service.*;
 import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -146,7 +147,7 @@ public class TeamController {
     @StatisticsTime("addMember2Team")
     @ApiOperation("team添加成员")
     @PostMapping("/addMember2Team")
-    public BaseRes addMember2Team(@OpenId String openId,@RequestParam int teamId, @RequestParam String jwcAccount) {
+        public BaseRes addMember2Team(@OpenId String openId, @RequestParam Integer teamId, @RequestParam String jwcAccount) {
         StudentDO studentDO=studentService.getStudentInfoByJwcAccount(jwcAccount);
         GroupMemberVO groupMemberVO=new GroupMemberVO();
         SystemNotificationDO systemNotificationDO=new SystemNotificationDO();
@@ -179,7 +180,7 @@ public class TeamController {
     @StatisticsTime("addProject2Team")
     @ApiOperation("为team添加项目")
     @PostMapping("/addProject2Team")
-    public BaseRes addProject2Team(@RequestParam int teamId, @RequestParam String projectName,
+    public BaseRes addProject2Team(@RequestParam Integer teamId, @RequestParam String projectName,
                                    @RequestParam String projectDescription, @RequestParam String properties) {
         ProjectDO projectDO = new ProjectDO();
         projectDO.setDescription(projectDescription);
