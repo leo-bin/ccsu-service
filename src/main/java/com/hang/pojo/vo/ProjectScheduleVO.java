@@ -18,5 +18,4 @@ public class ProjectScheduleVO {
     private Date time;
 
     private String content;
-
 }

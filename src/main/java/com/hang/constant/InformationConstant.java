@@ -20,7 +20,7 @@ public class InformationConstant {
 
     public static final String SYSTEM_NOTIFICATION_SUFFIX="邀请你参加他们的团队，请及时完善你的个人信息";
 
-    public static final String INVITATION_SUCCESS_SUFFIX="龚喜你，邀请成功";
+    public static final String INVITATION_SUCCESS_SUFFIX="恭喜你，邀请成功";
 
     public static final int INFORMATION_EXPIRE = 0;
 

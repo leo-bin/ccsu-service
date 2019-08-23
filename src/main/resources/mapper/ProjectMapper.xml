@@ -33,6 +33,9 @@
             <if test="detailDescription != null">
                 detail_description = #{detailDescription},
             </if>
+            <if test="projectPlan != null">
+                project_plan = #{projectPlan},
+            </if>
         </set>
         where id = #{id}
     </update>
@@ -42,6 +45,7 @@
         from project
         where id = #{id}
     </select>
+
     <select id="list" resultType="com.hang.pojo.data.ProjectDO">
         select *
         from project

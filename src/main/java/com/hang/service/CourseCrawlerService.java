@@ -2,6 +2,8 @@ package com.hang.service;
 
 import com.hang.constant.SchoolConstant;
 import com.hang.dao.CourseDAO;
+import com.hang.enums.ResultEnum;
+import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.CourseDO;
 import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
@@ -23,6 +25,7 @@ import static com.hang.constant.SchoolConstant.LOGIN_URL;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author free-go
@@ -40,12 +43,11 @@ public class CourseCrawlerService {
      *
      * @param USERNAME 用户名
      * @param PASSWORD 密码
-     * @return 成功返回true 失败返回false
      */
     public HttpClient login(String USERNAME, String PASSWORD) {
         HttpClient httpclient = HttpClientBuilder.create().build();
         HttpPost httpost = new HttpPost(LOGIN_URL);
-
+        String con=null;
         List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 
         nvps.add(new BasicNameValuePair("USERNAME", USERNAME));
@@ -59,21 +61,28 @@ public class CourseCrawlerService {
 
         /*尝试登陆*/
         HttpResponse response;
+
         try {
             response = httpclient.execute(httpost);
+            HttpEntity httpEntity = response.getEntity();
+            con = EntityUtils.toString(httpEntity, "utf-8");
         } catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        /// TODO: BY leo-bin 2019/8/23
+        // TODO-LIST: 异常行为并未补全
+        Document doc = Jsoup.parse(con);
+        //如果官网登不上，抛出被墙的异常
+        if (Objects.isNull(doc)) {
+            new ApiException(ResultEnum.NETWORK_ERROR);
         }
         return httpclient;
     }
 
     /**
      * 将课程周数格式转换
-     *
-     * @param str
-     * @return
      */
     public String Seq(String str) {
         //字符处理去掉"（周）"

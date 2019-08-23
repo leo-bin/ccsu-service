@@ -80,8 +80,12 @@ public enum ResultEnum {
     /**
      * 教工号格式错误
      */
-    STAFF_NUMBER_ERROR(-10017, "teacher number is wrong");
+    STAFF_NUMBER_ERROR(-10017, "teacher number is wrong"),
 
+    /**
+     * 网络错误
+     */
+    NETWORK_ERROR(-10018,"your network is blocked unexpected");
 
     /**
      * 错误码

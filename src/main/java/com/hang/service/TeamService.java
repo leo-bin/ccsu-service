@@ -4,10 +4,8 @@ package com.hang.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.google.common.collect.Lists;
-import com.hang.dao.NotificationDAO;
 import com.hang.dao.StudentDAO;
 import com.hang.dao.TeamDAO;
-import com.hang.enums.NotificationEnum;
 import com.hang.pojo.data.*;
 import com.hang.pojo.vo.*;
 import org.apache.commons.lang3.StringUtils;
@@ -17,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.hang.constant.InformationConstant.SYSTEM_NOTIFICATION_SUFFIX;
 
 /**
  * @author hangs.zhang
@@ -118,9 +114,6 @@ public class TeamService {
 
     /**
      * 添加项目到team
-     *
-     * @param teamId
-     * @param projectPO
      */
     public void addProject2Team(int teamId, ProjectDO projectPO) {
         ProjectDO project = projectService.addProject(projectPO);
@@ -183,13 +176,11 @@ public class TeamService {
         if (StringUtils.isNotBlank(teamDO.getLog())) {
             teamVO.setTeamLog(JSON.parseObject(teamDO.getLog(), new TypeReference<ArrayList<TeamLogVO>>() {}));
         }
-
         String honor = teamDO.getHonor();
         if (StringUtils.isNotBlank(honor)) {
             String[] split = honor.split(",");
             teamVO.setHonor(Arrays.asList(split));
         }
-
         if (!Objects.isNull(teamDO.getId())) {
             List<ProjectDO> projectPOS = teamDAO.selectProjectByTeamId(teamDO.getId());
             if (!Objects.isNull(projectPOS)) {
@@ -220,10 +211,13 @@ public class TeamService {
         /// List<TeamDO> teamDOS = teamDAO.selectTeamByProjectId(projectPO.getId());
         /// Map<String, Integer> teams = teamDOS.stream().collect(Collectors.toMap(TeamDO::getName, TeamDO::getId));
         /// projectVO.setTeams(teams);
-
         String schedule = projectDO.getSchedule();
+        String plans=projectDO.getProjectPlan();
         if (StringUtils.isNotBlank(schedule)) {
             projectVO.setSchedule(JSON.parseObject(projectDO.getSchedule(), new TypeReference<ArrayList<ProjectScheduleVO>>() {}));
+        }
+        if (StringUtils.isNotBlank(plans)){
+            projectVO.setProjectPlan(JSON.parseObject(projectDO.getProjectPlan(),new TypeReference<ArrayList<ProjectPlanVO>>(){}));
         }
         return projectVO;
     }

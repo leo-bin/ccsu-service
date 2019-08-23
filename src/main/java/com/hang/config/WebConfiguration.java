@@ -56,6 +56,7 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .excludePathPatterns("/project/list")
                 .excludePathPatterns("/project/addHonor2Project")
                 .excludePathPatterns("/project/addSchedule2Project")
+                .excludePathPatterns("/project/addPlan2Project")
                 .excludePathPatterns("/team/getAllTeam")
                 .excludePathPatterns("/team/createTeam")
                 .excludePathPatterns("/team/addLog2Team")

@@ -1,10 +1,13 @@
 package com.hang.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.google.common.collect.Lists;
 import com.hang.dao.ProjectDAO;
 import com.hang.pojo.data.ProjectDO;
+import com.hang.pojo.vo.ProjectPlanVO;
 import com.hang.pojo.vo.ProjectScheduleVO;
 import com.hang.pojo.vo.ProjectVO;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +18,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author hangs.zhang
@@ -80,10 +84,20 @@ public class ProjectService {
         } else {
             projectScheduleVOS = Lists.newArrayList();
         }
-
         projectScheduleVOS.add(new ProjectScheduleVO(time, schedule));
         projectDO.setSchedule(JSON.toJSONString(projectScheduleVOS));
         projectDAO.updateProject(projectDO);
     }
 
+    public void addPlan2Project(int projectId,String plans){
+        ProjectDO projectDO=projectDAO.selectByProjectId(projectId);
+        JSONArray jsonArray=JSONArray.parseArray(plans);
+        List<ProjectPlanVO> projectPlanVOS=Lists.newArrayList();
+        for (Object jsonObject:jsonArray){
+            ProjectPlanVO projectPlanVO=JSON.parseObject(jsonObject.toString(),ProjectPlanVO.class);
+            projectPlanVOS.add(projectPlanVO);
+            projectDO.setProjectPlan(JSON.toJSONString(projectPlanVOS));
+        }
+        projectDAO.updateProject(projectDO);
+    }
 }

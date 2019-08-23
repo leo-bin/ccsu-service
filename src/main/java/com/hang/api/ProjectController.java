@@ -50,7 +50,7 @@ public class ProjectController {
      */
     @StatisticsTime("updateProject")
     @ApiOperation("更新项目基本信息")
-    @GetMapping("/updateProject")
+    @RequestMapping("/updateProject")
     public BaseRes updateProject(int projectId, String name, String description, String properties) {
         projectService.updateProject(projectId, name, description, properties);
         return RespUtil.success();
@@ -61,7 +61,7 @@ public class ProjectController {
      */
     @StatisticsTime("addHonor2Project")
     @ApiOperation("为项目添加荣誉")
-    @GetMapping("/addHonor2Project")
+    @RequestMapping("/addHonor2Project")
     public BaseRes addHonor2Project(int projectId, String honor) {
         projectService.addHonor2Project(projectId, honor);
         return RespUtil.success();
@@ -72,11 +72,21 @@ public class ProjectController {
      */
     @StatisticsTime("addSchedule2Project")
     @ApiOperation("为项目追加进度")
-    @GetMapping("/addSchedule2Project")
+    @RequestMapping("/addSchedule2Project")
     public BaseRes addSchedule2Project(int projectId, Long time, String schedule) {
         Date date = new Date(time);
         projectService.addSchedule2Project(projectId, date, schedule);
         return RespUtil.success();
     }
 
+    /**
+     * 制定项目甘特图
+     */
+    @StatisticsTime("addPlan2Project")
+    @ApiOperation("为项目添加计划")
+    @RequestMapping("/addPlan2Project")
+    public BaseRes addPlan2Project(@RequestParam Integer projectId, @RequestParam String plans) {
+        projectService.addPlan2Project(projectId, plans);
+        return RespUtil.success();
+    }
 }

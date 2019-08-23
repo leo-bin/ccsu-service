@@ -38,6 +38,11 @@ public class ProjectVO {
      */
     private List<ProjectScheduleVO> schedule;
 
+    /**
+     * 项目计划
+     */
+    private List<ProjectPlanVO> projectPlan;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

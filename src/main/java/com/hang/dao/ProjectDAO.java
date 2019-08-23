@@ -39,5 +39,4 @@ public interface ProjectDAO {
     int updateProject(ProjectDO projectPO);
 
     List<ProjectDO> list();
-
 }

@@ -42,9 +42,6 @@ public class StudentService {
 
     /**
      * 学生绑定学号和密码
-     *
-     * @param openId
-     * @param account
      * @apiNote 在官网做模拟登陆，进行信息的校验，同时将学生的最新课表爬取下来
      */
     @Transactional(rollbackFor = Exception.class)

@@ -147,7 +147,8 @@ public class TeamController {
     @StatisticsTime("addMember2Team")
     @ApiOperation("team添加成员")
     @PostMapping("/addMember2Team")
-        public BaseRes addMember2Team(@OpenId String openId, @RequestParam Integer teamId, @RequestParam String jwcAccount) {
+        public BaseRes addMember2Team(@RequestParam String openId, @RequestParam Integer teamId,
+                                      @RequestParam String jwcAccount,@RequestParam Integer noteId) {
         StudentDO studentDO=studentService.getStudentInfoByJwcAccount(jwcAccount);
         GroupMemberVO groupMemberVO=new GroupMemberVO();
         SystemNotificationDO systemNotificationDO=new SystemNotificationDO();
@@ -162,9 +163,11 @@ public class TeamController {
         systemNotificationDO.setState(1);
         notificationDAO.insertSystemNote(systemNotificationDO);
         Integer notificationId=systemNotificationDO.getId();
-        notificationService.sendNotification(studentDO.getOpenId(),openId, NotificationEnum.SYSTEM_NOTE_INVITATION,notificationId,INVITATION_SUCCESS_SUFFIX,"");
+        notificationService.sendNotification(studentDO.getOpenId(),openId,NotificationEnum.SYSTEM_NOTE_INVITATION,notificationId,INVITATION_SUCCESS_SUFFIX,"");
         //将对方的通知状态更新为成功
         notificationService.updateByIsSuccess(notificationId);
+        //将自己的通知状态改为成功
+        notificationService.updateByIsSuccess(noteId);
         return RespUtil.success();
     }
 

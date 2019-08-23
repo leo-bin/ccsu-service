@@ -176,7 +176,7 @@
     <select id="findCommentNoteByOpenId" resultType="map">
         select n.*, u.nick_name, u.avatar_url, t.id as topic_id, t.title as topic_title
         from notification n left join topic t on n.notification_id = t.id left join t_user_info u on n.open_id = u.id
-        where n.target_open_id = #{targetOpenId}
+        where n.target_open_id = #{targetOpenId} and n.action='COMMENT'
         <if test="orderBy != null">
             order by ${orderBy}
         </if>
@@ -189,7 +189,7 @@
         select n.*, u.nick_name, u.avatar_url, s.id as system_note_id, s.system_notify_type as note_type,s.state as note_state
         from notification n left join system_notification s on n.notification_id = s.id left join t_user_info u on
         n.open_id = u.id
-        where n.target_open_id = #{targetOpenId}
+        where n.target_open_id = #{targetOpenId} and n.action !='COMMENT'
         <if test="orderBy != null">
             order by ${orderBy}
         </if>

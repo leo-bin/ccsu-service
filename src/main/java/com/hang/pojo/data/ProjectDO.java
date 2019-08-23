@@ -37,4 +37,9 @@ public class ProjectDO {
      */
     private String schedule;
 
+    /**
+     * 项目计划
+     */
+    private String projectPlan;
+
 }
