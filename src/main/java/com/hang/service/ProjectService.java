@@ -2,23 +2,19 @@ package com.hang.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.google.common.collect.Lists;
 import com.hang.dao.ProjectDAO;
 import com.hang.pojo.data.ProjectDO;
 import com.hang.pojo.vo.ProjectPlanVO;
 import com.hang.pojo.vo.ProjectScheduleVO;
 import com.hang.pojo.vo.ProjectVO;
+import com.hang.pojo.vo.HonorVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author hangs.zhang
@@ -63,28 +59,26 @@ public class ProjectService {
         projectDAO.updateProject(projectPO);
     }
 
-    public void addHonor2Project(int projectId, String honor) {
+    public void addHonor2Project(int projectId, String honors) {
         ProjectDO projectPO = projectDAO.selectByProjectId(projectId);
-        String honors = projectPO.getHonor();
-        if (StringUtils.isBlank(honors)) {
-            honors = honor;
-        } else {
-            honors += "," + honor;
+        ArrayList<HonorVO> projectHonors=Lists.newArrayList();
+        JSONArray jsonArray=JSONArray.parseArray(honors);
+        for (Object jsonObject:jsonArray){
+            HonorVO honor =JSON.parseObject(jsonObject.toString(), HonorVO.class);
+            projectHonors.add(honor);
         }
-        projectPO.setHonor(honors);
+        projectPO.setHonor(JSON.toJSONString(projectHonors));
         projectDAO.updateProject(projectPO);
     }
 
-    public void addSchedule2Project(int projectId, Date time, String schedule) {
+    public void addSchedule2Project(int projectId, String schedules) {
         ProjectDO projectDO = projectDAO.selectByProjectId(projectId);
-        List<ProjectScheduleVO> projectScheduleVOS;
-        if (StringUtils.isNotBlank(projectDO.getSchedule())) {
-            projectScheduleVOS = JSON.parseObject(projectDO.getSchedule(), new TypeReference<ArrayList<ProjectScheduleVO>>() {
-            });
-        } else {
-            projectScheduleVOS = Lists.newArrayList();
+        JSONArray jsonArray=JSONArray.parseArray(schedules);
+        List<ProjectScheduleVO> projectScheduleVOS=Lists.newArrayList();
+        for (Object jsonObject:jsonArray){
+            ProjectScheduleVO projectScheduleVO=JSON.parseObject(jsonObject.toString(),ProjectScheduleVO.class);
+            projectScheduleVOS.add(projectScheduleVO);
         }
-        projectScheduleVOS.add(new ProjectScheduleVO(time, schedule));
         projectDO.setSchedule(JSON.toJSONString(projectScheduleVOS));
         projectDAO.updateProject(projectDO);
     }
@@ -96,8 +90,8 @@ public class ProjectService {
         for (Object jsonObject:jsonArray){
             ProjectPlanVO projectPlanVO=JSON.parseObject(jsonObject.toString(),ProjectPlanVO.class);
             projectPlanVOS.add(projectPlanVO);
-            projectDO.setProjectPlan(JSON.toJSONString(projectPlanVOS));
         }
+        projectDO.setProjectPlan(JSON.toJSONString(projectPlanVOS));
         projectDAO.updateProject(projectDO);
     }
 }

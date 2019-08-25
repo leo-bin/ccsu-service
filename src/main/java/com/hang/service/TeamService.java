@@ -2,6 +2,7 @@ package com.hang.service;
 
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.TypeReference;
 import com.google.common.collect.Lists;
 import com.hang.dao.StudentDAO;
@@ -123,36 +124,30 @@ public class TeamService {
 
     /**
      * 添加荣誉到team
-     * @param teamId
-     * @param honor
      */
-    public void addHonor2Team(int teamId, String honor) {
+    public void addHonor2Team(int teamId, String honors) {
         TeamDO teamDO = teamDAO.selectByTeamId(teamId);
-        String honors = teamDO.getHonor();
-        if (StringUtils.isBlank(honors)) {
-            honors = honor;
-        } else {
-            honors += "," + honor;
+        ArrayList<HonorVO> teamHonors =Lists.newArrayList();
+        JSONArray jsonArray=JSONArray.parseArray(honors);
+        for (Object jsonObject:jsonArray){
+            HonorVO honorVO =JSON.parseObject(jsonObject.toString(), HonorVO.class);
+            teamHonors.add(honorVO);
         }
-        teamDO.setHonor(honors);
+        teamDO.setHonor(JSON.toJSONString(teamHonors));
         teamDAO.updateTeam(teamDO);
     }
 
     /**
      * 添加团队日志到team
-     * @param teamId
-     * @param time
-     * @param log
      */
-    public void addLog2Team(int teamId, Date time, String log) {
+    public void addLog2Team(int teamId,String logs) {
         TeamDO teamDO = teamDAO.selectByTeamId(teamId);
-        ArrayList<TeamLogVO> teamLogVOS;
-        if (StringUtils.isBlank(teamDO.getLog())) {
-            teamLogVOS = new ArrayList<>();
-        } else {
-            teamLogVOS = JSON.parseObject(teamDO.getLog(), new TypeReference<ArrayList<TeamLogVO>>() {});
+        JSONArray jsonArray=JSONArray.parseArray(logs);
+        ArrayList<TeamLogVO> teamLogVOS=Lists.newArrayList();
+        for (Object jsonObject:jsonArray){
+            TeamLogVO teamLogVO=JSON.parseObject(jsonObject.toString(),TeamLogVO.class);
+            teamLogVOS.add(teamLogVO);
         }
-        teamLogVOS.add(new TeamLogVO(time, log));
         teamDO.setLog(JSON.toJSONString(teamLogVOS));
         teamDAO.updateTeam(teamDO);
     }

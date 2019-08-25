@@ -174,11 +174,6 @@ public class TeamController {
 
     /**
      * 创建project，然后添加到team
-     *
-     * @param teamId
-     * @param projectName
-     * @param projectDescription
-     * @return
      */
     @StatisticsTime("addProject2Team")
     @ApiOperation("为team添加项目")
@@ -196,32 +191,23 @@ public class TeamController {
 
     /**
      * 增加荣誉
-     *
-     * @param teamId
-     * @param honor
-     * @return
      */
     @StatisticsTime("addHonor2Team")
     @ApiOperation("team添加荣耀")
     @PostMapping("/addHonor2Team")
-    public BaseRes addHonor2Team(@RequestParam int teamId, @RequestParam String honor) {
-        teamService.addHonor2Team(teamId, honor);
+    public BaseRes addHonor2Team(@RequestParam Integer teamId, @RequestParam String honors) {
+        teamService.addHonor2Team(teamId, honors);
         return RespUtil.success();
     }
 
     /**
      * 追加日志
-     *
-     * @param teamId
-     * @param log
-     * @return
      */
     @StatisticsTime("addLog2Team")
     @ApiOperation("team添加日志")
     @PostMapping("/addLog2Team")
-    public BaseRes addLog2Team(@RequestParam int teamId, @RequestParam Long time, @RequestParam String log) {
-        Date date = new Date(time);
-        teamService.addLog2Team(teamId, date, log);
+    public BaseRes addLog2Team(@RequestParam Integer teamId, @RequestParam String logs) {
+        teamService.addLog2Team(teamId, logs);
         return RespUtil.success();
     }
 

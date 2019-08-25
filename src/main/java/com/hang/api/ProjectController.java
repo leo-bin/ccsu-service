@@ -51,7 +51,8 @@ public class ProjectController {
     @StatisticsTime("updateProject")
     @ApiOperation("更新项目基本信息")
     @RequestMapping("/updateProject")
-    public BaseRes updateProject(int projectId, String name, String description, String properties) {
+    public BaseRes updateProject(@RequestParam Integer projectId, @RequestParam String name,
+                                 @RequestParam String description, @RequestParam String properties) {
         projectService.updateProject(projectId, name, description, properties);
         return RespUtil.success();
     }
@@ -62,8 +63,8 @@ public class ProjectController {
     @StatisticsTime("addHonor2Project")
     @ApiOperation("为项目添加荣誉")
     @RequestMapping("/addHonor2Project")
-    public BaseRes addHonor2Project(int projectId, String honor) {
-        projectService.addHonor2Project(projectId, honor);
+    public BaseRes addHonor2Project(@RequestParam Integer projectId, String honors) {
+        projectService.addHonor2Project(projectId, honors);
         return RespUtil.success();
     }
 
@@ -73,9 +74,8 @@ public class ProjectController {
     @StatisticsTime("addSchedule2Project")
     @ApiOperation("为项目追加进度")
     @RequestMapping("/addSchedule2Project")
-    public BaseRes addSchedule2Project(int projectId, Long time, String schedule) {
-        Date date = new Date(time);
-        projectService.addSchedule2Project(projectId, date, schedule);
+    public BaseRes addSchedule2Project(@RequestParam Integer projectId,@RequestParam String schedules) {
+        projectService.addSchedule2Project(projectId, schedules);
         return RespUtil.success();
     }
 

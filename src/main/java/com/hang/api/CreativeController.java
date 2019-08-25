@@ -5,7 +5,6 @@ import com.hang.enums.ResultEnum;
 import com.hang.pojo.data.AdviserDO;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.service.AdviserService;
-import com.hang.service.InformationService;
 import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

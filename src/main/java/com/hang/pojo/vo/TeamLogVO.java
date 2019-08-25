@@ -14,6 +14,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 public class TeamLogVO {
+    private Integer id;
 
     private Date time;
 

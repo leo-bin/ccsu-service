@@ -14,6 +14,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 public class ProjectScheduleVO {
+    private Integer id;
 
     private Date time;
 
