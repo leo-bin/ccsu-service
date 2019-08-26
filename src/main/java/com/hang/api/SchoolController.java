@@ -121,10 +121,10 @@ public class SchoolController {
     }
 
 
-    @StatisticsTime("modifyLostandRecruitMessage")
-    @ApiOperation("修改LostandRecruitMessage")
-    @GetMapping("/modifyLostandRecruitMessage")
-    public BaseRes modifyLostandRecruitMessage(@RequestParam int id,
+    @StatisticsTime("modifyLostAndRecruitMessage")
+    @ApiOperation("修改LostAndRecruitMessage")
+    @GetMapping("/modifyLostAndRecruitMessage")
+    public BaseRes modifyLostAndRecruitMessage(@RequestParam int id,
                                                @RequestParam String initiatorMessage,
                                                @RequestParam String initiatorLocation,
                                                @RequestParam Long occurtime,

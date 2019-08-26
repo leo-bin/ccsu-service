@@ -69,8 +69,8 @@ public class TeamService {
         return teamVOS;
     }
 
-    public List<TeamVO> getTeams(int start, int offset) {
-        List<TeamDO> teamDOS = teamDAO.selectTeams(start, offset);
+    public List<TeamVO> getTeams(int start, int offset, int state) {
+        List<TeamDO> teamDOS = teamDAO.selectTeams(start, offset, state);
         return teamDOS.stream().map(teamDO -> teamDO2VO(teamDO)).collect(Collectors.toList());
     }
 

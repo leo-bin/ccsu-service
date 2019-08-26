@@ -19,8 +19,8 @@
 </script>
 
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-mini" lay-event="detail">查看</a>
-    <a class="layui-btn layui-btn-mini layui-btn-normal" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-mini" lay-event="detail">查看和编辑</a>
+    <!--<a class="layui-btn layui-btn-mini layui-btn-normal" lay-event="edit">编辑</a>-->
 </script>
 
 
@@ -176,11 +176,11 @@
                     obj.del();
                     layer.close(index);
                 });
-            } else if (obj.event === 'edit') {
+            } else if (obj.event === 'detail') {
                 layer.open({
                     //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                     type: 1,
-                    title: "修改导师信息",
+                    title: "查看和修改导师信息",
                     area: ['800px', '600px'],
                     content: $("#popUpdateTest")//引用的弹出层的页面层的方式加载修改界面表单
                 });
