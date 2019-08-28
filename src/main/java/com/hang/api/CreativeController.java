@@ -97,4 +97,15 @@ public class CreativeController {
         adviserService.updateAdviserInfo(adviserDO);
         return RespUtil.success();
     }
+
+    /**
+     * 删除导师信息
+     */
+    @StatisticsTime("removeAdviserInfo")
+    @ApiOperation("删除导师信息")
+    @PostMapping("/removeAdviserInfo")
+    public BaseRes removeAdviserInfo(@RequestParam int id){
+        adviserService.removeAdviserInfo(id);
+        return RespUtil.success();
+    }
 }

@@ -66,4 +66,10 @@
         limit #{start}, #{offset}
     </select>
 
+    <delete id="deleteAdviser">
+        delete
+        from adviser_info
+        where id = #{id}
+    </delete>
+
 </mapper>

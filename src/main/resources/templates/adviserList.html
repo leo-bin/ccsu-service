@@ -19,8 +19,8 @@
 </script>
 
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-mini" lay-event="detail">查看和编辑</a>
-    <!--<a class="layui-btn layui-btn-mini layui-btn-normal" lay-event="edit">编辑</a>-->
+    <a class="layui-btn layui-btn-xs" lay-event="detail">查看和编辑</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
 </script>
 
 
@@ -105,7 +105,7 @@
                     width: 220
                 }, {
                     fixed: 'right',
-                    width: 178,
+                    width: 150,
                     align: 'center',
                     toolbar: '#barDemo'
                 }]
@@ -175,6 +175,12 @@
                     // console.log(obj);
                     obj.del();
                     layer.close(index);
+                    console.log(data.id);
+                    $.ajax({
+                        url: '/creative/removeAdviserInfo',
+                        type: 'POST',
+                        data: "id=" + data.id,
+                    })
                 });
             } else if (obj.event === 'detail') {
                 layer.open({
@@ -283,7 +289,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">导师联系电话</label>
                 <div class="layui-input-block">
-                    <input type="text" name="tel" required autocomplete="off" placeholder="" class="layui-input">
+                    <input type="text" name="tel"  autocomplete="off" placeholder="" class="layui-input">
                 </div>
             </div>
 
@@ -326,14 +332,14 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">邮箱</label>
                 <div class="layui-input-block">
-                    <input type="text" name="email" required autocomplete="off" placeholder="" class="layui-input">
+                    <input type="text" name="email"  autocomplete="off" placeholder="" class="layui-input">
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label">办公地点</label>
                 <div class="layui-input-block">
-                    <input type="text" name="office" required autocomplete="off" placeholder="" class="layui-input">
+                    <input type="text" name="office"  autocomplete="off" placeholder="" class="layui-input">
                 </div>
             </div>
 

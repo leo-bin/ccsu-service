@@ -2,6 +2,7 @@ package com.hang.service;
 
 import com.hang.dao.AdviserDAO;
 import com.hang.exceptions.ApiAssert;
+import com.hang.exceptions.ApiException;
 import com.hang.pojo.data.AdviserDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,13 @@ public class AdviserService {
    public void insertAdviserInfo(AdviserDO adviserDo){
        int i=adviserDAO.insertAdviser(adviserDo);
        ApiAssert.nonEqualInteger(i, 1, "更新失败");
+   }
+
+   public void removeAdviserInfo(int id){
+       int i = adviserDAO.deleteAdviser(id);
+       if (i != 1) {
+           throw new ApiException(-1, "删除失败");
+       }
    }
 
 }
