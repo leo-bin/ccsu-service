@@ -103,7 +103,7 @@ public class ArticleCrawlerService {
         }
     }
 
-    @Scheduled(cron = "0 0 2 ? * 1")        ////每周日凌晨两点启动
+    @Scheduled(cron = "0 0 2 1 * ？")        ////每月一日凌晨两点启动
     public void run() {
         try {
             saveUrlParse(UrlGet());
