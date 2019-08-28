@@ -49,6 +49,7 @@ public class SchoolController {
 
     /**
      * 查询第n周的课表
+     *
      * @param openId
      * @param week
      * @param semester
@@ -68,6 +69,7 @@ public class SchoolController {
 
     /**
      * 查询全部课表
+     *
      * @param openId
      * @param semester
      * @return
@@ -115,7 +117,8 @@ public class SchoolController {
     @StatisticsTime("removeLostAndRecruitMessage")
     @ApiOperation("删除LostAndRecruitMessage")
     @GetMapping("/removeLostAndRecruitMessage")
-    public BaseRes removeLostAndRecruitMessage(@RequestParam Integer id) {
+    public BaseRes removeLostAndRecruitMessage(@OpenId String openId, @RequestParam Integer id) {
+        ApiAssert.checkOpenId(openId);
         schoolService.removeLostAndRecruit(id);
         return RespUtil.success();
     }
@@ -124,11 +127,14 @@ public class SchoolController {
     @StatisticsTime("modifyLostAndRecruitMessage")
     @ApiOperation("修改LostAndRecruitMessage")
     @GetMapping("/modifyLostAndRecruitMessage")
-    public BaseRes modifyLostAndRecruitMessage(@RequestParam Integer id,
-                                               @RequestParam String initiatorMessage,
-                                               @RequestParam String initiatorLocation,
-                                               @RequestParam Long occurtime,
-                                               @RequestParam String contactInformation) {
+    public BaseRes modifyLostAndRecruitMessage(
+            @OpenId String openId,
+            @RequestParam Integer id,
+            @RequestParam String initiatorMessage,
+            @RequestParam String initiatorLocation,
+            @RequestParam Long occurtime,
+            @RequestParam String contactInformation) {
+        ApiAssert.checkOpenId(openId);
         LostPropertyAndRecruitDO lostPropertyAndRecruitDO = schoolService.getLostAndRecruit(id);
         lostPropertyAndRecruitDO.setInitiatorMessage(initiatorMessage);
         lostPropertyAndRecruitDO.setInitiatorLocation(initiatorLocation);
@@ -151,12 +157,6 @@ public class SchoolController {
 
     /**
      * 获取空闲教室
-     * @param semester
-     * @param section
-     * @param week
-     * @param weekDay
-     * @param building
-     * @return
      */
     @StatisticsTime("getFreeClassroom")
     @ApiOperation("获取本学期空闲教室")
@@ -165,9 +165,8 @@ public class SchoolController {
                                     @ApiParam("课程时间节数 1-2或3-4或5-6等") String section,
                                     @ApiParam("周数") String week,
                                     @ApiParam("星期") String weekDay,
-                                    @ApiParam("教学楼") String building)
-    {
-        return RespUtil.success(schoolService.getFreeClassroom(semester, section, week, weekDay,building));
+                                    @ApiParam("教学楼") String building) {
+        return RespUtil.success(schoolService.getFreeClassroom(semester, section, week, weekDay, building));
     }
 
 
@@ -180,9 +179,6 @@ public class SchoolController {
 
     /**
      * 查询成绩
-     * @param openId
-     * @param semeter
-     * @return
      */
     @StatisticsTime("getGrade")
     @ApiOperation("查询成绩")
@@ -191,8 +187,8 @@ public class SchoolController {
         ApiAssert.checkOpenId(openId);
         UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
         jwcAccountCheck(userInfo);
-        StudentDO studentDO=studentService.getStudentInfoByOpenId(openId);
-        return RespUtil.success(schoolService.getGrade(userInfo.getJwcAccount(), semeter,studentDO.getCode()));
+        StudentDO studentDO = studentService.getStudentInfoByOpenId(openId);
+        return RespUtil.success(schoolService.getGrade(userInfo.getJwcAccount(), semeter, studentDO.getCode()));
     }
 
     /**

@@ -50,7 +50,6 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .addPathPatterns("/project/**")
                 .addPathPatterns("/user/**")
                 .addPathPatterns("/session/**")
-                .addPathPatterns("/shcool/**")
                 .addPathPatterns("/api/**")
                 // 不拦截
                 .excludePathPatterns("/project/list")
@@ -73,8 +72,8 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .excludePathPatterns("/information/listAll")
                 .excludePathPatterns("/information/createInformation")
                 .excludePathPatterns("/information/removeInformation")
-                .excludePathPatterns("/school/studentList")
                 .excludePathPatterns("/user/login")
+                .excludePathPatterns("/school/**")
                 .excludePathPatterns("/notification/**");
     }
 
