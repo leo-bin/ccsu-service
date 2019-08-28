@@ -38,4 +38,9 @@ public enum InformationCategoryEnum {
      */
     PUBLIC,
 
+    /**
+     * 活动
+     */
+    ACTIVITY,
+
 }

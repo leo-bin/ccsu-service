@@ -11,6 +11,16 @@
 </head>
 <body>
 
+<div class="layui-tab" >
+    <ul class="layui-tab-title" >
+        <li class="layui-this" id="RECRUITMENT">招新</li>
+        <li id="NOTIFICATION">通知</li>
+        <li id="ACTIVITY">活动</li>
+        <li id="PUBLIC">公示</li>
+        <li id="TECHNOLOGY">技术</li>
+    </ul>
+</div>
+
 <table class="layui-hide" id="test" lay-filter="test"></table>
 <span id="show" style="display:none">123</span>
 <script type="text/html" id="toolbarDemo">
@@ -31,16 +41,74 @@
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
 <script>
-    layui.use(['table', 'laypage', 'layer', 'jquery', 'form', 'laydate'], function () {
+    layui.use(['table', 'laypage', 'layer', 'jquery', 'form', 'laydate','element'], function () {
         var table = layui.table;
         var $ = layui.$;
         var form = layui.form;
         var layer = layui.layer;
 
+        var sortcode= 'RECRUITMENT';
+
+        $("#RECRUITMENT").click(function () {
+            table.reload('mytable', {
+                page: {
+                    curr: 1
+                }
+                , method: 'GET',
+                url: '/information/listByCategory?category=RECRUITMENT',
+            });
+            sortcode = 'RECRUITMENT';
+        })
+
+        $("#NOTIFICATION").click(function () {
+            table.reload('mytable', {
+                page: {
+                    curr: 1
+                }
+                , method: 'GET',
+                url: '/information/listByCategory?category=NOTIFICATION',
+            });
+            sortcode = 'NOTIFICATION';
+        })
+
+        $("#ACTIVITY").click(function () {
+            table.reload('mytable', {
+                page: {
+                    curr: 1
+                }
+                , method: 'GET',
+                url: '/information/listByCategory?category=ACTIVITY',
+            });
+            sortcode = 'ACTIVITY';
+        })
+
+        $("#PUBLIC").click(function () {
+            table.reload('mytable', {
+                page: {
+                    curr: 1
+                }
+                , method: 'GET',
+                url: '/information/listByCategory?category=PUBLIC',
+            });
+            sortcode = 'PUBLIC';
+        })
+
+        $("#TECHNOLOGY").click(function () {
+            table.reload('mytable', {
+                page: {
+                    curr: 1
+                }
+                , method: 'GET',
+                url: '/information/listByCategory?category=TECHNOLOGY',
+            });
+            sortcode = 'TECHNOLOGY';
+        })
+
         table.render({
 
+            id:'mytable',
             elem: '#test',
-            url: '/information/listAll',
+            url: '/information/listByCategory',
             toolbar: '#toolbarDemo',
             title: '用户数据表',
             totalRow: true,
@@ -82,7 +150,7 @@
                     title: '类别',
                     width: 100
                 }, {
-                    // fixed: 'right',
+                    fixed: 'right',
                     title: '操作',
                     toolbar: '#barDemo',
                     width: 300

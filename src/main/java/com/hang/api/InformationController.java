@@ -124,6 +124,17 @@ public class InformationController {
     }
 
     /**
+     * 根据类别获取information
+     */
+    @StatisticsTime("listByCategory")
+    @GetMapping("/listByCategory")
+    public BaseRes listByCategory(@RequestParam(required = false,defaultValue = "RECRUITMENT") String category,
+                                   @RequestParam(required = false, defaultValue = "0") int start,
+                                  @RequestParam(required = false, defaultValue = "100") int offset){
+        return RespUtil.success(informationService.getInformationByCategory(category,start,offset));
+    }
+
+    /**
      * 更新redis缓存信息
      */
     @PostMapping("/updateCacheInfo")

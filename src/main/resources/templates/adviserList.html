@@ -11,6 +11,17 @@
 </head>
 <body>
 
+<div class="statistic0">
+    <div class="statistic1">
+        <select name="interest" lay-filter="aihao" id="statistic">
+            <option value=""></option>
+            <option value="100" selected="">查看前一百条数据</option>
+            <option value="200">查看前两百条数据</option>
+            <option value="300">查看前三百条数据</option>
+        </select>
+    </div>
+</div>
+
 <table class="layui-hide" id="test" lay-filter="test"></table>
 <span id="show" style="display:none">123</span>
 <script type="text/html" id="toolbarDemo">
@@ -35,8 +46,22 @@
         var form = layui.form;
         var layer = layui.layer;
 
+        $("#statistic").change(function () {
+            var value = $('select  option:selected').val();
+            var u = window.location.href;
+            console.log(value);
+            table.reload('mytable', {
+                page: {
+                    curr: 1
+                }
+                , method: 'GET',
+                url: '/creative/getAdvisers?offset=' + value,
+            });
+        })
+
         table.render({
 
+            id: 'mytable',
             elem: '#test',
             url: '/creative/getAdvisers',
             toolbar: '#toolbarDemo',
@@ -187,7 +212,7 @@
                     //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                     type: 1,
                     title: "查看和修改导师信息",
-                    area: ['800px', '600px'],
+                    area: ['700px', '500px'],
                     content: $("#popUpdateTest")//引用的弹出层的页面层的方式加载修改界面表单
                 });
                 //表单初始赋值

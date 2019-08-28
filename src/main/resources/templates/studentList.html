@@ -11,6 +11,18 @@
 </head>
 <body>
 
+<div class="statistic0">
+    <div class="statistic1">
+        <select name="interest" lay-filter="aihao" id="statistic">
+            <option value=""></option>
+            <option value="100" selected="">查看前一百条数据</option>
+            <option value="300">查看前三百条数据</option>
+            <option value="500">查看前五百条数据</option>
+            <option value="1000">查看前一千条数据</option>
+        </select>
+    </div>
+</div>
+
 <table class="layui-hide" id="test" lay-filter="test"></table>
 <span id="show" style="display:none">123</span>
 <script type="text/html" id="toolbarDemo">
@@ -18,6 +30,7 @@
     </div>
 </script>
 <script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-mini" lay-event="detail">查看</a>
 </script>
 
 
@@ -30,8 +43,24 @@
         var $ = layui.$;
         var form = layui.form;
 
+
+        $("#statistic").change(function () {
+            var value = $('select  option:selected').val();
+            var u = window.location.href;
+            console.log(value);
+            table.reload('mytable', {
+                page: {
+                    curr: 1
+                }
+                , method: 'GET',
+                url: '/school/studentList?offset='+ value,
+            });
+        })
+
+
         table.render({
 
+            id: 'mytable',
             elem: '#test',
             url: '/school/studentList',
             toolbar: '#toolbarDemo',
@@ -79,6 +108,11 @@
                     field: 'department',
                     title: '学院',
                     width: 200
+                },{
+                    fixed: 'right',
+                    width: 100,
+                    align: 'center',
+                    toolbar: '#barDemo'
                 }]
             ],
             page: false,
@@ -146,24 +180,86 @@
         //监听行工具事件
         table.on('tool(test)', function (obj) {
             var data = obj.data;
-
-            if (obj.event === 'del') {
-                layer.confirm('真的删除行么', function (index) {
-                    // console.log(obj);
-                    obj.del();
-                    layer.close(index);
-                });
-            } else if (obj.event === 'edit') {
+            if (obj.event === 'detail') {
                 console.log(obj.data);
-
-                $('#show').html(JSON.stringify(data));
-                $("#show").toggle();
-                var table = $(this).parents().find(".layui-form")[0]
-                $(table).toggle();
-
+                layer.open({
+                    //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                    type: 1,
+                    title: "学生信息详情",
+                    area: ['700px', '500px'],
+                    content: $("#popUpdateTest")//引用的弹出层的页面层的方式加载修改界面表单
+                });
+                //表单初始赋值
+                setForm(data);
             }
         });
+        function setForm(data) {
+            form.val('student', {
+                "nickName": data.nickName     // 格式："name": "value"
+                , "openId": data.openId
+                , "jwcAccount": data.jwcAccount
+                , "comprehensiveFraction": data.comprehensiveFraction
+                , "qualityFraction": data.qualityFraction
+                , "grade":data.grade
+                , "department":data.department
+            })
+        }
     });
 </script>
+<div class="layui-row" id="popUpdateTest" style="display:none;">
+    <div class="layui-col-md10">
+        <form class="layui-form layui-from-pane" lay-filter="student" action="" style="margin-top:20px">
+            <div class="layui-form-item">
+                <label class="layui-form-label">申请人微信昵称 </label>
+                <div class="layui-input-block">
+                    <input type="text" name="nickName" required lay-verify="required" autocomplete="off" placeholder=""
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">微信openId </label>
+                <div class="layui-input-block">
+                    <input type="text" name="openId" required lay-verify="required" autocomplete="off" placeholder=""
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">学号 </label>
+                <div class="layui-input-block">
+                    <input type="text" name="jwcAccount" required lay-verify="required" autocomplete="off" placeholder=""
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">素质拓展分数 </label>
+                <div class="layui-input-block">
+                    <input type="text" name="comprehensiveFraction" required lay-verify="required" autocomplete="off" placeholder=""
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">综测 </label>
+                <div class="layui-input-block">
+                    <input type="text" name="qualityFraction" required lay-verify="required" autocomplete="off" placeholder=""
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">年级 </label>
+                <div class="layui-input-block">
+                    <input type="text" name="grade" required lay-verify="required" autocomplete="off" placeholder=""
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">学院 </label>
+                <div class="layui-input-block">
+                    <input type="text" name="department" required lay-verify="required" autocomplete="off" placeholder=""
+                           class="layui-input">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>

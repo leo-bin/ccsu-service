@@ -20,7 +20,7 @@
     </div>
 </script>
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-mini" lay-event="edit">查看和编辑</a>
+    <a class="layui-btn layui-btn-mini" lay-event="detail">查看</a>
 </script>
 
 
@@ -79,7 +79,7 @@
                     width: 200
                 }, {
                     fixed: 'right',
-                    width: 178,
+                    width: 100,
                     align: 'center',
                     toolbar: '#barDemo'
                 }]
@@ -145,73 +145,19 @@
         //监听行工具事件
         table.on('tool(test)', function (obj) {
             var data = obj.data;
-            if (obj.event === 'del') {
-                // layer.confirm('真的删除行么', function (index) {
-                //     // console.log(obj);
-                //     obj.del();
-                //     layer.close(index);
-                // });
-            } else if (obj.event === 'edit') {
+            if (obj.event === 'detail') {
                 layer.open({
                     //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                     type: 1,
-                    title: "查看修改团队项目信息",
-                    area: ['800px', '600px'],
+                    title: "团队项目信息详情",
+                    area: ['700px', '500px'],
                     content: $("#popUpdateTest")//引用的弹出层的页面层的方式加载修改界面表单
                 });
                 //表单初始赋值
                 setForm(data);
-                //动态向表传递赋值可以参看文章进行修改界面的更新前数据的显示，当然也是异步请求的要数据的修改数据的获取
-                setFormValue(obj, data);
             }
             console.log(obj.data);
         });
-
-        //监听弹出框表单提交，massage是修改界面的表单数据,submit(sub)是修改按钮的绑定
-        function setFormValue(obj, data) {
-            form.on('submit(sub)', function (massage) {
-                console.log(massage);
-                $.ajax({
-                    url: '/project/updateProject',
-                    type: 'GET',
-                    data: {
-                        id: data.id,  //原来的数据：id
-                        name:massage.field.name,
-                        description:massage.field.description,
-                        detailDescription:massage.field.detailDescription,
-                        honor:massage.field.honor,
-                        properties:massage.field.properties
-                    },
-                    success: function (res) {
-                        var returnCode = res.code;//取得返回数据（Sting类型的字符串）的信息进行取值判断
-                        console.log(res.code);
-                        console.log(res);
-                        if (returnCode == 0) {
-                            layer.closeAll('loading');
-                            layer.load(2);
-                            layer.msg("修改成功", {icon: 6});
-                            setTimeout(function () {
-                                obj.update({
-                                    id: data.id,  //原来的数据：id
-                                    name:massage.field.name,
-                                    description:massage.field.description,
-                                    detailDescription:massage.field.detailDescription,
-                                    honor:massage.field.honor,
-                                    properties:massage.field.properties
-                                });//修改成功修改表格数据不进行跳转
-                                layer.closeAll();//关闭所有的弹出层
-                                window.location.reload();
-                            }, 1000);
-                            //加载层-风格
-                        } else {
-                            layer.msg("修改失败", {icon: 6});
-                        }
-                    }
-                })
-                return false;
-            })
-        }
-
 
         function setForm(data) {
             form.val('project', {
@@ -246,14 +192,14 @@
             <div class="layui-form-item layui-form-text">
                 <label class="layui-form-label">详细描述</label>
                 <div class="layui-input-block">
-                    <textarea name="detailDescription"  lay-verify="required" autocomplete="off" placeholder=""
+                    <textarea name="detailDescription"  autocomplete="off" placeholder=""
                               class="layui-textarea"></textarea>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">荣誉 </label>
                 <div class="layui-input-block">
-                    <input type="text" name="honor" required lay-verify="required" autocomplete="off" placeholder=""
+                    <input type="text" name="honor"  autocomplete="off" placeholder=""
                            class="layui-input">
                 </div>
             </div>
@@ -265,12 +211,7 @@
                            class="layui-input">
                 </div>
             </div>
-            <div class="layui-form-item" style="margin-top:40px">
-                <div class="layui-input-block">
-                    <button class="layui-btn  layui-btn-submit " lay-submit="" lay-filter="sub">确认修改</button>
-                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                </div>
-            </div>
+
         </form>
     </div>
 </div>
