@@ -14,6 +14,7 @@ import java.util.Date;
 public class LostPropertyAndRecruitVO {
 
     private Integer id;
+
     /**
      * 发起者
      */

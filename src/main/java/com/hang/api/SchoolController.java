@@ -115,7 +115,7 @@ public class SchoolController {
     @StatisticsTime("removeLostAndRecruitMessage")
     @ApiOperation("删除LostAndRecruitMessage")
     @GetMapping("/removeLostAndRecruitMessage")
-    public BaseRes removeLostAndRecruitMessage(@RequestParam int id) {
+    public BaseRes removeLostAndRecruitMessage(@RequestParam Integer id) {
         schoolService.removeLostAndRecruit(id);
         return RespUtil.success();
     }
@@ -124,7 +124,7 @@ public class SchoolController {
     @StatisticsTime("modifyLostAndRecruitMessage")
     @ApiOperation("修改LostAndRecruitMessage")
     @GetMapping("/modifyLostAndRecruitMessage")
-    public BaseRes modifyLostAndRecruitMessage(@RequestParam int id,
+    public BaseRes modifyLostAndRecruitMessage(@RequestParam Integer id,
                                                @RequestParam String initiatorMessage,
                                                @RequestParam String initiatorLocation,
                                                @RequestParam Long occurtime,
