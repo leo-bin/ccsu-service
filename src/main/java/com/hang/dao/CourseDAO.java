@@ -42,6 +42,14 @@ public interface CourseDAO {
      */
     List<CourseDO> selectAllCourseByJwcAccountAndSemester(@Param("jwcAccount") String jwcAccount, @Param("semester") String semester);
 
+    /**
+     * 删除对应学号和学期的课表
+     *
+     * @param jwcAccount
+     * @param semester
+     * @return
+     */
+    int deleteCourse(@Param("jwcAccount") String jwcAccount, @Param("semester") String semester);
 
     /**
      * 查询空闲教室

@@ -13,6 +13,7 @@ import com.hang.pojo.data.UserInfoDO;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.pojo.vo.CourseVO;
 import com.hang.pojo.vo.LostPropertyAndRecruitVO;
+import com.hang.service.CourseUpdateService;
 import com.hang.service.SchoolService;
 import com.hang.service.StudentService;
 import com.hang.service.UserService;
@@ -46,6 +47,11 @@ public class SchoolController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CourseUpdateService updateService;
+
+
 
     /**
      * 查询第n周的课表
@@ -85,6 +91,22 @@ public class SchoolController {
         return RespUtil.success(allCourse);
     }
 
+    /**
+     * 查询全部课表
+     * @param openId
+     * @return
+     */
+    @StatisticsTime("UpdateCourse")
+    @ApiOperation("更新全部课表")
+    @GetMapping("/course/updateCourse")
+    public BaseRes updateCourse(@OpenId String openId,
+                                @RequestParam(required = false, defaultValue = "2018-2019-2") String semester) {
+        ApiAssert.checkOpenId(openId);
+        UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
+        jwcAccountCheck(userInfo);
+        updateService.turnToCourse(userInfo.getJwcAccount(),semester,studentService.getStudentInfoByJwcAccount(openId).getCode());
+        return RespUtil.success();
+    }
 
     @StatisticsTime("initiatorMessage")
     @ApiOperation("发布失物与招领 code=0为发布失物 code=1为发布招领,默认code为0")

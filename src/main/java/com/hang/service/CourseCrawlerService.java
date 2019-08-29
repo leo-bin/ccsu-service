@@ -157,9 +157,9 @@ public class CourseCrawlerService {
      */
     public Integer turnToCourse(String USERNAME, String PASSWORD) {
         //如果数据库里有当前学期的课程就不需要在绑定学号的时候重复写数据了
-        List<CourseDO> courseDOS = courseDAO.selectAllCourseByJwcAccount(USERNAME);
         SchoolConstant schoolConstant = new SchoolConstant();
         String xueqi = schoolConstant.getTerm();
+        List<CourseDO> courseDOS = courseDAO.selectAllCourseByJwcAccountAndSemester(USERNAME,xueqi);
         HttpEntity en = getCurriculum(login(USERNAME, PASSWORD), xueqi, USERNAME);
         String con = null;
         Integer flag = 0;
