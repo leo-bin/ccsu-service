@@ -80,7 +80,7 @@ public class UserController {
             teacherService.bindForTeacher(openId, account, code);
             return RespUtil.success();
         }
-        return RespUtil.error(ResultEnum.STAFF_NUMBER_ERROR);
+        return RespUtil.error(ResultEnum.JWC_ACCOUNT_OR_CODE_ERROR);
     }
 
     /**

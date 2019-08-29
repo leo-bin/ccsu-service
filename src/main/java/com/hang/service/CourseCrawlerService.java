@@ -177,7 +177,9 @@ public class CourseCrawlerService {
             e.printStackTrace();
         }
         Document doc = Jsoup.parse(con);
-        if (doc != null&&flag!=2) {
+        Elements elements=doc.select("table[id=kbtable]");
+        String text=elements.text();
+        if (text.length()>1) {
             flag = 1;
             //i代表周一至周日
             if (courseDOS.size() == 0) {
