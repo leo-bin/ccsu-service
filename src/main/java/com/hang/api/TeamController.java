@@ -79,9 +79,8 @@ public class TeamController {
     @ApiOperation("无差别获取团队信息")
     @GetMapping("/getAllTeam")
     public BaseRes getAllTeam(@RequestParam(required = false, defaultValue = "0") int start,
-                              @RequestParam(required = false, defaultValue = "10") int offset,
-                              @RequestParam(required = false, defaultValue = "1") int state) {
-        return RespUtil.success(teamService.getTeams(start, offset, state));
+                              @RequestParam(required = false, defaultValue = "10") int offset) {
+        return RespUtil.success(teamService.getTeams(start, offset));
     }
 
     /**

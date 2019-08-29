@@ -67,7 +67,7 @@ public interface TeamDAO {
      */
     List<TeamDO> selectTeamByUserId(String userId);
 
-    List<TeamDO> selectTeams(@Param("start") int start, @Param("offset") int offset,@Param("state")int state);
+    List<TeamDO> selectTeams(@Param("start") int start, @Param("offset") int offset);
 
     List<TeamDO> selectTeamsByAdvisor(String advisor);
 

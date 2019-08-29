@@ -11,5 +11,5 @@ import lombok.Data;
 public class HonorVO {
     private Integer id;
 
-    private String honor;
+    private String content;
 }

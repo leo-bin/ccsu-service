@@ -112,9 +112,7 @@ public class GradeCrawlerService {
     /**
      * 爬取成绩功能调用器
      */
-    public void turnTOGrade(String userName, String code) {
-        SchoolConstant schoolConstant = new SchoolConstant();
-        String xueqi = schoolConstant.getTerm();
+    public void turnTOGrade(String userName, String code,String xueqi) {
         HttpEntity en = getCurriculum(login(userName, code), xueqi);
         try {
             String con = EntityUtils.toString(en, "utf-8");

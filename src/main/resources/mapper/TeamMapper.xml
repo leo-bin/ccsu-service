@@ -84,7 +84,6 @@
     <select id="selectTeams" resultType="com.hang.pojo.data.TeamDO">
         select *
         from team
-        where state = #{state}
         limit #{start}, #{offset}
     </select>
 

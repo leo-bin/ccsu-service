@@ -59,6 +59,7 @@ public class UserController {
 
     /**
      * 绑定账户信息
+     *
      * @param openId
      * @param account
      * @return
@@ -66,19 +67,20 @@ public class UserController {
     @StatisticsTime("bind")
     @ApiOperation("绑定账户信息，openId参数不用传")
     @PostMapping("/bind")
-    public BaseRes bind(@OpenId String openId, @RequestParam String account,@RequestParam String code) {
+    public BaseRes bind(@OpenId String openId, @RequestParam String account, @RequestParam String code) {
         log.info("account:{}, openId:{}", account, openId);
-        if ("B".equals(account.substring(0,1))||"b".equals(account.substring(0,1))){
-            studentService.bindForStudent(openId, account,code);
+        if ("B".equals(account.substring(0, 1)) || "b".equals(account.substring(0, 1))) {
+            Integer flag = studentService.bindForStudent(openId, account, code);
+            if (flag == 1) {
+                return RespUtil.success();
+            } else if (flag == 2) {
+                return RespUtil.error(ResultEnum.NETWORK_ERROR);
+            }
+        } else if ("Z".equals(code.substring(0, 1)) && code.length() == 9) {
+            teacherService.bindForTeacher(openId, account, code);
             return RespUtil.success();
         }
-        else if ("Z".equals(code.substring(0,1))&&code.length()==9){
-            teacherService.bindForTeacher(openId, account,code);
-            return RespUtil.success();
-        }
-        else{
-            return RespUtil.error(ResultEnum.STAFF_NUMBER_ERROR);
-        }
+        return RespUtil.error(ResultEnum.STAFF_NUMBER_ERROR);
     }
 
     /**

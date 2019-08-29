@@ -10,6 +10,8 @@ import com.hang.exceptions.ApiException;
 import com.hang.manage.UserCache;
 import com.hang.pojo.data.StudentDO;
 import com.hang.pojo.data.UserInfoDO;
+import com.hang.pojo.vo.BaseRes;
+import com.hang.utils.RespUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,11 +47,9 @@ public class StudentService {
      * @apiNote 在官网做模拟登陆，进行信息的校验，同时将学生的最新课表爬取下来
      */
     @Transactional(rollbackFor = Exception.class)
-    public void bindForStudent(String openId, String account, String code) {
+    public Integer bindForStudent(String openId, String account, String code) {
         Integer flag = courseCrawlerService.turnToCourse(account, code);
-        if (flag == 0) {
-            throw new ApiException(ResultEnum.JWC_ACCOUNT_OR_CODE_ERROR);
-        } else {
+         if (flag==1){
             userService.updateJwcAccount(openId, account);
             SchoolConstant schoolConstant = new SchoolConstant();
             UserInfoDO userInfoDO = userInfoDAO.selectByOpenId(openId);
@@ -73,6 +73,7 @@ public class StudentService {
             //redis缓存穿透
             userCache.updateUserInfo(openId, userInfo);
         }
+        return flag;
     }
 
 
