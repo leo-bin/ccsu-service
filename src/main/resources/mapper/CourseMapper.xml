@@ -17,6 +17,12 @@
         where jwc_account = #{jwcAccount}
     </select>
 
+    <delete id="deleteCourse" parameterType="com.hang.pojo.data.CourseDO">
+        delete
+        from course
+        where jwc_account = #{jwcAccount} and xnxqh = #{semester}
+    </delete>
+
     <select id="selectAllCourseByJwcAccountAndSemester" resultType="com.hang.pojo.data.CourseDO">
         select *
         from course
