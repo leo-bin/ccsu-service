@@ -85,7 +85,13 @@ public enum ResultEnum {
     /**
      * 网络错误
      */
-    NETWORK_ERROR(-10018,"your network is blocked unexpected");
+    NETWORK_ERROR(-10018,"your network is blocked unexpected"),
+
+    /**
+     * 课表更新失败
+     */
+    COURSE_UPDATE_ERROR(-10019,"course update error");
+
 
     /**
      * 错误码

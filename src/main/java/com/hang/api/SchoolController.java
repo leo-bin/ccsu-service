@@ -55,11 +55,6 @@ public class SchoolController {
 
     /**
      * 查询第n周的课表
-     *
-     * @param openId
-     * @param week
-     * @param semester
-     * @return
      */
     @StatisticsTime("getCourseByWeek")
     @ApiOperation("查询第n周的课表,OpenId参数不用传")
@@ -75,10 +70,6 @@ public class SchoolController {
 
     /**
      * 查询全部课表
-     *
-     * @param openId
-     * @param semester
-     * @return
      */
     @StatisticsTime("getAllCourse")
     @ApiOperation("查询全部课表,OpenId参数不用传")
@@ -88,26 +79,29 @@ public class SchoolController {
         ApiAssert.checkOpenId(openId);
         UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
         jwcAccountCheck(userInfo);
-
         List<CourseDO> allCourse = schoolService.getAllCourse(userInfo.getJwcAccount(), semester);
         return RespUtil.success(allCourse);
     }
 
     /**
      * 查询全部课表
-     * @param openId
-     * @return
      */
     @StatisticsTime("UpdateCourse")
     @ApiOperation("更新全部课表")
-    @GetMapping("/course/updateCourse")
+    @RequestMapping("/course/updateCourse")
     public BaseRes updateCourse(@OpenId String openId,
                                 @RequestParam(required = false, defaultValue = "2018-2019-2") String semester) {
         ApiAssert.checkOpenId(openId);
-        UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
-        jwcAccountCheck(userInfo);
-        updateService.turnToCourse(userInfo.getJwcAccount(),semester,studentService.getStudentInfoByJwcAccount(openId).getCode());
-        return RespUtil.success();
+        UserInfoDO userInfoDO=userService.getUserInfoByOpenId(openId);
+        jwcAccountCheck(userInfoDO);
+        StudentDO studentDO=studentService.getStudentInfoByOpenId(openId);
+        Integer flag=updateService.turnToCourse(studentDO.getJwcAccount(),semester,studentDO.getCode());
+        if (flag==1){
+            return RespUtil.success();
+        }
+        else {
+            return RespUtil.error(ResultEnum.COURSE_UPDATE_ERROR);
+        }
     }
 
     @StatisticsTime("initiatorMessage")
