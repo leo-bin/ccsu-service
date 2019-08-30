@@ -59,35 +59,30 @@ public class UserController {
 
     /**
      * 绑定账户信息
-     *
-     * @param openId
-     * @param account
-     * @return
      */
     @StatisticsTime("bind")
     @ApiOperation("绑定账户信息，openId参数不用传")
     @PostMapping("/bind")
     public BaseRes bind(@OpenId String openId, @RequestParam String account, @RequestParam String code) {
         log.info("account:{}, openId:{}", account, openId);
-        if ("B".equals(account.substring(0, 1)) || "b".equals(account.substring(0, 1))) {
-            Integer flag = studentService.bindForStudent(openId, account, code);
-            if (flag == 1) {
-                return RespUtil.success();
-            } else if (flag == 2) {
-                return RespUtil.error(ResultEnum.NETWORK_ERROR);
-            }
+        Integer flag=0;
+        if (account.length()==12&&"B".equals(account.substring(0,1))) {
+            flag = studentService.bindForStudent(openId, account, code);
         } else if ("Z".equals(code.substring(0, 1)) && code.length() == 9) {
             teacherService.bindForTeacher(openId, account, code);
             return RespUtil.success();
         }
-        return RespUtil.error(ResultEnum.JWC_ACCOUNT_OR_CODE_ERROR);
+        if (flag == 1) {
+            return RespUtil.success();
+        } else if (flag == 2) {
+            return RespUtil.error(ResultEnum.NETWORK_ERROR);
+        } else {
+            return RespUtil.error(ResultEnum.JWC_ACCOUNT_OR_CODE_ERROR);
+        }
     }
 
     /**
      * 用户登陆
-     * @param code
-     * @param rawData
-     * @return
      */
     @StatisticsTime("login")
     @ApiOperation("登录，获取sessionId")
@@ -137,8 +132,6 @@ public class UserController {
     /**
      * 用户个人中心
      * @apiNote  根据角色Id判断返回对象
-     * @param openId
-     * @return
      */
     @StatisticsTime("personCenter")
     @ApiOperation("个人中心")

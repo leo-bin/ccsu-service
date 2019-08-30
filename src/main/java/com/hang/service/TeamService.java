@@ -127,8 +127,8 @@ public class TeamService {
      */
     public void addHonor2Team(int teamId, String honors) {
         TeamDO teamDO = teamDAO.selectByTeamId(teamId);
-        ArrayList<HonorVO> teamHonors =Lists.newArrayList();
         JSONArray jsonArray=JSONArray.parseArray(honors);
+        ArrayList<HonorVO> teamHonors =Lists.newArrayList();
         for (Object jsonObject:jsonArray){
             HonorVO honorVO =JSON.parseObject(jsonObject.toString(), HonorVO.class);
             teamHonors.add(honorVO);
@@ -169,12 +169,12 @@ public class TeamService {
         teamVO.setAvatar(teamDO.getAvatar());
         teamVO.setState(teamDO.getState());
         if (StringUtils.isNotBlank(teamDO.getLog())) {
-            teamVO.setTeamLog(JSON.parseObject(teamDO.getLog(), new TypeReference<ArrayList<TeamLogVO>>() {}));
+            teamVO.setTeamLog(JSON.parseObject(teamDO.getLog(), new TypeReference<ArrayList<TeamLogVO>>() {
+            }));
         }
-        String honor = teamDO.getHonor();
-        if (StringUtils.isNotBlank(honor)) {
-            String[] split = honor.split(",");
-            teamVO.setHonor(Arrays.asList(split));
+        if (StringUtils.isNotBlank(teamDO.getHonor())) {
+            teamVO.setHonor(JSON.parseObject(teamDO.getHonor(), new TypeReference<List<HonorVO>>() {
+            }));
         }
         if (!Objects.isNull(teamDO.getId())) {
             List<ProjectDO> projectPOS = teamDAO.selectProjectByTeamId(teamDO.getId());
@@ -203,16 +203,15 @@ public class TeamService {
         if (StringUtils.isNotBlank(projectDO.getProperties())) {
             projectVO.setProperties(projectDO.getProperties());
         }
-        /// List<TeamDO> teamDOS = teamDAO.selectTeamByProjectId(projectPO.getId());
-        /// Map<String, Integer> teams = teamDOS.stream().collect(Collectors.toMap(TeamDO::getName, TeamDO::getId));
-        /// projectVO.setTeams(teams);
         String schedule = projectDO.getSchedule();
-        String plans=projectDO.getProjectPlan();
+        String plans = projectDO.getProjectPlan();
         if (StringUtils.isNotBlank(schedule)) {
-            projectVO.setSchedule(JSON.parseObject(projectDO.getSchedule(), new TypeReference<ArrayList<ProjectScheduleVO>>() {}));
+            projectVO.setSchedule(JSON.parseObject(projectDO.getSchedule(), new TypeReference<ArrayList<ProjectScheduleVO>>() {
+            }));
         }
-        if (StringUtils.isNotBlank(plans)){
-            projectVO.setProjectPlan(JSON.parseObject(projectDO.getProjectPlan(),new TypeReference<ArrayList<ProjectPlanVO>>(){}));
+        if (StringUtils.isNotBlank(plans)) {
+            projectVO.setProjectPlan(JSON.parseObject(projectDO.getProjectPlan(), new TypeReference<ArrayList<ProjectPlanVO>>() {
+            }));
         }
         return projectVO;
     }
