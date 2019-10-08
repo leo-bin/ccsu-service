@@ -25,7 +25,6 @@ import static com.hang.constant.SchoolConstant.HUANCHON_URL;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author free-go
@@ -39,6 +38,7 @@ public class CourseCrawlerService {
     private CourseDAO courseDAO;
 
     public  Integer flag = 0;
+
     /**
      * 登陆到教务系统
      *
@@ -46,6 +46,7 @@ public class CourseCrawlerService {
      * @param PASSWORD 密码
      */
     public HttpClient login(String USERNAME, String PASSWORD) {
+        flag=0;
         HttpClient httpclient = HttpClientBuilder.create().build();
         HttpPost httpost = new HttpPost(LOGIN_URL);
         HttpPost post=new HttpPost(HUANCHON_URL);
@@ -82,9 +83,9 @@ public class CourseCrawlerService {
             e.printStackTrace();
         }
         Document doc = Jsoup.parse(con);
-        Elements elements=doc.select("menu[parentid=0]");
+        Elements elements=doc.getElementsByAttributeValue("name","学生专区");
         //登不上官网
-        if (Objects.isNull(elements)) {
+        if (elements.toString().length()<1) {
             flag=2;
         }
         return httpclient;
@@ -171,6 +172,7 @@ public class CourseCrawlerService {
         List<CourseDO> courseDOS = courseDAO.selectAllCourseByJwcAccountAndSemester(USERNAME,xueqi);
         HttpEntity en = getCurriculum(login(USERNAME, PASSWORD), xueqi, USERNAME);
         String con = null;
+        Integer state=0;
         try {
             con = EntityUtils.toString(en, "utf-8");
         } catch (IOException e) {
@@ -178,9 +180,8 @@ public class CourseCrawlerService {
         }
         Document doc = Jsoup.parse(con);
         Elements elements=doc.select("table[id=kbtable]");
-        String text=elements.text();
-        if (text.length()>1) {
-            flag = 1;
+        if (elements.text().length()>1&&flag!=2) {
+            state = 1;
             //i代表周一至周日
             if (courseDOS.size() == 0) {
                 for (int i = 1; i < 8; i++) {
@@ -206,6 +207,6 @@ public class CourseCrawlerService {
                 }
             }
         }
-        return flag;
+        return state;
     }
 }

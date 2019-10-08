@@ -75,7 +75,7 @@ public class UserController {
         if (flag == 1) {
             return RespUtil.success();
         } else if (flag == 2) {
-            return RespUtil.error(ResultEnum.NETWORK_ERROR);
+            return RespUtil.error(ResultEnum.JWC_ACCOUNT_OR_CODE_ERROR);
         } else {
             return RespUtil.error(ResultEnum.JWC_ACCOUNT_OR_CODE_ERROR);
         }

@@ -42,7 +42,7 @@ public enum ResultEnum {
     /**
      * 账号未绑定
      */
-    ACCOUNT_NOT_BIND(-10010, "jwd account not bind"),
+    ACCOUNT_NOT_BIND(-10010, "jwc account not bind"),
 
     /**
      * 导师姓名为空

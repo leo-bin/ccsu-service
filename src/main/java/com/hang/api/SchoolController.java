@@ -60,7 +60,7 @@ public class SchoolController {
     @ApiOperation("查询第n周的课表,OpenId参数不用传")
     @GetMapping("/course/getCourseByWeek")
     public BaseRes getCourseByWeek(@OpenId String openId, @RequestParam Integer week,
-                                   @RequestParam(required = false, defaultValue = "2018-2019-2") String semester) {
+                                   @RequestParam(required = false, defaultValue = "2019-2020-1") String semester) {
         ApiAssert.checkOpenId(openId);
         UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
         jwcAccountCheck(userInfo);
@@ -75,7 +75,7 @@ public class SchoolController {
     @ApiOperation("查询全部课表,OpenId参数不用传")
     @GetMapping("/course/getAllCourse")
     public BaseRes getAllCourse(@OpenId String openId,
-                                @RequestParam(required = false, defaultValue = "2018-2019-2") String semester) {
+                                @RequestParam(required = false, defaultValue = "2019-2020-1") String semester) {
         ApiAssert.checkOpenId(openId);
         UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
         jwcAccountCheck(userInfo);
@@ -90,7 +90,7 @@ public class SchoolController {
     @ApiOperation("更新全部课表")
     @RequestMapping("/course/updateCourse")
     public BaseRes updateCourse(@OpenId String openId,
-                                @RequestParam(required = false, defaultValue = "2018-2019-2") String semester) {
+                                @RequestParam(required = false, defaultValue = "2019-2020-1") String semester) {
         ApiAssert.checkOpenId(openId);
         UserInfoDO userInfoDO=userService.getUserInfoByOpenId(openId);
         jwcAccountCheck(userInfoDO);
@@ -177,7 +177,7 @@ public class SchoolController {
     @StatisticsTime("getFreeClassroom")
     @ApiOperation("获取本学期空闲教室")
     @GetMapping("/getFreeClassroom")
-    public BaseRes getFreeClassroom(@ApiParam("学期，默认为2017-2018-2") @RequestParam(required = false, defaultValue = "2017-2018-2") String semester,
+    public BaseRes getFreeClassroom(@ApiParam("学期，默认为2019-2020-1") @RequestParam(required = false, defaultValue = "2017-2018-2") String semester,
                                     @ApiParam("课程时间节数 1-2或3-4或5-6等") String section,
                                     @ApiParam("周数") String week,
                                     @ApiParam("星期") String weekDay,

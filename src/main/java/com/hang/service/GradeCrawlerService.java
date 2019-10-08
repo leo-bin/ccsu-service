@@ -1,6 +1,5 @@
 package com.hang.service;
 
-import com.hang.constant.SchoolConstant;
 import com.hang.dao.GradeDAO;
 import com.hang.pojo.data.GradeDO;
 import org.apache.http.Consts;
@@ -79,7 +78,6 @@ public class GradeCrawlerService {
         try {
             re = httpClient.execute(httpPost);
             HttpEntity en = re.getEntity();
-            re.getEntity().getContent().close();
             return en;
         } catch (IOException e) {
             e.printStackTrace();
