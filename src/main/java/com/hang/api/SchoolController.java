@@ -103,7 +103,7 @@ public class SchoolController {
                                 @RequestParam(required = false, defaultValue = "2018-2019-2") String semester) {
         ApiAssert.checkOpenId(openId);
         UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
-        jwcAccountCheck(userInfo);
+        jwcAccountCheck (userInfo);
         updateService.turnToCourse(userInfo.getJwcAccount(),semester,studentService.getStudentInfoByJwcAccount(openId).getCode());
         return RespUtil.success();
     }
