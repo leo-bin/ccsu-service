@@ -10,8 +10,7 @@ server:
 spring:
   redis:
     host: 47.100.170.169
-    #host: 127.0.0.1
-    password:
+    password: 3hdg23y$%3||^5&|6=&*&*LKSDJN
     port: 6379
     database: 0
     jedis:
