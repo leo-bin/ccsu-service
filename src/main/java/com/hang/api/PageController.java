@@ -1,10 +1,7 @@
 package com.hang.api;
 
 import com.hang.pojo.data.AdminUserInfoDO;
-import com.hang.pojo.data.GradeDO;
-import com.hang.service.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Timer;
-
 
 /**
  * @author leo-bin
@@ -39,6 +33,8 @@ public class PageController {
     public String page1(@PathVariable String page) {
         return page;
     }
+
+
 
 
     /**

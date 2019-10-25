@@ -2,6 +2,7 @@ package com.hang.api;
 
 import com.hang.annotation.OpenId;
 import com.hang.aop.StatisticsTime;
+import com.hang.constant.SchoolConstant;
 import com.hang.enums.LostPropertyAndRecruitEnum;
 import com.hang.enums.ResultEnum;
 import com.hang.exceptions.ApiAssert;
@@ -89,13 +90,14 @@ public class SchoolController {
     @StatisticsTime("UpdateCourse")
     @ApiOperation("更新全部课表")
     @RequestMapping("/course/updateCourse")
-    public BaseRes updateCourse(@OpenId String openId,
-                                @RequestParam(required = false, defaultValue = "2019-2020-1") String semester) {
+    public BaseRes updateCourse(@OpenId String openId
+                                ) {
         ApiAssert.checkOpenId(openId);
         UserInfoDO userInfoDO=userService.getUserInfoByOpenId(openId);
         jwcAccountCheck(userInfoDO);
         StudentDO studentDO=studentService.getStudentInfoByOpenId(openId);
-        Integer flag=updateService.turnToCourse(studentDO.getJwcAccount(),semester,studentDO.getCode());
+        SchoolConstant schoolConstant=new SchoolConstant();
+        Integer flag=updateService.turnToCourse(studentDO.getJwcAccount(),schoolConstant.getTerm(),studentDO.getCode());
         if (flag==1){
             return RespUtil.success();
         }

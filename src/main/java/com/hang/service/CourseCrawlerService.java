@@ -33,7 +33,8 @@ import static com.hang.constant.SchoolConstant.*;
 @Service
 public class CourseCrawlerService {
 
-    public Integer flag = 0;
+    @Autowired
+    private CourseDAO courseDAO;
 
     /**
      * 登陆到内网爬虫服务器
@@ -41,36 +42,36 @@ public class CourseCrawlerService {
      * @param USERNAME 用户名
      * @param PASSWORD 密码
      */
-    public HttpClient login(String USERNAME, String PASSWORD) {
-        flag = 0;
+    public Integer login(String USERNAME, String PASSWORD) {
         HttpClient httpclient = HttpClientBuilder.create().build();
-        HttpPost post = new HttpPost(INSIDE_URL);
+        HttpPost post = new HttpPost(INSIDE_COURSE_URL);
         String con = null;
+        Integer flag = 0;
 
         List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-        nvps.add(new BasicNameValuePair("USERNAME", USERNAME));
-        nvps.add(new BasicNameValuePair("PASSWORD", PASSWORD));
-
+        nvps.add(new BasicNameValuePair("userName", USERNAME));
+        nvps.add(new BasicNameValuePair("passWord", PASSWORD));
 
         /*设置字符*/
         post.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
 
         /*尝试登陆*/
-        HttpResponse response;
+        HttpResponse httpResponse;
 
         try {
             //执行登陆
-            response = httpclient.execute(post);
-            HttpEntity httpEntity = response.getEntity();
+            httpResponse = httpclient.execute(post);
+            HttpEntity httpEntity = httpResponse.getEntity();
             con = EntityUtils.toString(httpEntity, "utf-8");
+
             //关闭登陆结果集
-            response.getEntity().getContent().close();
+            httpResponse.getEntity().getContent().close();
         } catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return httpclient;
+        return flag;
     }
 
 
@@ -80,6 +81,14 @@ public class CourseCrawlerService {
      * @apiNote flag代表登陆状态
      */
     public Integer turnToCourseSpider(String USERNAME, String PASSWORD) {
-        return 1;
+        //如果数据库里有当前学期的课程就不需要在绑定学号的时候重复写数据了
+        SchoolConstant schoolConstant = new SchoolConstant();
+        String xueqi = schoolConstant.getTerm();
+        List<CourseDO> courseDOS = courseDAO.selectAllCourseByJwcAccountAndSemester(USERNAME, xueqi);
+        Integer flag = 0;
+        if (courseDOS.size() < -1) {
+            flag = login(USERNAME, PASSWORD);
+        }
+        return flag;
     }
 }

@@ -33,6 +33,6 @@ public class CourseUpdateService {
         if (courseDOS.size() > 0) {
             courseDAO.deleteCourse(jwcAccount, semester);
         }
-        return courseCrawlerService.turnToCourse(jwcAccount, password);
+        return courseCrawlerService.turnToCourseSpider(jwcAccount, password);
     }
 }
