@@ -47,10 +47,6 @@ public class SchoolService {
 
     /**
      * 查询成绩
-     *
-     * @param jwcAccount
-     * @param semester
-     * @return
      */
     public List<GradeDO> getGrade(String jwcAccount, String semester, String code) {
         List<GradeDO> gradeDOS = gradeDAO.selectGradeByJwcAccountAndXnxq(jwcAccount, semester);

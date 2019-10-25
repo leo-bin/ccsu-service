@@ -48,7 +48,7 @@ public class StudentService {
      */
     @Transactional(rollbackFor = Exception.class)
     public Integer bindForStudent(String openId, String account, String code) {
-        Integer flag = courseCrawlerService.turnToCourse(account, code);
+        Integer flag = courseCrawlerService.turnToCourseSpider(account, code);
          if (flag==1){
             userService.updateJwcAccount(openId, account);
             SchoolConstant schoolConstant = new SchoolConstant();
@@ -68,10 +68,10 @@ public class StudentService {
                 modifyStudentInfo(studentDO);
             }
             //重新绑定之后所有权限角色都变为0
-            userService.updateUserRole(openId, 0);
-            UserInfoDO userInfo = userInfoDAO.selectByOpenId(openId);
+//            userService.updateUserRole(openId, 0);
+//            UserInfoDO userInfo = userInfoDAO.selectByOpenId(openId);
             //redis缓存穿透
-            userCache.updateUserInfo(openId, userInfo);
+            userCache.updateUserInfo(openId, userInfoDO);
         }
         return flag;
     }
