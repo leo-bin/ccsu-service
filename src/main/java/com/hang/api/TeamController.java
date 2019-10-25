@@ -6,7 +6,6 @@ import com.google.common.collect.Sets;
 import com.hang.annotation.OpenId;
 import com.hang.aop.StatisticsTime;
 import com.hang.dao.NotificationDAO;
-import com.hang.dao.TeamDAO;
 import com.hang.enums.NotificationEnum;
 import com.hang.enums.ResultEnum;
 import com.hang.exceptions.ApiAssert;
@@ -19,7 +18,6 @@ import com.hang.service.*;
 import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 import static com.hang.constant.InformationConstant.INVITATION_SUCCESS_SUFFIX;
-import static com.hang.constant.InformationConstant.SYSTEM_NOTIFICATION_SUFFIX;
 
 /**
  * @author hangs.zhang
@@ -62,11 +59,11 @@ public class TeamController {
     @ApiOperation("创建团队")
     @StatisticsTime("createTeam")
     @PostMapping("/createTeam")
-    public BaseRes createTeam(@OpenId String openId,@RequestParam String name, @RequestParam String advisor) {
+    public BaseRes createTeam(@OpenId String openId, @RequestParam String name, @RequestParam String advisor) {
         ApiAssert.checkOpenId(openId);
-        UserInfoDO userInfoDO=userService.getUserInfoByOpenId(openId);
-        if (userInfoDO.getRoleId().equals(2)){
-            teamService.createTeam(openId,name, advisor);
+        UserInfoDO userInfoDO = userService.getUserInfoByOpenId(openId);
+        if (userInfoDO.getRoleId().equals(2)) {
+            teamService.createTeam(openId, name, advisor);
             return RespUtil.success();
         }
         return RespUtil.error(ResultEnum.AUTHORIZE_ERROR);
@@ -92,20 +89,19 @@ public class TeamController {
     public BaseRes getMyTeam(@OpenId String openId) {
         log.info("checkOpenId : {}", openId);
         ApiAssert.checkOpenId(openId);
-        UserInfoDO userInfoDO=userService.getUserInfoByOpenId(openId);
-        Integer roleId=userInfoDO.getRoleId();
+        UserInfoDO userInfoDO = userService.getUserInfoByOpenId(openId);
+        Integer roleId = userInfoDO.getRoleId();
         HashMap<String, Object> result = Maps.newHashMap();
-        if (roleId.equals(1)){
-            TeacherDO teacherDO=teacherService.getTeacherInfo(openId);
-            List<TeamVO> teams=teamService.getTeamsByAdvisor(teacherDO.getName());
+        if (roleId.equals(1)) {
+            TeacherDO teacherDO = teacherService.getTeacherInfo(openId);
+            List<TeamVO> teams = teamService.getTeamsByAdvisor(teacherDO.getName());
             result.put("teams", teams);
             Set<ProjectVO> projects = Sets.newHashSet();
             teams.forEach(e -> projects.addAll(e.getProjects()));
             result.put("projects", projects);
-        }
-        else{
+        } else {
             List<TeamVO> teams = teamService.getTeamByUserId(openId);
-            result.put("teams",teams);
+            result.put("teams", teams);
             Set<ProjectVO> projects = Sets.newHashSet();
             teams.forEach(e1 -> projects.addAll(e1.getProjects()));
             result.put("projects", projects);
@@ -127,6 +123,7 @@ public class TeamController {
 
     /**
      * 为团队添加头像
+     *
      * @param teamId
      * @param avatar
      * @return
@@ -141,29 +138,31 @@ public class TeamController {
 
     /**
      * 增加成员
+     *
      * @apiNote @ModelAttribute Objects objects: 数据绑定，将url对应的请求参数和对象进行一一对应的绑定
      * 前端一旦调用这个接口代表被邀请人已同意，这里直接开始添加
+     * 因为前端通过这个接口/sendNotification已经自动发了一条通知给被邀请人，等待对方确认
      */
     @StatisticsTime("addMember2Team")
     @ApiOperation("team添加成员")
     @PostMapping("/addMember2Team")
-        public BaseRes addMember2Team(@RequestParam String openId, @RequestParam Integer teamId,
-                                      @RequestParam String jwcAccount,@RequestParam Integer noteId) {
-        StudentDO studentDO=studentService.getStudentInfoByJwcAccount(jwcAccount);
-        GroupMemberVO groupMemberVO=new GroupMemberVO();
-        SystemNotificationDO systemNotificationDO=new SystemNotificationDO();
+    public BaseRes addMember2Team(@RequestParam String openId, @RequestParam Integer teamId,
+                                  @RequestParam String jwcAccount, @RequestParam Integer noteId) {
+        StudentDO studentDO = studentService.getStudentInfoByJwcAccount(jwcAccount);
+        GroupMemberVO groupMemberVO = new GroupMemberVO();
+        SystemNotificationDO systemNotificationDO = new SystemNotificationDO();
         groupMemberVO.setAvatar(studentDO.getAvatar());
         groupMemberVO.setName(studentDO.getRealName());
         groupMemberVO.setTitle(studentDO.getTitle());
         groupMemberVO.setRole("组员");
-        teamService.addMember2Team(teamId, groupMemberVO,studentDO.getOpenId());
+        teamService.addMember2Team(teamId, groupMemberVO, studentDO.getOpenId());
         //邀请成功之后给邀请人发通知
         systemNotificationDO.setNoteType(NotificationEnum.SYSTEM_NOTE_INVITATION.name());
         systemNotificationDO.setMessage(INVITATION_SUCCESS_SUFFIX);
         systemNotificationDO.setState(1);
         notificationDAO.insertSystemNote(systemNotificationDO);
-        Integer notificationId=systemNotificationDO.getId();
-        notificationService.sendNotification(studentDO.getOpenId(),openId,NotificationEnum.SYSTEM_NOTE_INVITATION,notificationId,INVITATION_SUCCESS_SUFFIX,"");
+        Integer notificationId = systemNotificationDO.getId();
+        notificationService.sendNotification(studentDO.getOpenId(), openId, NotificationEnum.SYSTEM_NOTE_INVITATION, notificationId, INVITATION_SUCCESS_SUFFIX, "");
         //将对方的通知状态更新为成功
         notificationService.updateByIsSuccess(notificationId);
         //将自己的通知状态改为成功
@@ -220,17 +219,16 @@ public class TeamController {
     public BaseRes updateTeamInfo(@RequestParam Integer id,
                                   @RequestParam String name,
                                   @RequestParam String advisor,
-                                  @RequestParam Integer state){
-        TeamVO teamVO=teamService.getTeamByTeamId(id);
-        TeamDO teamDO=new TeamDO();
+                                  @RequestParam Integer state) {
+        TeamVO teamVO = teamService.getTeamByTeamId(id);
+        TeamDO teamDO = new TeamDO();
         teamDO.setId(id);
         teamDO.setName(name);
         teamDO.setAdvisor(advisor);
         teamDO.setState(state);
-        if (teamVO!=null){
+        if (teamVO != null) {
             return RespUtil.success(teamService.updateTeamInfo(teamDO));
-        }
-        else{
+        } else {
             return RespUtil.error(ResultEnum.TEAM_NOT_EXIT);
         }
     }
@@ -254,7 +252,7 @@ public class TeamController {
     @StatisticsTime("getStudentInfoByJwcAccount")
     @ApiOperation("根据学号查询")
     @GetMapping("/getStudentInfoByJwcAccount")
-    public BaseRes getStudentInfoByJwcAccount(@RequestParam String jwcAccount){
+    public BaseRes getStudentInfoByJwcAccount(@RequestParam String jwcAccount) {
         return RespUtil.success(studentService.getStudentInfoByJwcAccount(jwcAccount));
     }
 }

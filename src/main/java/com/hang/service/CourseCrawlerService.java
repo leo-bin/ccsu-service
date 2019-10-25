@@ -63,7 +63,9 @@ public class CourseCrawlerService {
             httpResponse = httpclient.execute(post);
             HttpEntity httpEntity = httpResponse.getEntity();
             con = EntityUtils.toString(httpEntity, "utf-8");
-
+            if (con.equals("1")) {
+                flag=1;
+            }
             //关闭登陆结果集
             httpResponse.getEntity().getContent().close();
         } catch (ClientProtocolException e) {
