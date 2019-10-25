@@ -48,7 +48,7 @@ public class StudentService {
      */
     @Transactional(rollbackFor = Exception.class)
     public Integer bindForStudent(String openId, String account, String code) {
-        Integer flag = courseCrawlerService.turnToCourseSpider(account, code);
+        Integer flag = courseCrawlerService.turnToCourse(account, code);
          if (flag==1){
             userService.updateJwcAccount(openId, account);
             SchoolConstant schoolConstant = new SchoolConstant();
