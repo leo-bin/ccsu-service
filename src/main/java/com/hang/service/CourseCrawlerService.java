@@ -19,12 +19,11 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.hang.constant.SchoolConstant.LOGIN_URL;
-import static com.hang.constant.SchoolConstant.HUANCHON_URL;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.hang.constant.SchoolConstant.*;
 
 /**
  * @author free-go
@@ -34,46 +33,35 @@ import java.util.List;
 @Service
 public class CourseCrawlerService {
 
-    @Autowired
-    private CourseDAO courseDAO;
-
-    public  Integer flag = 0;
+    public Integer flag = 0;
 
     /**
-     * 登陆到教务系统
+     * 登陆到内网爬虫服务器
      *
      * @param USERNAME 用户名
      * @param PASSWORD 密码
      */
     public HttpClient login(String USERNAME, String PASSWORD) {
-        flag=0;
+        flag = 0;
         HttpClient httpclient = HttpClientBuilder.create().build();
-        HttpPost httpost = new HttpPost(LOGIN_URL);
-        HttpPost post=new HttpPost(HUANCHON_URL);
-        String con=null;
-        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+        HttpPost post = new HttpPost(INSIDE_URL);
+        String con = null;
 
+        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
         nvps.add(new BasicNameValuePair("USERNAME", USERNAME));
         nvps.add(new BasicNameValuePair("PASSWORD", PASSWORD));
-        nvps.add(new BasicNameValuePair("useDogCode", ""));
-        nvps.add(new BasicNameValuePair("x", "37"));
-        nvps.add(new BasicNameValuePair("y", "11"));
+
 
         /*设置字符*/
-        httpost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
+        post.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
 
         /*尝试登陆*/
         HttpResponse response;
 
-        /*尝试缓冲登陆*/
-        HttpResponse httpResponse;
-
         try {
             //执行登陆
-            response = httpclient.execute(httpost);
-            //执行缓冲登陆
-            httpResponse=httpclient.execute(post);
-            HttpEntity httpEntity = httpResponse.getEntity();
+            response = httpclient.execute(post);
+            HttpEntity httpEntity = response.getEntity();
             con = EntityUtils.toString(httpEntity, "utf-8");
             //关闭登陆结果集
             response.getEntity().getContent().close();
@@ -81,12 +69,6 @@ public class CourseCrawlerService {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        Document doc = Jsoup.parse(con);
-        Elements elements=doc.getElementsByAttributeValue("name","学生专区");
-        //登不上官网
-        if (elements.toString().length()<1) {
-            flag=2;
         }
         return httpclient;
     }
@@ -98,11 +80,6 @@ public class CourseCrawlerService {
      * @apiNote flag代表登陆状态
      */
     public Integer turnToCourseSpider(String USERNAME, String PASSWORD) {
-        //如果数据库里有当前学期的课程就不需要在绑定学号的时候重复写数据了
-        SchoolConstant schoolConstant = new SchoolConstant();
-        String xueqi = schoolConstant.getTerm();
-        Integer state=0;
-
-        return state;
+        return 1;
     }
 }
