@@ -29,9 +29,9 @@ public class SessionService {
     private static final Logger log = LoggerFactory.getLogger(SessionService.class);
 
     /**
-     * 会话过期时间（默认 7200 秒）
+     * 会话过期时间（默认 14400 秒，四个小时）
      */
-    @Value("${expireIn: 7200}")
+    @Value("${expireIn: 14400}")
     private int expiredIn;
 
     @Autowired

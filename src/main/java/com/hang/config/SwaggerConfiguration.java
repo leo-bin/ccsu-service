@@ -32,7 +32,7 @@ public class SwaggerConfiguration {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("后台服务接口")
-                .description("2019年 毕业设计 后台相关接口")
+                .description("长沙学院计数院1204实验室开发 萌芽创新创业微平台项目 后台相关接口")
                 .version("1.0")
                 .build();
     }

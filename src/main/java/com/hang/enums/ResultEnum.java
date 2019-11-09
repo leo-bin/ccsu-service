@@ -42,7 +42,7 @@ public enum ResultEnum {
     /**
      * 账号未绑定
      */
-    ACCOUNT_NOT_BIND(-10010, "jwd account not bind"),
+    ACCOUNT_NOT_BIND(-10010, "jwc account not bind"),
 
     /**
      * 导师姓名为空
@@ -85,7 +85,13 @@ public enum ResultEnum {
     /**
      * 网络错误
      */
-    NETWORK_ERROR(-10018,"your network is blocked unexpected");
+    NETWORK_ERROR(-10018,"your network is blocked unexpected"),
+
+    /**
+     * 课表更新失败
+     */
+    COURSE_UPDATE_ERROR(-10019,"course update error");
+
 
     /**
      * 错误码

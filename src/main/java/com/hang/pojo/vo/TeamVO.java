@@ -42,7 +42,7 @@ public class TeamVO {
     /**
      * 团队荣誉
      */
-    private List<String> honor;
+    private List<HonorVO> honor;
 
     /**
      * 团队日志

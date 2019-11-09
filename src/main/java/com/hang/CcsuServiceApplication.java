@@ -19,10 +19,4 @@ public class CcsuServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(CcsuServiceApplication.class, args);
     }
-
-    @GetMapping("/hello")
-    public String hello() {
-        return "hello";
-    }
-
 }

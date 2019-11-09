@@ -11,6 +11,25 @@
 </head>
 <body>
 
+<div class="layui-tab">
+    <ul class="layui-tab-title">
+        <li class="layui-this" id="finished">已结题</li>
+        <li id="unfinished">未结题</li>
+    </ul>
+</div>
+
+<div class="statistic0">
+    <div class="statistic1">
+        <select name="interest" lay-filter="aihao" id="statistic">
+            <option value=""></option>
+            <option value="10" selected="">查看前十条数据</option>
+            <option value="20">查看前二十条数据</option>
+            <option value="50">查看前五十条数据</option>
+            <option value="100">查看前一百条数据</option>
+        </select>
+    </div>
+</div>
+
 <table class="layui-hide" id="test" lay-filter="test"></table>
 <span id="show" style="display:none">123</span>
 <script type="text/html" id="toolbarDemo">
@@ -20,7 +39,7 @@
     </div>
 </script>
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-mini" lay-event="edit">查看和编辑</a>
 </script>
 
 
@@ -28,14 +47,55 @@
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
 <script>
-    layui.use(['table', 'laypage', 'layer', 'jquery', 'form', 'laydate'], function () {
+    layui.use(['table', 'laypage', 'layer', 'jquery', 'form', 'laydate', 'element'], function () {
         var table = layui.table;
         var $ = layui.$;
         var form = layui.form;
         var layer = layui.layer;
 
+        var statecode = '1';
+
+        $("#finished").click(function () {
+            table.reload('mytable', {
+                page: {
+                    curr: 1
+                }
+                , method: 'GET',
+                url: '/team/getAllTeam?state=1',
+            });
+           statecode = '1';
+        })
+
+
+        $("#unfinished").click(function () {
+            table.reload('mytable', {
+                page: {
+                    curr: 1
+                }
+                , method: 'GET',
+                url: '/team/getAllTeam?state=2',
+            });
+            statecode= '2';
+        })
+
+        $("#statistic").change(function () {
+            var value = $('select  option:selected').val();
+            var u = window.location.href;
+            console.log(value);
+            console.log(codetest);
+            table.reload('mytable', {
+                page: {
+                    curr: 1
+                }
+                , method: 'GET',
+                url: '/team/getAllTeam?state=' + statecode + '&offset=' + value,
+            });
+        })
+
+
         table.render({
 
+            id: 'mytable',
             elem: '#test',
             url: '/team/getAllTeam',
             toolbar: '#toolbarDemo',
@@ -147,7 +207,7 @@
                 layer.open({
                     //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                     type: 1,
-                    title: "修改团队信息",
+                    title: "查看和修改团队信息",
                     area: ['700px', '500px'],
                     content: $("#popUpdateTest")//引用的弹出层的页面层的方式加载修改界面表单
                 });
@@ -186,6 +246,13 @@
                                     state: massage.field.state,
                                 });//修改成功修改表格数据不进行跳转
                                 layer.closeAll();//关闭所有的弹出层
+                                table.reload('mytable', {
+                                    page: {
+                                        curr: 1
+                                    }
+                                    , method: 'GET',
+                                    url: '/team/getAllTeam?state='+statecode,
+                                });
                             }, 1000);
                             //加载层-风格
                         } else {

@@ -55,16 +55,12 @@ public class SchoolController {
 
     /**
      * 查询第n周的课表
-     * @param openId
-     * @param week
-     * @param semester
-     * @return
      */
     @StatisticsTime("getCourseByWeek")
     @ApiOperation("查询第n周的课表,OpenId参数不用传")
     @GetMapping("/course/getCourseByWeek")
     public BaseRes getCourseByWeek(@OpenId String openId, @RequestParam Integer week,
-                                   @RequestParam(required = false, defaultValue = "2018-2019-2") String semester) {
+                                   @RequestParam(required = false, defaultValue = "2019-2020-1") String semester) {
         ApiAssert.checkOpenId(openId);
         UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
         jwcAccountCheck(userInfo);
@@ -74,38 +70,38 @@ public class SchoolController {
 
     /**
      * 查询全部课表
-     * @param openId
-     * @param semester
-     * @return
      */
     @StatisticsTime("getAllCourse")
     @ApiOperation("查询全部课表,OpenId参数不用传")
     @GetMapping("/course/getAllCourse")
     public BaseRes getAllCourse(@OpenId String openId,
-                                @RequestParam(required = false, defaultValue = "2018-2019-2") String semester) {
+                                @RequestParam(required = false, defaultValue = "2019-2020-1") String semester) {
         ApiAssert.checkOpenId(openId);
         UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
         jwcAccountCheck(userInfo);
-
         List<CourseDO> allCourse = schoolService.getAllCourse(userInfo.getJwcAccount(), semester);
         return RespUtil.success(allCourse);
     }
 
     /**
      * 查询全部课表
-     * @param openId
-     * @return
      */
     @StatisticsTime("UpdateCourse")
     @ApiOperation("更新全部课表")
-    @GetMapping("/course/updateCourse")
+    @RequestMapping("/course/updateCourse")
     public BaseRes updateCourse(@OpenId String openId,
-                                @RequestParam(required = false, defaultValue = "2018-2019-2") String semester) {
+                                @RequestParam(required = false, defaultValue = "2019-2020-1") String semester) {
         ApiAssert.checkOpenId(openId);
-        UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
-        jwcAccountCheck (userInfo);
-        updateService.turnToCourse(userInfo.getJwcAccount(),semester,studentService.getStudentInfoByJwcAccount(openId).getCode());
-        return RespUtil.success();
+        UserInfoDO userInfoDO=userService.getUserInfoByOpenId(openId);
+        jwcAccountCheck(userInfoDO);
+        StudentDO studentDO=studentService.getStudentInfoByOpenId(openId);
+        Integer flag=updateService.turnToCourse(studentDO.getJwcAccount(),semester,studentDO.getCode());
+        if (flag==1){
+            return RespUtil.success();
+        }
+        else {
+            return RespUtil.error(ResultEnum.COURSE_UPDATE_ERROR);
+        }
     }
 
     @StatisticsTime("initiatorMessage")
@@ -137,20 +133,24 @@ public class SchoolController {
     @StatisticsTime("removeLostAndRecruitMessage")
     @ApiOperation("删除LostAndRecruitMessage")
     @GetMapping("/removeLostAndRecruitMessage")
-    public BaseRes removeLostAndRecruitMessage(@RequestParam int id) {
+    public BaseRes removeLostAndRecruitMessage(@OpenId String openId, @RequestParam Integer id) {
+        ApiAssert.checkOpenId(openId);
         schoolService.removeLostAndRecruit(id);
         return RespUtil.success();
     }
 
 
-    @StatisticsTime("modifyLostandRecruitMessage")
-    @ApiOperation("修改LostandRecruitMessage")
-    @GetMapping("/modifyLostandRecruitMessage")
-    public BaseRes modifyLostandRecruitMessage(@RequestParam int id,
-                                               @RequestParam String initiatorMessage,
-                                               @RequestParam String initiatorLocation,
-                                               @RequestParam Long occurtime,
-                                               @RequestParam String contactInformation) {
+    @StatisticsTime("modifyLostAndRecruitMessage")
+    @ApiOperation("修改LostAndRecruitMessage")
+    @GetMapping("/modifyLostAndRecruitMessage")
+    public BaseRes modifyLostAndRecruitMessage(
+            @OpenId String openId,
+            @RequestParam Integer id,
+            @RequestParam String initiatorMessage,
+            @RequestParam String initiatorLocation,
+            @RequestParam Long occurtime,
+            @RequestParam String contactInformation) {
+        ApiAssert.checkOpenId(openId);
         LostPropertyAndRecruitDO lostPropertyAndRecruitDO = schoolService.getLostAndRecruit(id);
         lostPropertyAndRecruitDO.setInitiatorMessage(initiatorMessage);
         lostPropertyAndRecruitDO.setInitiatorLocation(initiatorLocation);
@@ -173,23 +173,16 @@ public class SchoolController {
 
     /**
      * 获取空闲教室
-     * @param semester
-     * @param section
-     * @param week
-     * @param weekDay
-     * @param building
-     * @return
      */
     @StatisticsTime("getFreeClassroom")
     @ApiOperation("获取本学期空闲教室")
     @GetMapping("/getFreeClassroom")
-    public BaseRes getFreeClassroom(@ApiParam("学期，默认为2017-2018-2") @RequestParam(required = false, defaultValue = "2017-2018-2") String semester,
+    public BaseRes getFreeClassroom(@ApiParam("学期，默认为2019-2020-1") @RequestParam(required = false, defaultValue = "2017-2018-2") String semester,
                                     @ApiParam("课程时间节数 1-2或3-4或5-6等") String section,
                                     @ApiParam("周数") String week,
                                     @ApiParam("星期") String weekDay,
-                                    @ApiParam("教学楼") String building)
-    {
-        return RespUtil.success(schoolService.getFreeClassroom(semester, section, week, weekDay,building));
+                                    @ApiParam("教学楼") String building) {
+        return RespUtil.success(schoolService.getFreeClassroom(semester, section, week, weekDay, building));
     }
 
 
@@ -202,9 +195,6 @@ public class SchoolController {
 
     /**
      * 查询成绩
-     * @param openId
-     * @param semeter
-     * @return
      */
     @StatisticsTime("getGrade")
     @ApiOperation("查询成绩")
@@ -213,8 +203,8 @@ public class SchoolController {
         ApiAssert.checkOpenId(openId);
         UserInfoDO userInfo = userService.getUserInfoByOpenId(openId);
         jwcAccountCheck(userInfo);
-        StudentDO studentDO=studentService.getStudentInfoByOpenId(openId);
-        return RespUtil.success(schoolService.getGrade(userInfo.getJwcAccount(), semeter,studentDO.getCode()));
+        StudentDO studentDO = studentService.getStudentInfoByOpenId(openId);
+        return RespUtil.success(schoolService.getGrade(userInfo.getJwcAccount(), semeter, studentDO.getCode()));
     }
 
     /**

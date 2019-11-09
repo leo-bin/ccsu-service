@@ -40,13 +40,11 @@ public class TeacherService {
      * @apiNote 在官网做模拟登陆，进行信息的校验
      */
     @Transactional(rollbackFor = Exception.class)
-    public void bindForTeacher(String openId, String account, String code) {
+    public void bindForTeacher(String openId, String account) {
         String name = account;
-        userService.updateJwcAccount(openId, code);
         UserInfoDO userInfoDO = userInfoDAO.selectByOpenId(openId);
         TeacherDO teacherDO = new TeacherDO();
         teacherDO.setStaffNum(userInfoDO.getJwcAccount());
-        teacherDO.setCode(code);
         teacherDO.setNickName(userInfoDO.getNickName());
         teacherDO.setOpenId(userInfoDO.getOpenId());
         teacherDO.setName(name);

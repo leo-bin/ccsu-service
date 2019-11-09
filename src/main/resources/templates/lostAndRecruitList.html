@@ -39,10 +39,6 @@
     </div>
 </script>
 
-<script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-</script>
 <script src="/static/layui/layui.js" charset="utf-8"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
@@ -258,7 +254,7 @@
                     var getTime = new Date(massage.field.occurtime).getTime();
                     console.log(getTime);
                     $.ajax({
-                        url: '/school/modifyLostandRecruitMessage',
+                        url: '/school/modifyLostAndRecruitMessage',
                         type: 'GET',
                         data: {
                             id: data.id,  //原来的数据：id
