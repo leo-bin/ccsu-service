@@ -22,7 +22,7 @@ public class InformationConstant {
 
     public static final String INVITATION_SUCCESS_SUFFIX="恭喜你，邀请成功";
 
-    public static final String AUTHORIZE_SUCCESS="恭喜你，你已成功被授权为团队管理员，赶快邀请成员进来吧！";
+    public static final String AUTHORIZE_SUCCESS = "恭喜你，你已成功被授权为团队管理员，赶快邀请成员进来吧！";
 
     public static final int INFORMATION_EXPIRE = 0;
 

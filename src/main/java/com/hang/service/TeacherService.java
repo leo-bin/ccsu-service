@@ -44,7 +44,7 @@ public class TeacherService {
     private NotificationDAO notificationDAO;
 
     @Autowired
-    private  NotificationService notificationService;
+    private NotificationService notificationService;
 
 
     /**
@@ -53,11 +53,13 @@ public class TeacherService {
      * @apiNote 在官网做模拟登陆，进行信息的校验
      */
     @Transactional(rollbackFor = Exception.class)
-    public void bindForTeacher(String openId, String account) {
+    public void bindForTeacher(String openId, String account, String code) {
         String name = account;
+        userService.updateJwcAccount(openId, code);
         UserInfoDO userInfoDO = userInfoDAO.selectByOpenId(openId);
         TeacherDO teacherDO = new TeacherDO();
         teacherDO.setStaffNum(userInfoDO.getJwcAccount());
+        teacherDO.setCode(code);
         teacherDO.setNickName(userInfoDO.getNickName());
         teacherDO.setOpenId(userInfoDO.getOpenId());
         teacherDO.setName(name);
@@ -114,12 +116,12 @@ public class TeacherService {
         int i = teacherDAO.authorizeToStudent(jwcAccount);
         ApiAssert.nonEqualInteger(i, 1, "授权失败");
         //授权成功，给被授权人发通知
-        UserInfoDO userInfoDO=userService.getUserInfoByJwcAccount(jwcAccount);
-        SystemNotificationDO systemNotificationDO=new SystemNotificationDO();
+        UserInfoDO userInfoDO = userService.getUserInfoByJwcAccount(jwcAccount);
+        SystemNotificationDO systemNotificationDO = new SystemNotificationDO();
         systemNotificationDO.setNoteType(NotificationEnum.SYSTEM_NOTE_PUBLIC.name());
         systemNotificationDO.setMessage(AUTHORIZE_SUCCESS);
         notificationDAO.insertSystemNote(systemNotificationDO);
-        Integer notificationId=systemNotificationDO.getId();
-        notificationService.sendNotification(openId,userInfoDO.getOpenId(),NotificationEnum.SYSTEM_NOTE_PUBLIC,notificationId,AUTHORIZE_SUCCESS,"");
+        Integer notificationId = systemNotificationDO.getId();
+        notificationService.sendNotification(openId, userInfoDO.getOpenId(), NotificationEnum.SYSTEM_NOTE_PUBLIC, notificationId, AUTHORIZE_SUCCESS, "");
     }
 }

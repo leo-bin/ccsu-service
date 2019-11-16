@@ -57,7 +57,7 @@ public class SchoolService {
         if (gradeDOS.size() != 0) {
             return gradeDOS;
         } else {
-            gradeCrawlerService.turnTOGradeSpider(jwcAccount, code,semester);
+            gradeCrawlerService.turnTOGradeSpider(jwcAccount, code, semester);
             gradeDOS = gradeDAO.selectGradeByJwcAccountAndXnxq(jwcAccount, semester);
             return gradeDOS;
         }

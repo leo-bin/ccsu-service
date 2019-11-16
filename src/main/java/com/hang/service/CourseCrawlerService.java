@@ -7,15 +7,10 @@ import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,7 +59,7 @@ public class CourseCrawlerService {
             HttpEntity httpEntity = httpResponse.getEntity();
             con = EntityUtils.toString(httpEntity, "utf-8");
             if (con.equals("1")) {
-                flag=1;
+                flag = 1;
             }
             //关闭登陆结果集
             httpResponse.getEntity().getContent().close();

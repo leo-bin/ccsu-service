@@ -60,7 +60,7 @@ public class StudentService {
             studentDO.setOpenId(userInfoDO.getOpenId());
             studentDO.setDepartment(schoolConstant.getDepartment(account));
             studentDO.setAvatar(userInfoDO.getAvatarUrl());
-            studentDO.setCode(code);
+             studentDO.setCode(code);
             StudentDO studentInfo = getStudentInfoByOpenId(openId);
             if (Objects.isNull(studentInfo)) {
                 saveStudentInfo(studentDO);
@@ -68,10 +68,10 @@ public class StudentService {
                 modifyStudentInfo(studentDO);
             }
             //重新绑定之后所有权限角色都变为0
-            userService.updateUserRole(openId, 0);
-            UserInfoDO userInfo = userInfoDAO.selectByOpenId(openId);
+             userService.updateUserRole(openId, 0);
+             UserInfoDO userInfo = userInfoDAO.selectByOpenId(openId);
             //redis缓存穿透
-            userCache.updateUserInfo(openId, userInfo);
+             userCache.updateUserInfo(openId, userInfo);
         }
         return flag;
     }

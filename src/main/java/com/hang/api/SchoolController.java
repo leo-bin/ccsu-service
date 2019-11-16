@@ -91,13 +91,13 @@ public class SchoolController {
     @ApiOperation("更新全部课表")
     @RequestMapping("/course/updateCourse")
     public BaseRes updateCourse(@OpenId String openId
-                                ) {
+    ) {
         ApiAssert.checkOpenId(openId);
         UserInfoDO userInfoDO=userService.getUserInfoByOpenId(openId);
         jwcAccountCheck(userInfoDO);
         StudentDO studentDO=studentService.getStudentInfoByOpenId(openId);
-        SchoolConstant schoolConstant=new SchoolConstant();
-        Integer flag=updateService.turnToCourse(studentDO.getJwcAccount(),schoolConstant.getTerm(),studentDO.getCode());
+        SchoolConstant schoolConstant = new SchoolConstant();
+        Integer flag = updateService.turnToCourse(studentDO.getJwcAccount(), schoolConstant.getTerm(), studentDO.getCode());
         if (flag==1){
             return RespUtil.success();
         }

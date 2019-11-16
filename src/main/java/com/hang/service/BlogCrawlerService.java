@@ -3,9 +3,12 @@ package com.hang.service;
 import com.hang.dao.InformationDAO;
 import com.hang.pojo.data.InformationDO;
 import org.apache.http.HttpEntity;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
@@ -15,6 +18,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -25,13 +29,9 @@ import java.util.Date;
  * @Date Created in 9:26 2019/7/24
  * @function: 文章爬虫服务层
  **/
-@Component
-public class ArticleCrawlerService {
-
-    /**
-     * CSDN程序人生URL
-     */
-    private static final String URL = "https://www.csdn.net/nav/career";
+@Service
+public class BlogCrawlerService {
+    private static final String URL = "https://www.cnblogs.com/cate/codelife/";  //博客园URL
 
     @Autowired
     private InformationDAO informationDAO;
@@ -39,34 +39,48 @@ public class ArticleCrawlerService {
     @Autowired
     private HotAndCacheService cacheService;
 
-    public Elements UrlGet() throws Exception {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
+    public Elements doGet() {
+        // 获得Http客户端(可以理解为:你得先有一个浏览器;注意:实际上HttpClient与浏览器是不一样的)
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        // 创建Get请求
         HttpGet httpGet = new HttpGet(URL);
+
+        // 响应模型
         CloseableHttpResponse response = null;
         try {
-            response = httpclient.execute(httpGet);
-            HttpEntity en = response.getEntity();
-            String con = EntityUtils.toString(en, "utf-8");
-            Document doc = Jsoup.parse(con);
-            return doc.select("h2>a[href]");
+            // 由客户端执行(发送)Get请求
+            response = httpClient.execute(httpGet);
+            // 从响应模型中获取响应实体
+            HttpEntity responseEntity = response.getEntity();
+            if (responseEntity != null) {
+                String con = EntityUtils.toString(responseEntity, "utf-8");
+                Document doc = Jsoup.parse(con);
+                return doc.select("h3>a[href]");  //返回第一页所有博客的URL
+
+            }
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (response != null) {
-                response.close();
+            try {
+                // 释放资源
+                if (httpClient != null) {
+                    httpClient.close();
+                }
+                if (response != null) {
+                    response.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
         }
         return null;
     }
 
-    /**
-     * 解析URL
-     * @apiNote 获取源码并对其做相应处理，以便于显示于富文本
-     *          分别存储标题和正文
-     * @throws Exception
-     */
-    public void saveUrlParse(Elements elements) throws Exception {
+    public void urlParse(Elements elements) throws Exception {
         InformationDO informationDO = new InformationDO();
         for (int i = 0; i < elements.size(); i++) {
             Element element = elements.get(i);
@@ -78,19 +92,19 @@ public class ArticleCrawlerService {
                 HttpEntity en = response.getEntity();
                 String con = EntityUtils.toString(en, "utf-8");
                 Document doc = Jsoup.parse(con);
-                String title = String.valueOf(doc.select("h1.title-article").text());
-                String text = String.valueOf(doc.select("div#content_views")).replaceAll("\n", " ")
+                String title = String.valueOf(doc.select("a.postTitle2").text());
+                String text = String.valueOf(doc.select("div#cnblogs_post_body")).replaceAll("\n", " ")
                         .replaceAll("'", "\"").replaceAll("<br>", "\n");
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date time = formatter.parse(doc.select("span.time").text().replaceAll("年", "-")
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                Date time = formatter.parse(doc.select("span#post-date").text().replaceAll("年", "-")
                         .replaceAll("月", "-").replaceAll("日", ""));
                 informationDO.setTitle(title);
                 informationDO.setContent(text);
                 informationDO.setReleaseTime(time);
-                informationDO.setAuthors("CSDN");
+                informationDO.setAuthors("博客园");
                 informationDO.setCategory("TECHNOLOGY");
                 informationDO.setCategoryName("技术");
-                informationDAO.addArticle(informationDO);
+                informationDAO.insert(informationDO);
                 //写入缓存
                 cacheService.addInformation2Cache(informationDO);
             } catch (IOException e) {
@@ -101,12 +115,14 @@ public class ArticleCrawlerService {
                 }
             }
         }
+
+
     }
 
-    @Scheduled(cron = "0 0 2 1 * ?")        ////每月一日凌晨两点启动
+    @Scheduled(cron = "0 0 2 ? * 1")       //每周日凌晨两点启动
     public void run() {
         try {
-            saveUrlParse(UrlGet());
+            urlParse(doGet());
         } catch (Exception e) {
             e.printStackTrace();
         }
