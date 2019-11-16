@@ -198,7 +198,6 @@
         </if>
     </select>
 
-
     <select id="countByTargetOpenId" resultType="java.lang.Integer">
         select count(1)
         from notification

@@ -63,13 +63,13 @@ public class UserController {
     @StatisticsTime("bind")
     @ApiOperation("绑定账户信息，openId参数不用传")
     @PostMapping("/bind")
-    public BaseRes bind(@OpenId String openId, @RequestParam String account) {
+    public BaseRes bind(@OpenId String openId, @RequestParam String account, @RequestParam String code) {
         log.info("account:{}, openId:{}", account, openId);
-        Integer flag=0;
-        if (account.length()==12&&"B".equals(account.substring(0,1))) {
-            flag = studentService.bindForStudent(openId, account);
-        } else if ("Z".equals(account.substring(0, 1)) && account.length() == 9) {
-            teacherService.bindForTeacher(openId, account);
+        Integer flag = 0;
+        if (account.length() == 12 && "B".equals(account.substring(0, 1))) {
+            flag = studentService.bindForStudent(openId, account, code);
+        } else if ("Z".equals(code.substring(0, 1)) && code.length() == 9) {
+            teacherService.bindForTeacher(openId, account, code);
             return RespUtil.success();
         }
         if (flag == 1) {
@@ -112,11 +112,11 @@ public class UserController {
         if (Strings.isEmpty(sessionId)) {
             sessionId = request.getHeader("sessionId");
         }
-        UserInfoDO userInfoOld=sessionService.getSessionInfo(sessionId);
-        if (Objects.isNull(userInfoOld)){
+        UserInfoDO userInfoOld = sessionService.getSessionInfo(sessionId);
+        if (Objects.isNull(userInfoOld)) {
             return RespUtil.error(-10008, "your sessionId was not exist or expired.");
         }
-        UserInfoDO userInfoNew=userService.getUserInfoByOpenId(userInfoOld.getOpenId());
+        UserInfoDO userInfoNew = userService.getUserInfoByOpenId(userInfoOld.getOpenId());
         return RespUtil.success(userInfoNew);
     }
 
@@ -131,26 +131,26 @@ public class UserController {
 
     /**
      * 用户个人中心
-     * @apiNote  根据角色Id判断返回对象
+     *
+     * @apiNote 根据角色Id判断返回对象
      */
     @StatisticsTime("personCenter")
     @ApiOperation("个人中心")
     @GetMapping("/personCenter")
     public BaseRes personCenter(@OpenId String openId) {
         ApiAssert.checkOpenId(openId);
-        StudentDO studentInfo=null;
-        TeacherDO teacherDO=null;
-        Integer roleId=userService.getUserInfoByOpenId(openId).getRoleId();
-        if (roleId.equals(0)||roleId.equals(2)){
-           studentInfo = studentService.getStudentInfoByOpenId(openId);
+        StudentDO studentInfo = null;
+        TeacherDO teacherDO = null;
+        Integer roleId = userService.getUserInfoByOpenId(openId).getRoleId();
+        if (roleId.equals(0) || roleId.equals(2)) {
+            studentInfo = studentService.getStudentInfoByOpenId(openId);
             if (studentInfo == null) {
                 return RespUtil.error(ResultEnum.ACCOUNT_NOT_BIND);
             }
             return RespUtil.success(studentInfo);
-        }
-        else{
-            teacherDO=teacherService.getTeacherInfo(openId);
-            if (teacherDO==null){
+        } else {
+            teacherDO = teacherService.getTeacherInfo(openId);
+            if (teacherDO == null) {
                 return RespUtil.error(ResultEnum.ACCOUNT_NOT_BIND);
             }
         }
@@ -164,22 +164,20 @@ public class UserController {
     @StatisticsTime("authorizeToStudent")
     @ApiOperation("教师给学生授权")
     @RequestMapping("/authorizeToStudent")
-    public BaseRes authorizeToStudent(@OpenId String openId,@RequestParam String jwcAccount){
+    public BaseRes authorizeToStudent(@OpenId String openId, @RequestParam String jwcAccount) {
         ApiAssert.checkOpenId(openId);
         UserInfoDO teacherInfo = userService.getUserInfoByOpenId(openId);
-        UserInfoDO studentInfo=userService.getUserInfoByJwcAccount(jwcAccount);
-        Integer roleId=teacherInfo.getRoleId();
-        if(roleId.equals(1)&&!Objects.isNull(studentInfo)){
-            teacherService.authorizeToStudent(jwcAccount);
+        UserInfoDO studentInfo = userService.getUserInfoByJwcAccount(jwcAccount);
+        Integer roleId = teacherInfo.getRoleId();
+        if (roleId.equals(1) && !Objects.isNull(studentInfo)) {
+            teacherService.authorizeToStudent(openId, jwcAccount);
             //更新缓存
-            UserInfoDO userInfoDO=userService.getUserInfoByJwcAccount(jwcAccount);
-            userCache.updateUserInfo(studentInfo.getOpenId(),userInfoDO);
+            UserInfoDO userInfoDO = userService.getUserInfoByJwcAccount(jwcAccount);
+            userCache.updateUserInfo(studentInfo.getOpenId(), userInfoDO);
             return RespUtil.success();
-        }
-        else if (Objects.isNull(studentInfo)){
+        } else if (Objects.isNull(studentInfo)) {
             return RespUtil.success(ResultEnum.CAN_NOT_GET_USER_INFO);
-        }
-        else{
+        } else {
             return RespUtil.success(ResultEnum.AUTHORIZE_ERROR);
         }
     }

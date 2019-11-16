@@ -68,8 +68,6 @@ public class NotificationService {
 
     /**
      * 根据用户查询通知
-     *
-     * @return
      */
     public long countByTargetUserAndIsRead(String targetOpenId) {
         return notificationDAO.countByTargetOpenId(targetOpenId);
@@ -88,8 +86,6 @@ public class NotificationService {
     public void updateByIsSuccess(Integer id){
         notificationDAO.updateByIsSuccess(id);
     }
-
-
 
 
     /**

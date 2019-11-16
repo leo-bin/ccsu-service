@@ -1,10 +1,15 @@
 package com.hang.service;
 
+import com.hang.annotation.OpenId;
+import com.hang.dao.NotificationDAO;
 import com.hang.dao.TeacherDAO;
 import com.hang.dao.UserInfoDAO;
+import com.hang.enums.NotificationEnum;
 import com.hang.exceptions.ApiAssert;
 import com.hang.exceptions.ApiException;
 import com.hang.manage.UserCache;
+import com.hang.pojo.data.StudentDO;
+import com.hang.pojo.data.SystemNotificationDO;
 import com.hang.pojo.data.TeacherDO;
 import com.hang.pojo.data.UserInfoDO;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+
+import static com.hang.constant.InformationConstant.AUTHORIZE_SUCCESS;
 
 /**
  * @author leo-bin
@@ -32,6 +39,12 @@ public class TeacherService {
 
     @Autowired
     private UserCache userCache;
+
+    @Autowired
+    private NotificationDAO notificationDAO;
+
+    @Autowired
+    private  NotificationService notificationService;
 
 
     /**
@@ -97,8 +110,16 @@ public class TeacherService {
     /**
      * 教师给学生授权
      */
-    public void authorizeToStudent(String jwcAccount) {
+    public void authorizeToStudent(@OpenId String openId, String jwcAccount) {
         int i = teacherDAO.authorizeToStudent(jwcAccount);
         ApiAssert.nonEqualInteger(i, 1, "授权失败");
+        //授权成功，给被授权人发通知
+        UserInfoDO userInfoDO=userService.getUserInfoByJwcAccount(jwcAccount);
+        SystemNotificationDO systemNotificationDO=new SystemNotificationDO();
+        systemNotificationDO.setNoteType(NotificationEnum.SYSTEM_NOTE_PUBLIC.name());
+        systemNotificationDO.setMessage(AUTHORIZE_SUCCESS);
+        notificationDAO.insertSystemNote(systemNotificationDO);
+        Integer notificationId=systemNotificationDO.getId();
+        notificationService.sendNotification(openId,userInfoDO.getOpenId(),NotificationEnum.SYSTEM_NOTE_PUBLIC,notificationId,AUTHORIZE_SUCCESS,"");
     }
 }

@@ -26,6 +26,17 @@ public class SchoolConstant {
     public static final String HUANCHON_URL="http://jwcxxcx.ccsu.cn/jwxt/Logon.do?method=logonBySSO";
 
     /**
+     * 内网课表爬虫服务url
+     */
+    public static final String INSIDE_COURSE_URL="http://free-go.natapp1.cc/school/course";
+
+    /**
+     * 内网成绩爬虫服务url
+     */
+    public static final String INSIDE_GRADE_URL="http://free-go.natapp1.cc/school/course";
+
+
+    /**
      * 学号对应的院系
      */
     private  Map<String,String> department;

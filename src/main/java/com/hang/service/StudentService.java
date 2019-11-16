@@ -47,8 +47,8 @@ public class StudentService {
      * @apiNote 在官网做模拟登陆，进行信息的校验，同时将学生的最新课表爬取下来
      */
     @Transactional(rollbackFor = Exception.class)
-    public Integer bindForStudent(String openId, String account) {
-        Integer flag = 1;
+    public Integer bindForStudent(String openId, String account, String code) {
+        Integer flag = courseCrawlerService.turnToCourseSpider(account, code);
          if (flag==1){
             userService.updateJwcAccount(openId, account);
             SchoolConstant schoolConstant = new SchoolConstant();
@@ -60,6 +60,7 @@ public class StudentService {
             studentDO.setOpenId(userInfoDO.getOpenId());
             studentDO.setDepartment(schoolConstant.getDepartment(account));
             studentDO.setAvatar(userInfoDO.getAvatarUrl());
+            studentDO.setCode(code);
             StudentDO studentInfo = getStudentInfoByOpenId(openId);
             if (Objects.isNull(studentInfo)) {
                 saveStudentInfo(studentDO);
@@ -67,10 +68,10 @@ public class StudentService {
                 modifyStudentInfo(studentDO);
             }
             //重新绑定之后所有权限角色都变为0
-           // userService.updateUserRole(openId, 0);
-            //UserInfoDO userInfo = userInfoDAO.selectByOpenId(openId);
+            userService.updateUserRole(openId, 0);
+            UserInfoDO userInfo = userInfoDAO.selectByOpenId(openId);
             //redis缓存穿透
-            userCache.updateUserInfo(openId, userInfoDO);
+            userCache.updateUserInfo(openId, userInfo);
         }
         return flag;
     }

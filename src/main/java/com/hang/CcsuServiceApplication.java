@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @SpringBootApplication
 @MapperScan(basePackages = "com.hang")
-@EnableScheduling
 public class CcsuServiceApplication {
 
     public static void main(String[] args) {
