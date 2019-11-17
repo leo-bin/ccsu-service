@@ -33,7 +33,7 @@ public class SchoolConstant {
     /**
      * 内网成绩爬虫服务url
      */
-    public static final String INSIDE_GRADE_URL="http://free-go.natapp1.cc/school/course";
+    public static final String INSIDE_GRADE_URL="http://free-go.natapp1.cc/school/grade";
 
 
     /**

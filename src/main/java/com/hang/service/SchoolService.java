@@ -54,7 +54,7 @@ public class SchoolService {
      */
     public List<GradeDO> getGrade(String jwcAccount, String semester, String code) {
         List<GradeDO> gradeDOS = gradeDAO.selectGradeByJwcAccountAndXnxq(jwcAccount, semester);
-        if (gradeDOS.size() != 0) {
+        if (gradeDOS.size() >0) {
             return gradeDOS;
         } else {
             gradeCrawlerService.turnTOGradeSpider(jwcAccount, code,semester);

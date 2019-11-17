@@ -1,22 +1,14 @@
 package com.hang.service;
 
-import com.hang.constant.SchoolConstant;
-import com.hang.dao.CourseDAO;
-import com.hang.pojo.data.CourseDO;
 import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
+
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -33,8 +25,7 @@ import static com.hang.constant.SchoolConstant.*;
 @Service
 public class CourseCrawlerService {
 
-    @Autowired
-    private CourseDAO courseDAO;
+    public Integer flag = 0;
 
     /**
      * 登陆到内网爬虫服务器
@@ -46,7 +37,7 @@ public class CourseCrawlerService {
         HttpClient httpclient = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(INSIDE_COURSE_URL);
         String con = null;
-        Integer flag = 0;
+        flag = 0;
 
         List<NameValuePair> nvps = new ArrayList<NameValuePair>();
         nvps.add(new BasicNameValuePair("userName", USERNAME));
@@ -64,7 +55,7 @@ public class CourseCrawlerService {
             HttpEntity httpEntity = httpResponse.getEntity();
             con = EntityUtils.toString(httpEntity, "utf-8");
             if (con.equals("1")) {
-                flag=1;
+                flag = 1;
             }
             //关闭登陆结果集
             httpResponse.getEntity().getContent().close();
@@ -83,14 +74,6 @@ public class CourseCrawlerService {
      * @apiNote flag代表登陆状态
      */
     public Integer turnToCourseSpider(String USERNAME, String PASSWORD) {
-        //如果数据库里有当前学期的课程就不需要在绑定学号的时候重复写数据了
-        SchoolConstant schoolConstant = new SchoolConstant();
-        String xueqi = schoolConstant.getTerm();
-        List<CourseDO> courseDOS = courseDAO.selectAllCourseByJwcAccountAndSemester(USERNAME, xueqi);
-        Integer flag = 0;
-        if (courseDOS.size() < -1) {
-            flag = login(USERNAME, PASSWORD);
-        }
-        return flag;
+        return login(USERNAME, PASSWORD);
     }
 }

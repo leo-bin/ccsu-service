@@ -49,7 +49,7 @@ public interface CourseDAO {
      * @param semester
      * @return
      */
-    int deleteCourse(@Param("jwcAccount") String jwcAccount, @Param("semester") String semester);
+    Integer deleteCourse(@Param("jwcAccount") String jwcAccount, @Param("semester") String semester);
 
     /**
      * 查询空闲教室

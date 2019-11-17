@@ -65,10 +65,7 @@
         select *
         from information
         where category = 'RECRUITMENT'
-           or category = 'NOTIFICATION'
         order by release_time desc
         limit #{start}, #{offset}
     </select>
-
-
 </mapper>

@@ -31,7 +31,7 @@ public class CourseUpdateService {
     public Integer turnToCourse(String jwcAccount, String semester, String password) {
         List<CourseDO> courseDOS = courseDAO.selectAllCourseByJwcAccountAndSemester(jwcAccount, semester);
         if (courseDOS.size() > 0) {
-            courseDAO.deleteCourse(jwcAccount, semester);
+            Integer flag=courseDAO.deleteCourse(jwcAccount, semester);
         }
         return courseCrawlerService.turnToCourseSpider(jwcAccount, password);
     }
