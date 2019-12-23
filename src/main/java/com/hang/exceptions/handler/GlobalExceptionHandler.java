@@ -37,7 +37,6 @@ public class GlobalExceptionHandler {
         log.error("RequestURI {}", request.getRequestURI());
         // 打印异常堆栈
         log.error("exception", ex);
-
         // 自定义的感兴趣的异常
         if (ex instanceof ApiException) {
             ApiException globalException = (ApiException) ex;
@@ -45,7 +44,6 @@ public class GlobalExceptionHandler {
             // 其他异常
         } else if (ex instanceof HttpRequestMethodNotSupportedException) {
             return RespUtil.error(-1, "对不起，不支持当前HTTP方法");
-
         } else if (ex instanceof MissingServletRequestParameterException) {
             return RespUtil.error(-1, ex.getMessage());
         } else {

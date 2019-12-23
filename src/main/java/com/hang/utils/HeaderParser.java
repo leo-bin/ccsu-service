@@ -42,7 +42,6 @@ public class HeaderParser {
     }
 
     public static boolean isBaseType(Class<?> clz) {
-
         if (clz.equals(Integer.class) ||
                 clz.equals(int.class) ||
                 clz.equals(Byte.class) ||

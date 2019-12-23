@@ -7,7 +7,6 @@ package com.hang.api;
 import com.hang.aop.StatisticsTime;
 import com.hang.pojo.vo.BaseRes;
 import com.hang.service.SessionService;
-import com.hang.service.UserService;
 import com.hang.utils.RespUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/session")
 public class SessionController {
+
     private static final Logger log = LoggerFactory.getLogger(SessionController.class);
 
     @Autowired

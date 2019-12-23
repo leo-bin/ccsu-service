@@ -2,6 +2,7 @@ package com.hang.config;
 
 import com.hang.CcsuServiceApplication;
 import com.hang.handler.OpenIdResolver;
+import com.hang.interceptors.AntiBrushInterceptor;
 import com.hang.interceptors.HeaderCheckInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -29,10 +30,11 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Autowired
     private HeaderCheckInterceptor headerCheckInterceptor;
 
+    @Autowired
+    private AntiBrushInterceptor antiBrushInterceptor;
+
     /**
      * 配置web静态资源位置
-     *
-     * @param registry
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -40,8 +42,12 @@ public class WebConfiguration implements WebMvcConfigurer {
         /// registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/");
     }
 
+    /**
+     * 配置拦截器
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(antiBrushInterceptor);
         registry.addInterceptor(headerCheckInterceptor)
                 // 拦截
                 .addPathPatterns("/feed/**")
@@ -77,9 +83,11 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .excludePathPatterns("/notification/**");
     }
 
+    /**
+     * 配置参数解析器
+     */
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(openIdResolver);
     }
-
 }

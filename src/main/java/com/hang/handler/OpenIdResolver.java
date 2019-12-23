@@ -3,7 +3,6 @@ package com.hang.handler;
 import com.hang.annotation.OpenId;
 import com.hang.constant.WxConstant;
 import com.hang.pojo.data.UserInfoDO;
-import com.hang.pojo.vo.BaseRes;
 import com.hang.service.SessionService;
 import com.hang.utils.HeaderParser;
 import lombok.extern.slf4j.Slf4j;
@@ -32,11 +31,30 @@ public class OpenIdResolver implements HandlerMethodArgumentResolver {
     @Autowired
     private SessionService sessionService;
 
+    /**
+     * 参数是否可以使用解析器
+     *
+     * @param methodParameter spring对被注解修饰过参数的包装，从其中能拿到参数的反射相关信息
+     * @return
+     * @apiNote 传入一个参数，用以判断此参数是否能够使用该解析器
+     */
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
+        //只有被@OpenId 注解修饰的参数才能被此解析器处理
         return methodParameter.getParameterAnnotation(OpenId.class) != null;
     }
 
+    /**
+     * 具体解析函数
+     *
+     * @param methodParameter
+     * @param modelAndViewContainer
+     * @param nativeWebRequest
+     * @param webDataBinderFactory
+     * @return
+     * @throws Exception
+     * @apiNote 前端通过传递一个sessionId，这里的解析函数通过sessionId到redis中的用户会话信息去寻找用户信息
+     */
     @Override
     public String resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer,
                                   NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
@@ -53,7 +71,6 @@ public class OpenIdResolver implements HandlerMethodArgumentResolver {
             log.info("body: " + userInfo.toString());
             result = userInfo.getOpenId();
         }
-
         return result;
     }
 }

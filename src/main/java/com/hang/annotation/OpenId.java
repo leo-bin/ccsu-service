@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * @author hangs.zhang
  * @date 2018/12/13
  * *****************
- * function:
+ * function: 自定义注解，OpenId
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)

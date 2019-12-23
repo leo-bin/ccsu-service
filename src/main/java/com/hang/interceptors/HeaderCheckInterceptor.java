@@ -17,7 +17,7 @@ import java.util.Map;
  * @author hangs.zhang
  * @date 2018/11/20
  * *****************
- * function:
+ * function: 自定义检查请求头拦截器
  */
 @Slf4j
 @Component
@@ -26,6 +26,17 @@ public class HeaderCheckInterceptor extends HandlerInterceptorAdapter {
     @Value("${requiredHeaders}")
     private String requiredHeaders;
 
+
+    /**
+     * 预先处理器
+     *
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     * @throws Exception
+     * @apiNote 在业务处理器处理请求也就是调用接口之前被调用，判断前端的请求头是否符合要求
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Map<String, String> headers = null;
@@ -34,17 +45,13 @@ public class HeaderCheckInterceptor extends HandlerInterceptorAdapter {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
         if (null == headers || headers.size() == 0) {
             log.info("Request Intercepted: {}, Case: headers is empty", request.getRequestURI());
             RespUtil.render(response, ResultEnum.HEADERS_ERROR);
             return false;
         }
-
         String[] rqh = requiredHeaders.split(",");
-        /// headers.forEach((k, v) -> log.info("k:{}, v:{}", k, v));
         log.info("requiredHeaders: {}, conut: {}", requiredHeaders, rqh.length);
-
         for (String h : rqh) {
             String headerValue = headers.get(h.trim());
             if (StringUtils.isEmpty(headerValue)) {
@@ -58,6 +65,5 @@ public class HeaderCheckInterceptor extends HandlerInterceptorAdapter {
         log.info("access interceptor");
         return true;
     }
-
 }
 

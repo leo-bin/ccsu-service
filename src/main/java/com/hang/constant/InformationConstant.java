@@ -34,5 +34,4 @@ public class InformationConstant {
         CATEGORY_MAP.put("PUBLIC", "公示");
         CATEGORY_MAP.put("NOTIFICATION", "通知");
     }
-
 }

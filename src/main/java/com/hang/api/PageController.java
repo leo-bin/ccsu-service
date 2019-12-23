@@ -35,8 +35,6 @@ public class PageController {
     }
 
 
-
-
     /**
      * 设置默认打开地址http://localhost:8088的跳转(需要在拦截器中排除)
      * 1.已登录，跳转到menu.html，把adminUserInfo返回前端渲染
@@ -66,7 +64,6 @@ public class PageController {
                         @RequestParam(value = "verifyCode", required = false) String verifyCode,
                         HttpServletRequest request,
                         ModelMap modelMap){
-
         //先验证session，再验证密码
         HttpSession session = request.getSession();
         AdminUserInfoDO adminUserInfoDo = (AdminUserInfoDO) session.getAttribute("adminUserInfoDo");

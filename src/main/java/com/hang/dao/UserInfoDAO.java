@@ -5,7 +5,6 @@
 package com.hang.dao;
 
 import com.hang.pojo.data.UserInfoDO;
-import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
